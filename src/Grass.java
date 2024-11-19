@@ -11,16 +11,17 @@ import java.util.Random;
 
 
 
-public class Grass implements Spreadable, NonBlocking, DynamicDisplayInformationProvider {
-    private final double spreadChance;
-    private List<Location> surroundingTiles;
+public class Grass extends Plant {
+    protected List<Location> neighbours;
+    protected double spreadProbability;
+
     private final Random rand;
 
 
     public Grass() {
-       spreadChance = 0.15; // The change of a grass spreading each step of the simulation
-       surroundingTiles = null;
-       rand = new Random();
+        spreadProbability = 0.15; // The change of a grass spreading each step of the simulation
+        neighbours = null;
+        rand = new Random();
     }
 
     /**
@@ -30,12 +31,12 @@ public class Grass implements Spreadable, NonBlocking, DynamicDisplayInformation
     public void spread(World world) {
         // If there is at least one empty tile around this object,
         // save a list of said surrounding tiles in variable 'surroundingTiles'.
-        if(this.surroundingTiles == null) {
-            this.surroundingTiles = new ArrayList<>(world.getSurroundingTiles());
+        if(this.neighbours == null) {
+            this.neighbours = new ArrayList<>(world.getSurroundingTiles());
         }
 
         // Get surrounding tiles that doesn't contain a non-blocking object
-        if (rand.nextDouble() <= spreadChance){
+        if (rand.nextDouble() <= spreadProbability){
             List<Location> surroundingEmptyNonBlockingTiles = getSurroundingEmptyNonBlockingTiles(world);
 
         // If all surrounding tiles already have a non-blocking object,
@@ -64,7 +65,7 @@ public class Grass implements Spreadable, NonBlocking, DynamicDisplayInformation
     // Returns a list of the surrounding tiles that doesn't contain a non-blocking object
     private List<Location> getSurroundingEmptyNonBlockingTiles(World world) {
         List<Location> freeTiles = new ArrayList<>();
-        for(Location location : this.surroundingTiles) {
+        for(Location location : this.neighbours) {
             if(!world.containsNonBlocking(location)) {
                 freeTiles.add(location);
             }
@@ -72,4 +73,13 @@ public class Grass implements Spreadable, NonBlocking, DynamicDisplayInformation
         return freeTiles;
     }
 
+    @Override
+    public double eat() {
+        return 0;
+    }
+
+    @Override
+    public FoodType getType() {
+        return null;
+    }
 }

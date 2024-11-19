@@ -1,43 +1,43 @@
 import itumulator.executable.DynamicDisplayInformationProvider;
 import itumulator.simulator.Actor;
+import itumulator.world.Location;
+import itumulator.world.NonBlocking;
 
+import java.util.List;
 
-public abstract class Animal implements Actor, DynamicDisplayInformationProvider {
-    enum State {
-        ACTIVE,
-        SLEEPING,
-    }
+enum FoodType {
+    PLANT,
+    ANIMAL,
+}
 
+interface Eatable {
+    double eat();
+    FoodType getType();
+
+    //Eatable grass = new Grass();
+    //energy += grass.eat();
+}
+
+abstract class Plant implements NonBlocking, Actor, Spreadable, Eatable, DynamicDisplayInformationProvider {
+    protected List<Location> neighbours;
+    protected double spreadProbability;
+}
+
+abstract class Animal implements Eatable, Actor, DynamicDisplayInformationProvider {
     protected int age;
     protected double energy;
-    protected State state;
 
-    abstract void eat(Eatable eatable);
+    abstract void eatEatable();
     abstract void reproduce();
-    //method to path to some field/felt.
+    abstract void die();
 
-    public int getAge() {
-        return age;
-    }
+    // Methods for pathfinding or similarly
+}
 
-    public void setAge(int age) {
-        this.age = age;
-    }
+abstract class Herbivore extends Animal {
+    //Can only eat plants
+}
 
-    public double getEnergy() {
-        return energy;
-    }
-
-    public void setEnergy(double energy) {
-        this.energy = energy;
-    }
-
-    public State getState() {
-        return state;
-    }
-
-    public void setState(State state) {
-        this.state = state;
-    }
-
+abstract class Carnivore extends Animal {
+    //Can only eat meat
 }
