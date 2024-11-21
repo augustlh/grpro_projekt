@@ -6,7 +6,8 @@ public interface Eatable {
         ANIMAL,
     }
 
-    double onEaten();
+    double getEnergy();
     boolean canEat(Eatable other);
     Type getType();
+    void eaten(World world);
 }

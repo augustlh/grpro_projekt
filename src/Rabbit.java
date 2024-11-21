@@ -90,7 +90,7 @@ public class Rabbit extends Herbivore {
     }
 
     @Override
-    public double onEaten() {
+    public double getEnergy() {
         return this.energy;
     }
 
@@ -102,5 +102,8 @@ public class Rabbit extends Herbivore {
     public RabbitHole getRabbitHole() {
         return this.rabbitHole;
     }
+
+
+
 
 }

@@ -20,13 +20,17 @@ public abstract class Plant implements Eatable, Actor, NonBlocking, DynamicDispl
         this.neighbours = null;
     }
 
+    public void eaten(World world) {
+        world.delete(this);
+    }
+
     @Override
     public boolean canEat(Eatable other) {
         return false;
     }
 
     @Override
-    public double onEaten() {
+    public double getEnergy() {
         return this.energy;
     }
 
