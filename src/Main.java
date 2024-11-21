@@ -5,6 +5,9 @@ public class Main {
         ResourceManager resourceManager = new ResourceManager("src/Data/Week1/t1-1c.txt", 1200, 1000);
         Program program = resourceManager.getProgram();
         program.show();
+
+
+        // haha nikolejs jacked up kode
     }
 
 
