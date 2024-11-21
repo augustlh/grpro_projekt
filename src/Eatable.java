@@ -1,3 +1,5 @@
+import itumulator.world.World;
+
 public interface Eatable {
     enum Type {
         PLANT,

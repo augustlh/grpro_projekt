@@ -12,12 +12,11 @@ import java.util.Random;
 public class Grass extends Plant {
 
     public Grass() {
-        super(0.15, 100);
+        super(0.15, 1.4);//chance to something else later
     }
 
     @Override
-    public void act(World world) {
-        spread(world);
+    public void act(World world) {spread(world);
     }
 
     @Override
@@ -50,4 +49,5 @@ public class Grass extends Plant {
         }
         return freeTiles;
     }
+
 }

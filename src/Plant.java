@@ -10,6 +10,7 @@ public abstract class Plant implements Eatable, Actor, NonBlocking, DynamicDispl
     protected List<Location> neighbours;
     protected double spreadProbability;
     protected double energy;
+    protected Location location;
 
     abstract void spread(World world);
 
@@ -33,4 +34,8 @@ public abstract class Plant implements Eatable, Actor, NonBlocking, DynamicDispl
     public Type getType() {
         return Type.PLANT;
     }
+
+    public Location getLocation() {return this.location;}
+
+    public void setLocation(Location location) {this.location = location;}
 }

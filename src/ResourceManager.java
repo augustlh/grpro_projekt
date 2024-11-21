@@ -53,7 +53,9 @@ public class ResourceManager {
         for (int i = 0; i < quantity; i++) {
             Object e = createEntity(entity);
             Location location = getValidRandomLocation(e, world);
+            world.setCurrentLocation(location);
             world.setTile(location, e);
+
         }
     }
 
@@ -64,6 +66,7 @@ public class ResourceManager {
         return switch (entity) {
             case "grass" -> new Grass();
             case "rabbit" -> new Rabbit();
+            case "burrow" -> new RabbitHole();
             default -> throw new IllegalArgumentException("Unknown entity: " + entity);
         };
     }
