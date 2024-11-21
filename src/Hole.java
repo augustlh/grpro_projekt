@@ -23,4 +23,8 @@ public class Hole implements NonBlocking, DynamicDisplayInformationProvider {
     public Location getLocation() {
         return location;
     }
+
+    public RabbitHole getRabbitHole() {
+        return rabbitHole;
+    }
 }
