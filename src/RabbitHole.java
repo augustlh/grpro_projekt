@@ -25,7 +25,7 @@ public class RabbitHole {
         int closestDistance = Integer.MAX_VALUE;
 
         for(Hole hole : holes) {
-            int distance = Math.abs(hole.location.getX() - location.getX()) + Math.abs(hole.location.getY() - location.getY());
+            int distance = Math.abs(hole.getLocation().getX() - location.getX()) + Math.abs(hole.getLocation().getY() - location.getY());
 
             if(distance < closestDistance) {
                 closestHole = hole;

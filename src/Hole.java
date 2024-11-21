@@ -6,12 +6,13 @@ import itumulator.world.NonBlocking;
 import java.awt.Color;
 
 public class Hole implements NonBlocking, DynamicDisplayInformationProvider {
-    Location location;
-    RabbitHole rabbitHole;
+    private final Location location;
+    private final RabbitHole rabbitHole;
 
     public Hole(Location location, RabbitHole rabbitHole) {
         this.location = location;
         this.rabbitHole = rabbitHole;
+        this.rabbitHole.addHole(this);
     }
 
     @Override
