@@ -1,10 +1,11 @@
 import itumulator.world.Location;
+import itumulator.world.NonBlocking;
 import itumulator.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RabbitHole {
+public class RabbitHole implements NonBlocking {
     private final List<Hole> holes;
 
     public RabbitHole() {

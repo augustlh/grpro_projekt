@@ -15,6 +15,12 @@ abstract class Animal implements Eatable, Actor, DynamicDisplayInformationProvid
         this.energyDecay = energyDecay;
     }
 
+    /**
+     * Defines the action of eating another Eatable entity in a given world context.
+     *
+     * @param other the Eatable entity to be eaten.
+     * @param world the simulation world where the eating action takes place.
+     */
     abstract void eat(Eatable other, World world);
 
     public void eaten(World world) {
