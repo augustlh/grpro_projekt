@@ -17,29 +17,25 @@ public interface Eatable {
         ANIMAL,
     }
 
-    /**
-     * Retrieves the energy content of the entity.
-     *
-     * @return the energy value associated with the entity.
-     */
-    double getEnergy();
-    /**
-     * Determines if the current entity can eat another 'Eatable' entity.
-     *
-     * @param other the entity that is being checked if it can be eaten by the current entity.
-     * @return true if the current entity can eat the other entity, otherwise false.
-     */
-    boolean canEat(Eatable other);
+
     /**
      * Retrieves the type of the entity.
      *
      * @return the type of the entity, which can be either PLANT or ANIMAL.
      */
     Type getType();
+
     /**
      * Handles the action to be taken when the entity is eaten within the simulation world.
      *
      * @param world the simulation world where the entity exists and the eating event occurs.
      */
-    void eaten(World world);
+    void onEaten(World world);
+
+    /**
+     * Retrieves the nutritional content of the entity.
+     *
+     * @return the nutritional value associated with the entity.
+     */
+    double getNutritionalValue();
 }

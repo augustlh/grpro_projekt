@@ -20,17 +20,12 @@ public abstract class Plant implements Eatable, Actor, NonBlocking, DynamicDispl
         this.neighbours = null;
     }
 
-    public void eaten(World world) {
+    public void onEaten(World world) {
         world.delete(this);
     }
 
     @Override
-    public boolean canEat(Eatable other) {
-        return false;
-    }
-
-    @Override
-    public double getEnergy() {
+    public double getNutritionalValue() {
         return this.energy;
     }
 
@@ -39,7 +34,11 @@ public abstract class Plant implements Eatable, Actor, NonBlocking, DynamicDispl
         return Type.PLANT;
     }
 
-    public Location getLocation() {return this.location;}
+    public Location getLocation() {
+        return this.location;
+    }
 
-    public void setLocation(Location location) {this.location = location;}
+    public void setLocation(Location location) {
+        this.location = location;
+    }
 }

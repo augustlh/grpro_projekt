@@ -16,8 +16,6 @@ import java.util.Random;
  */
 public class Rabbit extends Herbivore {
     RabbitHole rabbitHole;
-    Random rand = new Random();
-    int time = World.getDayDuration();
 
     /**
      * Constructs a new instance of the Rabbit class. This sets the Rabbit's age to 0 and its energy to 20.
@@ -36,77 +34,50 @@ public class Rabbit extends Herbivore {
      */
     @Override
     public void act(World world) {
-        location = world.getLocation(this);
-
-        // Consumes energy and increases age for the action
-        energy = energy - energyDecay;
-        age++;
-        System.out.println("Energy: [" + energy + "]");
-        System.out.println("Age: [" + age + "]");
-
-        // Moves the rabbit to a hole when it's getting dark
-        if (time - world.getCurrentTime() <=2){
-            //move to hole
+        if (world.isNight() && this.rabbitHole != null) {
+            //sohuld seek rabbithole if it its not there
+            pursue(world, rabbitHole.getClosestHole(world.getLocation(this)));
+            return;
+        } else if (world.isNight() && this.rabbitHole == null) {
+            //dig a hole
+            //and enter it
+            //seeks random locatgion to test
+            pursue(world, new Location(1,1));
+            return;
         }
 
-        // Update the world to know this rabbit's location
-        if(!world.contains(this)){
-            world.setCurrentLocation(location);
-            world.setTile(location,this);
-        }
 
-        // Kills the rabbit
         if(energy <= 0 || age >= 100) {
             System.out.println("dead");
             world.delete(this);
             return;
         }
 
+        wander(world);
+
         // If there's grass, eat it
-        if (world.getNonBlocking(location) instanceof Grass) {
-            this.eat((Eatable) world.getNonBlocking(location),world);
-            return;
+        if (world.getNonBlocking(world.getLocation(this)) instanceof Grass) {
+            this.eat((Eatable) world.getNonBlocking(world.getLocation(this)),world);
         }
 
-        // Get neighbouring tiles
-        List<Location> neighbours = new ArrayList<Location>(world.getEmptySurroundingTiles());
-
-        if(neighbours.isEmpty()) {
-            return;
-        }
-
-        // Moves to a neighbouring tile with grass
-        for (Location loc : neighbours) {
-            if (world.getNonBlocking(loc) instanceof Grass) {
-                location=loc;
-                world.setCurrentLocation(loc);
-                world.move(this,loc);
-                return;
-            }
-        }
-
-        // If no neighbouring grass, move randomly
-        location = neighbours.get(rand.nextInt(neighbours.size()));
-        world.setCurrentLocation(location);
-        world.move(this, location);
-
-        // Reproduce if meet another rabbit
-        neighbours = new ArrayList<>(world.getSurroundingTiles(location));
-        if (neighbours.isEmpty()) {
-            return;
-        }
-        for (Location l : neighbours) {
-            if (world.getTile(l) instanceof Rabbit && 0 == rand.nextInt(5) && age >=10) {
-                for (Location l2 : neighbours) {
-                    if (world.isTileEmpty(l2)) {
-                        world.setCurrentLocation(l2);
-                        world.setTile(l2, new Rabbit());
-                        energy=energy-4;
-                        return;
-                    }
-                }
-            }
-        }
+        //dunno how this works, det må i fikse :)
+//        // Reproduce if meet another rabbit
+//        neighbours = new ArrayList<>(world.getSurroundingTiles(location));
+//        if (neighbours.isEmpty()) {
+//            return;
+//        }
+//        for (Location l : neighbours) {
+//            if (world.getTile(l) instanceof Rabbit && 0 == rand.nextInt(5) && age >=10) {
+//                for (Location l2 : neighbours) {
+//                    if (world.isTileEmpty(l2)) {
+//                        world.setCurrentLocation(l2);
+//                        world.setTile(l2, new Rabbit());
+//                        energy=energy-4;
+//                        return;
+//                    }
+//                }
+//            }
+//        }
     }
     
     /**
@@ -117,8 +88,8 @@ public class Rabbit extends Herbivore {
      */
     //@Override
     void eat(Eatable other, World world) {
-        energy += other.getEnergy();
-        other.eaten(world);
+        energy += metabolism * other.getNutritionalValue();
+        other.onEaten(world);
     }
 
     /**
@@ -127,7 +98,7 @@ public class Rabbit extends Herbivore {
      * @return the current energy level of the Rabbit.
      */
     @Override
-    public double getEnergy() {
+    public double getNutritionalValue() {
         return this.energy;
     }
 
@@ -139,10 +110,12 @@ public class Rabbit extends Herbivore {
      */
     @Override
     public DisplayInformation getInformation() {
+
         return new DisplayInformation(Color.red, "rabbit-large");
     }
 
     public RabbitHole getRabbitHole() {
+
         return this.rabbitHole;
     }
 
