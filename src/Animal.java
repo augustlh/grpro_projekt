@@ -16,7 +16,6 @@ public abstract class Animal implements Eatable, Actor, DynamicDisplayInformatio
 
     protected List<Location> pathToTarget;
 
-
     protected Location location;
 
     public Animal(double metabolism, double energyDecay) {
@@ -26,12 +25,18 @@ public abstract class Animal implements Eatable, Actor, DynamicDisplayInformatio
     }
 
     /**
-     * Returns whether or not this entity can eat another eatible entity.
+     * Returns whether or not this entity can eat another eatable entity.
      * @param other The other eatable entity
      * @return boolean, false or true, indicating whether it could eat or not.
      */
     abstract boolean canEat(Eatable other);
 
+    /**
+     * Makes the animal wander within the world. The animal will look for a nearby food source and move towards it,
+     * otherwise it will move to a random empty neighboring tile.
+     *
+     * @param world the simulation world where the animal exists, used to check surroundings and perform movements.
+     */
     protected void wander(World world) {
         Set<Location> emptyNeighbours = world.getEmptySurroundingTiles();
         Location newLocation = null;
@@ -39,6 +44,7 @@ public abstract class Animal implements Eatable, Actor, DynamicDisplayInformatio
             return;
         }
 
+        // If food is nearby, move to food
         for (Location location : emptyNeighbours) {
             if (world.getNonBlocking(location) instanceof Grass) {
                 world.move(this, location);
@@ -46,11 +52,20 @@ public abstract class Animal implements Eatable, Actor, DynamicDisplayInformatio
             }
         }
 
+        // Move randomly
         newLocation = (Location) emptyNeighbours.toArray()[new Random().nextInt(emptyNeighbours.size())];
         world.move(this, newLocation);
     }
 
 
+    /**
+     * Navigate the animal towards a target location within the world. If a valid path does not exist, it will compute a new path.
+     * Once a valid path exists, it moves the animal step by step along the path towards the target. If the tile on the path
+     * is not empty, it recomputes a new path.
+     *
+     * @param world the simulation world in which the animal exists and moves
+     * @param target the target location to which the animal is attempting to navigate
+     */
     protected void pursue(World world, Location target) {
         if(this.pathToTarget == null || this.pathToTarget.isEmpty()) {
             System.out.println("new path lol :)");
@@ -66,7 +81,6 @@ public abstract class Animal implements Eatable, Actor, DynamicDisplayInformatio
             this.pathToTarget.removeFirst();
             return;
         }
-
 
         wander(world);
 
@@ -89,7 +103,7 @@ public abstract class Animal implements Eatable, Actor, DynamicDisplayInformatio
         return Type.ANIMAL;
     }
 
-    public Location getLocation() {return location;}
+    public Location getLocation() {return location;} // Location not updated on act
 
-    public void setLocation(Location location) {this.location = location;}
+    public void setLocation(Location location) {this.location = location;} // Location not updated on act
 }

@@ -35,49 +35,55 @@ public class Rabbit extends Herbivore {
     @Override
     public void act(World world) {
         if (world.isNight() && this.rabbitHole != null) {
-            //sohuld seek rabbithole if it its not there
+            // Seek RabbitHole if it's not there
             pursue(world, rabbitHole.getClosestHole(world.getLocation(this)));
             return;
         } else if (world.isNight() && this.rabbitHole == null) {
-            //dig a hole
-            //and enter it
-            //seeks random locatgion to test
+            // Dig a hole
+            // and enter it
+            // seeks random location to test
             pursue(world, new Location(1,1));
             return;
         }
 
-
+        // Kills the rabbit if energy 0 or too old
         if(energy <= 0 || age >= 100) {
             System.out.println("dead");
             world.delete(this);
             return;
         }
 
-        wander(world);
-
         // If there's grass, eat it
         if (world.getNonBlocking(world.getLocation(this)) instanceof Grass) {
             this.eat((Eatable) world.getNonBlocking(world.getLocation(this)),world);
         }
 
-        //dunno how this works, det må i fikse :)
-//        // Reproduce if meet another rabbit
-//        neighbours = new ArrayList<>(world.getSurroundingTiles(location));
-//        if (neighbours.isEmpty()) {
-//            return;
-//        }
-//        for (Location l : neighbours) {
-//            if (world.getTile(l) instanceof Rabbit && 0 == rand.nextInt(5) && age >=10) {
-//                for (Location l2 : neighbours) {
-//                    if (world.isTileEmpty(l2)) {
-//                        world.setCurrentLocation(l2);
-//                        world.setTile(l2, new Rabbit());
-//                        energy=energy-4;
-//                        return;
-//                    }
-//                }
-//            }
-//        }
+        wander(world);
+
+        // Reproduce if meet another rabbit
+        int repChance = 5; // The chance of reproduction upon meeting: 1 / repChance
+        Random rand = new Random();
+        ArrayList<Location> neighbours = new ArrayList<>(world.getSurroundingTiles(world.getLocation(this)));
+        if (neighbours.isEmpty()) {
+            return;
+        }
+        for (Location l : neighbours) {
+            if (world.getTile(l) instanceof Rabbit && 0 == rand.nextInt(repChance) && age >= 5) {
+                for (Location l2 : neighbours) {
+                    if (world.isTileEmpty(l2)) {
+                        world.setCurrentLocation(l2);
+                        world.setTile(l2, new Rabbit());
+                        energy = energy - 4;
+                        return;
+                    }
+                }
+            }
+        }
+
+        // Increment age and energy every step
+        age++;
+        energy = energy - energyDecay;
+
     }
     
     /**
@@ -119,7 +125,18 @@ public class Rabbit extends Herbivore {
         return this.rabbitHole;
     }
 
+    /**
+     * Retrieves the current age of the Rabbit.
+     *
+     * @return the age of the Rabbit.
+     */
+    public int getAge() {return age;}
 
-
+    /**
+     * Retrieves the current energy level of the Rabbit.
+     *
+     * @return the current energy level of the Rabbit.
+     */
+    public double getEnergy() {return energy;}
 
 }
