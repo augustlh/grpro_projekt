@@ -16,6 +16,7 @@ import java.util.Random;
  */
 public class Rabbit extends Herbivore {
     RabbitHole rabbitHole;
+    int repChance;
 
     /**
      * Constructs a new instance of the Rabbit class. This sets the Rabbit's age to 0 and its energy to 20.
@@ -27,6 +28,7 @@ public class Rabbit extends Herbivore {
         super(0.8, 1.3);
         this.age = 0;
         this.energy = 20;
+        this.repChance=5;
     }
 
     /**
@@ -60,21 +62,19 @@ public class Rabbit extends Herbivore {
 
         wander(world);
 
-        // Reproduce if meet another rabbit
-        int repChance = 5; // The chance of reproduction upon meeting: 1 / repChance
+        // Reproduce if meet another rabbit// The chance of reproduction upon meeting: 1 / repChance
         Random rand = new Random();
         ArrayList<Location> neighbours = new ArrayList<>(world.getSurroundingTiles(world.getLocation(this)));
-        if (neighbours.isEmpty()) {
-            return;
-        }
-        for (Location l : neighbours) {
-            if (world.getTile(l) instanceof Rabbit && 0 == rand.nextInt(repChance) && age >= 5) {
-                for (Location l2 : neighbours) {
-                    if (world.isTileEmpty(l2)) {
-                        world.setCurrentLocation(l2);
-                        world.setTile(l2, new Rabbit());
-                        energy = energy - 4;
-                        return;
+        if (!neighbours.isEmpty()) {
+            for (Location l : neighbours) {
+                if (world.getTile(l) instanceof Rabbit && 0 == rand.nextInt(repChance) && age >= 5) {
+                    for (Location l2 : neighbours) {
+                        if (world.isTileEmpty(l2)) {
+                            world.setCurrentLocation(l2);
+                            world.setTile(l2, new Rabbit());
+                            energy = energy - 4;
+                            return;
+                        }
                     }
                 }
             }
