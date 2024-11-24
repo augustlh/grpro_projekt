@@ -53,12 +53,12 @@ public class Rabbit extends Herbivore {
             return;
         }
 
-        wander(world);
-
         // If there's grass, eat it
         if (world.getNonBlocking(world.getLocation(this)) instanceof Grass) {
             this.eat((Eatable) world.getNonBlocking(world.getLocation(this)),world);
         }
+
+        wander(world);
 
         //dunno how this works, det må i fikse :)
 //        // Reproduce if meet another rabbit
