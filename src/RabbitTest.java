@@ -47,9 +47,8 @@ public class RabbitTest {
 
         rabbit.act(world);
         //checks if rabbit is on grass
-        if (rabbit.getLocation().equals(grass.getLocation())){
-            assertTrue(true);
-        }
+        assertEquals(rabbit.getLocation(), grass.getLocation());
+
     }
 
     @Test
@@ -57,14 +56,9 @@ public class RabbitTest {
         //Sets up world
         World world = new World(5) {
             @Override
-            //does so there are no tiles grass can spread to
-            public Set<Location> getSurroundingTiles() {
+            //does so there are no tiles rabbit can move to
+            public Set<Location> getEmptySurroundingTiles() {
                 return new HashSet<>();
-            }
-
-            @Override
-            public boolean containsNonBlocking(Location location) {
-                return true;
             }
         };
         Rabbit rabbit = new Rabbit();
@@ -73,9 +67,7 @@ public class RabbitTest {
         world.setTile(new Location(0, 1), rabbit);
         rabbit.act(world);
         //checks if rabbit has moved (it should not)
-        if (rabbit.getLocation().equals(new Location(0, 1))){
-            assertTrue(true);
-        }
+        assertEquals(new Location(0, 1), rabbit.getLocation());;
     }
     @Test
     public void testRabbitReproduce() {

@@ -48,6 +48,7 @@ public abstract class Animal implements Eatable, Actor, DynamicDisplayInformatio
         for (Location location : emptyNeighbours) {
             if (world.getNonBlocking(location) instanceof Grass) {
                 world.move(this, location);
+                this.location = location;
                 return;
             }
         }
@@ -55,6 +56,7 @@ public abstract class Animal implements Eatable, Actor, DynamicDisplayInformatio
         // Move randomly
         newLocation = (Location) emptyNeighbours.toArray()[new Random().nextInt(emptyNeighbours.size())];
         world.move(this, newLocation);
+        this.location = newLocation;
     }
 
 
