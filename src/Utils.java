@@ -3,6 +3,9 @@ import itumulator.world.World;
 
 import java.util.*;
 
+/**
+ * Utility class providing various methods useful for working with simulation entities and locations.
+ */
 public class Utils {
     public static int manhattanDistance(Location a, Location b) {
         int dx = Math.abs(a.getX() - b.getX());
@@ -11,6 +14,14 @@ public class Utils {
         return dx + dy;
     }
 
+    /**
+     * Finds the closest consumable entity (Organism) within a given search radius from a specified organism.
+     *
+     * @param world the world containing the organism and other entities
+     * @param organism the organism searching for a consumable entity
+     * @param searchRadius the radius within which to search for consumable entities
+     * @return the location of the closest consumable organism if found, otherwise null
+     */
     public static Location closestConsumableEntity(World world, Organism organism, int searchRadius) {
         Set<Location> neighbours = world.getSurroundingTiles(searchRadius);
         Location currentLocation = world.getLocation(organism);
@@ -40,6 +51,14 @@ public class Utils {
 
     }
 
+    /**
+     * Finds the closest RabbitHole within a specified search radius from a given location.
+     *
+     * @param world the world containing the locations and entities
+     * @param currentLocation the location from which the search begins
+     * @param searchRadius the radius within which to search for RabbitHoles
+     * @return the location of the closest RabbitHole if found, otherwise null
+     */
     public static Location getClosestRabbitHole(World world, Location currentLocation, int searchRadius) {
         Set<Location> neighbours = world.getSurroundingTiles(searchRadius*2);
         int closestDistance = Integer.MAX_VALUE;
@@ -64,6 +83,13 @@ public class Utils {
         return world.getLocation(closestHole);
     }
 
+    /**
+     * Retrieves a list of tiles from the provided list that are empty and non-blocking within the given world.
+     *
+     * @param world the world containing the tiles
+     * @param tiles the list of locations to be checked
+     * @return a list of locations that are empty and non-blocking
+     */
     public static List<Location> getSurroundingEmptyNonBlockingTiles(World world, List<Location> tiles) {
         List<Location> freeTiles = new ArrayList<>();
         for(Location location : tiles) {
@@ -74,6 +100,13 @@ public class Utils {
         return freeTiles;
     }
 
+    /**
+     * Generates a valid random location within the given world that does not overlap with existing tiles.
+     *
+     * @param world The world object within which the location is to be generated.
+     * @return A valid random location within the world.
+     * @throws IllegalArgumentException If the provided world is null.
+     */
     public static Location getValidRandomLocation(World world) {
         if(world == null) {
             throw new IllegalArgumentException("World cannot be null");
@@ -91,6 +124,14 @@ public class Utils {
 
     }
 
+    /**
+     * Returns the first empty tile found within a 2-tile radius surrounding a given location in the world.
+     * If no empty tile is found, a valid random location within the world is returned.
+     *
+     * @param location the central location from which to search for surrounding empty tiles
+     * @param world the world containing the tiles
+     * @return the Location object of the first empty tile found, or a valid random location if no empty tile is found
+     */
     public static Location getSurroundingEmptyTiles(Location location, World world) {
         List<Location> tiles = new ArrayList<>(world.getSurroundingTiles(location,2));
         for(Location loc : tiles) {
@@ -100,4 +141,5 @@ public class Utils {
         }
         return getValidRandomLocation(world);
     }
+
 }

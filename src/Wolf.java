@@ -7,18 +7,39 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.List;
 
+/**
+ * The Wolf class represents a wolf, extending the Animal class. A wolf can form part of a pack,
+ * has an alpha status, and interacts with the world.
+ */
 public class Wolf extends Animal {
 
     private boolean alpha;
     private List<Wolf> pack;
+    private WolfPack wolfPack;
 
-    public Wolf(World world, Location location) {
+    /**
+     * Constructs a new Wolf object within the given world at the specified location and
+     * associates it with the provided wolf pack. Initializes the wolf with a random size
+     * and energy level and sets default values for its alpha status and pack.
+     *
+     * @param world The world in which the wolf resides.
+     * @param location The initial location of the wolf within the world.
+     * @param wolfPack The wolf pack to which this wolf belongs.
+     */
+    public Wolf(World world, Location location,WolfPack wolfPack) {
         super(Species.Wolf, new Random().nextDouble(), new Random().nextDouble(1, 2), 1);
         world.setTile(location, this);
         alpha = false;
         pack = null;
+        this.wolfPack = wolfPack;
     }
 
+    /**
+     * Performs the actions of the wolf in the given world. The wolf ages, eats, and moves according
+     * to its role within the pack (alpha or non-alpha).
+     *
+     * @param world The world in which the wolf performs its actions.
+     */
     @Override
     public void act(World world) {
         // Stops act if dead
@@ -30,15 +51,22 @@ public class Wolf extends Animal {
         // Eats nearby food
         List<Location> neighbours = new ArrayList<>(world.getSurroundingTiles());
         for (Location loc:neighbours){
-           if (world.getTile(loc) instanceof Organism o){
-                if(this.canEat(o)){
+            if (world.getTile(loc) instanceof Organism o){
+               if(this.canEat(o)){
                     this.consume(o,world);
                     world.move(this,loc);
                     return;
                 }
-           }
+           }else if(world.getTile(loc) instanceof Wolf w){
+                if(this.energy>w.energy){
+                    w.onConsume(world);
+                }else{
+                    this.onConsume(world);
+                    return;
+                }
+            }
         }
-        
+
         // Alpha moves
         if(alpha) {
             this.wander(world);
@@ -46,33 +74,56 @@ public class Wolf extends Animal {
 
         // Follow alpha
         if(!alpha) {
-            this.pursue(world, world.getLocation(pack.getFirst()));
+            this.pursue(world, world.getLocation(wolfPack.getAlpha()));
         }
         
     }
-    
-    
 
+    /**
+     * Ages the wolf by incrementing its age and decrementing its energy. If the wolf's energy
+     * depletes to zero or it reaches a certain age threshold, it will die. If the wolf is
+     * the alpha, it updates the pack's status before dying.
+     *
+     * @param world The world in which the wolf resides.
+     */
     private void age(World world){
         this.age ++;
         this.energy -=energyDecay;
         if (energy <=0 || age >=100){
+            if (alpha){
+                wolfPack.updatePack();
+            }
             die();
             world.delete(this);
         }
     }
 
+    /**
+     * Sets the alpha status of the wolf.
+     *
+     * @param b A boolean value indicating whether the wolf is the alpha (true) or not (false).
+     */
     public void setThisAlpha(boolean b) {
         this.alpha = b;
     }
 
+    /**
+     * Sets the pack of wolves to which this wolf belongs.
+     *
+     * @param wolves The list of wolves representing the pack.
+     */
     public void setPack(List<Wolf> wolves) {
         this.pack=wolves;
     }
 
+    /**
+     * Provides display information for the wolf object, including its color and the image key.
+     *
+     * @return a DisplayInformation object containing color as Color.GRAY and image key as "mc_wolf"
+     */
     @Override
     public DisplayInformation getInformation() {
-        return new DisplayInformation(Color.GRAY, "wolf");
+        return new DisplayInformation(Color.GRAY, "mc_wolf");
     }
 
 
