@@ -40,6 +40,30 @@ public class Utils {
 
     }
 
+    public static Location getClosestRabbitHole(World world, Location currentLocation, int searchRadius) {
+        Set<Location> neighbours = world.getSurroundingTiles(searchRadius*2);
+        int closestDistance = Integer.MAX_VALUE;
+        RabbitHole closestHole = null;
+
+        for(Location location : neighbours) {
+            Object entity = world.getTile(location);
+
+            if(entity instanceof RabbitHole hole) {
+                int distance = manhattanDistance(currentLocation, location);
+                if(distance < closestDistance) {
+                    closestDistance = distance;
+                    closestHole = hole;
+                }
+            }
+        }
+
+        if (closestHole == null) {
+            return null;
+        }
+
+        return world.getLocation(closestHole);
+    }
+
     public static List<Location> getSurroundingEmptyNonBlockingTiles(World world, List<Location> tiles) {
         List<Location> freeTiles = new ArrayList<>();
         for(Location location : tiles) {
@@ -65,5 +89,15 @@ public class Utils {
 
         return location;
 
+    }
+
+    public static Location getSurroundingEmptyTiles(Location location, World world) {
+        List<Location> tiles = new ArrayList<>(world.getSurroundingTiles(location,2));
+        for(Location loc : tiles) {
+            if(world.isTileEmpty(loc)) {
+                return loc;
+            }
+        }
+        return getValidRandomLocation(world);
     }
 }

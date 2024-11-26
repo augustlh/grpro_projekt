@@ -4,6 +4,8 @@ import itumulator.world.World;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 
@@ -49,11 +51,27 @@ public class ResourceManager {
     }
 
     private void spawnEntities(String entity, int quantity) {
-        World world = program.getWorld();
+        if (entity.equals("wolf")){
+            Location location = Utils.getValidRandomLocation(world);
+            createEntity(entity, location, quantity);
+            return;
+        }
 
         for (int i = 0; i < quantity; i++) {
             Location location = Utils.getValidRandomLocation(world);
             createEntity(entity, location);
+        }
+    }
+
+    private void createEntity(String entity, Location location, int quantity) {
+        if (entity == null) {
+            throw new IllegalArgumentException("Entity cannot be null");
+        }
+
+        if (entity.equals("wolf")) {
+            new WolfPack(world, location, quantity);
+        } else {
+            throw new IllegalArgumentException("Unknown entity: " + entity);
         }
     }
 
@@ -65,6 +83,7 @@ public class ResourceManager {
             case "grass" -> new Grass(world, location);
             case "rabbit" -> new Rabbit(world, location);
             case "burrow" -> new RabbitHole(world, location);
+            case "bear" -> new Bear(world, location);
             default -> throw new IllegalArgumentException("Unknown entity: " + entity);
         }
     }

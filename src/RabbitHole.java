@@ -28,7 +28,7 @@ public class RabbitHole implements NonBlocking, DynamicDisplayInformationProvide
     }
 
     public Location getRandomExit(World world) {
-        return holes.get(new Random().nextInt(this.holes.size())).getLocation();
+        return this.holes.get(new Random().nextInt(this.holes.size())).getLocation();
     }
 
     public Location getLocation() {
