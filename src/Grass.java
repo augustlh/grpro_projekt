@@ -7,12 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-
-
 public class Grass extends Plant {
+    List<Location> neighbours;
 
-    public Grass() {
-        super(0.15, 100);
+    public Grass(World world, Location location) {
+        super(0.125, 1.2);
+        world.setTile(location, this);
+        neighbours = null;
     }
 
     @Override
@@ -21,33 +22,23 @@ public class Grass extends Plant {
     }
 
     @Override
-    public void spread(World world) {
+    void spread(World world) {
         if(this.neighbours == null) {
             this.neighbours = new ArrayList<>(world.getSurroundingTiles());
         }
 
         Random rand = new Random();
         if (rand.nextDouble() <= spreadProbability){
-            List<Location> surroundingEmptyNonBlockingTiles = getSurroundingEmptyNonBlockingTiles(world);
+            List<Location> surroundingEmptyNonBlockingTiles = Utils.getSurroundingEmptyNonBlockingTiles(world, neighbours);
 
             if(surroundingEmptyNonBlockingTiles.isEmpty()) return;
             Location newLocation = surroundingEmptyNonBlockingTiles.get(rand.nextInt(surroundingEmptyNonBlockingTiles.size()));
-            world.setTile(newLocation, new Grass());
+            new Grass(world, newLocation);
         }
     }
 
     @Override
     public DisplayInformation getInformation() {
-        return new DisplayInformation(Color.green, "grass");
-    }
-
-    private List<Location> getSurroundingEmptyNonBlockingTiles(World world) {
-        List<Location> freeTiles = new ArrayList<>();
-        for(Location location : this.neighbours) {
-            if(!world.containsNonBlocking(location)) {
-                freeTiles.add(location);
-            }
-        }
-        return freeTiles;
+        return new DisplayInformation(Color.green, "bush");
     }
 }

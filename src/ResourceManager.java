@@ -1,6 +1,5 @@
 import itumulator.executable.Program;
 import itumulator.world.Location;
-import itumulator.world.NonBlocking;
 import itumulator.world.World;
 
 import java.io.BufferedReader;
@@ -10,6 +9,7 @@ import java.util.Random;
 
 public class ResourceManager {
     private Program program;
+    private World world;
 
     public ResourceManager(String filepath, int displaySize, int delay) {
         try {
@@ -25,6 +25,7 @@ public class ResourceManager {
 
         int worldSize = Integer.parseInt(bufferedReader.readLine());
         this.program = new Program(worldSize, displaySize, delay);
+        this.world = this.program.getWorld();
 
         String currentLine = null;
         while ((currentLine = bufferedReader.readLine()) != null) {
@@ -51,44 +52,21 @@ public class ResourceManager {
         World world = program.getWorld();
 
         for (int i = 0; i < quantity; i++) {
-            Object e = createEntity(entity);
-            Location location = getValidRandomLocation(e, world);
-            world.setTile(location, e);
+            Location location = Utils.getValidRandomLocation(world);
+            createEntity(entity, location);
         }
     }
 
-    private Object createEntity(String entity) {
+    private void createEntity(String entity, Location location) {
         if(entity == null) {
             throw new IllegalArgumentException("Entity cannot be null");
         }
-        return switch (entity) {
-            case "grass" -> new Grass();
-            case "rabbit" -> new Rabbit();
+        switch (entity) {
+            case "grass" -> new Grass(world, location);
+            case "rabbit" -> new Rabbit(world, location);
+            case "burrow" -> new RabbitHole(world, location);
             default -> throw new IllegalArgumentException("Unknown entity: " + entity);
-        };
-    }
-
-    private Location getValidRandomLocation(Object e, World world) {
-        if(world == null) {
-            throw new IllegalArgumentException("World cannot be null");
         }
-
-        int size = world.getSize();
-        Random rand = new Random();
-        Location location = new Location(rand.nextInt(size), rand.nextInt(size));
-
-        if(e instanceof NonBlocking) {
-            while (world.containsNonBlocking(location)) {
-                location = new Location(rand.nextInt(size), rand.nextInt(size));
-            }
-        } else {
-            while (!world.isTileEmpty(location)) {
-                location = new Location(rand.nextInt(size), rand.nextInt(size));
-            }
-        }
-
-        return location;
-
     }
 
     public Program getProgram() {

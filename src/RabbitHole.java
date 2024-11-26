@@ -1,42 +1,46 @@
+import itumulator.executable.DisplayInformation;
+import itumulator.executable.DynamicDisplayInformationProvider;
 import itumulator.world.Location;
+import itumulator.world.NonBlocking;
 import itumulator.world.World;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-public class RabbitHole {
-    private final List<Hole> holes;
+public class RabbitHole implements NonBlocking, DynamicDisplayInformationProvider {
+    private final List<RabbitHole> holes;
+    private final Location location;
 
-    public RabbitHole() {
-        holes = new ArrayList<>();
+    public RabbitHole(World world, Location location) {
+        world.setTile(location, this);
+        this.holes = new ArrayList<>();
+        this.holes.add(this);
+        this.location = location;
     }
 
-    public void addHole(Hole hole) {
-
-        holes.add(hole);
+    public RabbitHole(World world, Location location, List<RabbitHole> holes) {
+        world.setTile(location, this);
+        this.holes = holes;
+        this.location = location;
+        this.holes.add(this);
     }
 
-    public Location getClosestHole(Location location) {
-        if(this.holes.isEmpty()) {
-            return null;
-        }
+    public Location getRandomExit(World world) {
+        return holes.get(new Random().nextInt(this.holes.size())).getLocation();
+    }
 
-        Hole closestHole = null;
-        int closestDistance = Integer.MAX_VALUE;
+    public Location getLocation() {
+        return this.location;
+    }
 
-        for(Hole hole : holes) {
-            int distance = Math.abs(hole.getLocation().getX() - location.getX()) + Math.abs(hole.getLocation().getY() - location.getY());
+    public List<RabbitHole> getHoles() {
+        return holes;
+    }
 
-            if(distance < closestDistance) {
-                closestHole = hole;
-                closestDistance = distance;
-            }
-        }
-
-        if(closestHole != null) {
-            return closestHole.getLocation();
-        }
-
-        return null;
+    @Override
+    public DisplayInformation getInformation() {
+        return new DisplayInformation(Color.BLACK, "hole");
     }
 }
