@@ -19,6 +19,10 @@ public class Rabbit extends Animal {
 
     @Override
     public void act(World world) {
+        if(isDead) {
+            return;
+        }
+
         if(world.isDay()) {
             dayTimeBehaviour(world);
         }
@@ -34,7 +38,7 @@ public class Rabbit extends Animal {
 
         if(energy <= 0 || age >= 100) {
             die();
-            return;
+            world.remove(this);
         }
     }
     private void nightTimeBehaviour(World world) {

@@ -27,8 +27,7 @@ public class GrassTest {
                 return true;
             }
         };
-        Grass grass = new Grass();
-        world.setTile(new Location(0, 1), new Grass());
+        Grass grass = new Grass(world, new Location(0, 1));
         grass.spreadProbability=1;
         grass.spread(world);
 
@@ -38,14 +37,12 @@ public class GrassTest {
     @Test
     public void testSpread_ToNeighboringTiles() {
         World world = new World(5);
-        Grass grass = new Grass();
         Location location = new Location(0, 1);
-        grass.setLocation(location);
-        world.setTile(location, new Grass());
+        Grass grass = new Grass(world, location);
         world.setCurrentLocation(location);
         grass.spreadProbability=1;
         grass.spread(world);
-        List<Location> neighbours = new ArrayList<>(world.getSurroundingTiles(grass.getLocation()));
+        List<Location> neighbours = new ArrayList<>(world.getSurroundingTiles(world.getLocation(grass)));
         for (Location loc : neighbours) {
             if (world.getNonBlocking(loc) instanceof Grass && world.getEntities().containsValue(loc)) {
                     assertTrue(true);
