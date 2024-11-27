@@ -71,6 +71,6 @@ public class Grass extends Plant {
      */
     @Override
     public DisplayInformation getInformation() {
-        return new DisplayInformation(Color.green, "mc_grass");
+        return new DisplayInformation(Color.green, "mc-grass");
     }
 }

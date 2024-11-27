@@ -26,7 +26,7 @@ public class Wolf extends Animal {
      * @param location The initial location of the wolf within the world.
      * @param wolfPack The wolf pack to which this wolf belongs.
      */
-    public Wolf(World world, Location location,WolfPack wolfPack) {
+    public Wolf(World world, Location location, WolfPack wolfPack) {
         super(Species.Wolf, new Random().nextDouble(), new Random().nextDouble(1, 2), 1);
         world.setTile(location, this);
         alpha = false;
@@ -51,13 +51,16 @@ public class Wolf extends Animal {
         // Eats nearby food
         List<Location> neighbours = new ArrayList<>(world.getSurroundingTiles());
         for (Location loc:neighbours){
-            if (world.getTile(loc) instanceof Organism o){
+            if(world.getTile(loc) instanceof Organism o) {
                if(this.canEat(o)){
                     this.consume(o,world);
                     world.move(this,loc);
                     return;
-                }
-           }else if(world.getTile(loc) instanceof Wolf w){
+               }
+            }
+            /*
+            // What dis do?
+            else if(world.getTile(loc) instanceof Wolf w){
                 if(this.energy>w.energy){
                     w.onConsume(world);
                 }else{
@@ -65,16 +68,35 @@ public class Wolf extends Animal {
                     return;
                 }
             }
+             */
         }
 
         // Alpha moves
         if(alpha) {
             this.wander(world);
+            return;
         }
 
         // Follow alpha
         if(!alpha) {
             this.pursue(world, world.getLocation(wolfPack.getAlpha()));
+            return;
+        }
+
+        // DOESN'T WORK
+        // Fight other wolf packs
+        for (Location loc : neighbours) {
+            if(world.getTile(loc) instanceof Wolf w && w.getPack() != this.wolfPack) {
+                System.out.println("Fighting");
+                if(new Random().nextDouble() < 0.5) {
+                    w.onConsume(world);
+                    return;
+                }
+                else {
+                    this.onConsume(world);
+                    return;
+                }
+            }
         }
         
     }
@@ -88,7 +110,7 @@ public class Wolf extends Animal {
      */
     private void age(World world){
         this.age ++;
-        this.energy -=energyDecay;
+        //this.energy -= energyDecay;
         if (energy <=0 || age >=100){
             if (alpha){
                 wolfPack.updatePack();
@@ -116,6 +138,14 @@ public class Wolf extends Animal {
         this.pack=wolves;
     }
 
+
+    /**
+     * Retrieves the wolf pack that this wolf belongs to.
+     *
+     * @return the WolfPack object representing the wolf's pack
+     */
+    public WolfPack getPack() {return this.wolfPack;}
+
     /**
      * Provides display information for the wolf object, including its color and the image key.
      *
@@ -123,7 +153,7 @@ public class Wolf extends Animal {
      */
     @Override
     public DisplayInformation getInformation() {
-        return new DisplayInformation(Color.GRAY, "mc_wolf");
+        return new DisplayInformation(Color.GRAY, "mc-wolf-large");
     }
 
 

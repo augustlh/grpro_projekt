@@ -76,7 +76,6 @@ public class Rabbit extends Animal {
     private void age(World world) {
         this.age++;
         this.energy -= this.energyDecay * 0.2;
-
         if(energy <= 0 || age >= 100) {
             die(world);
         }
@@ -303,8 +302,8 @@ public class Rabbit extends Animal {
     @Override
     public DisplayInformation getInformation() {
         if(age > 6) {
-            return new DisplayInformation(Color.WHITE, "mc_rabbit");
+            return new DisplayInformation(Color.WHITE, "mc-rabbit-large");
         }
-        return new DisplayInformation(Color.WHITE, "mc_rabbit");
+        return new DisplayInformation(Color.WHITE, "mc-rabbit-large");
     }
 }
