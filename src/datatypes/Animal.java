@@ -28,7 +28,6 @@ public abstract class Animal extends Organism {
     public Animal(Species species, double metabolism, double energyDecay, int searchRadius) {
         super(species);
         this.age = 0;
-        this.energy = 20;
         this.metabolism = metabolism;
         this.energyDecay = energyDecay;
         this.searchRadius = searchRadius;

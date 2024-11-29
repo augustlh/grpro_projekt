@@ -35,6 +35,7 @@ public class Wolf extends Carnivore {
     public Wolf(World world, Location location, WolfPack wolfPack) {
         super(Species.Wolf, new Random().nextDouble(), new Random().nextDouble(1, 2), 1);
         world.setTile(location, this);
+        this.energy = 20;
         alpha = false;
         pack = null;
         this.wolfPack = wolfPack;

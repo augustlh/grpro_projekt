@@ -30,6 +30,7 @@ public class Rabbit extends Herbivore {
     public Rabbit(World world, Location location) {
         super(Species.Rabbit, new Random().nextDouble(), new Random().nextDouble(0, 0.8), 1);
         world.setTile(location, this);
+        this.energy = 20;
         this.canBreed = true;
         this.insideHole = false;
         this.hole = null;
