@@ -1,3 +1,6 @@
+package behaviours;
+
+import help.Utils;
 import itumulator.world.Location;
 import itumulator.world.World;
 

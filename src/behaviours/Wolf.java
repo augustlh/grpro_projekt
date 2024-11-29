@@ -1,3 +1,9 @@
+package behaviours;
+
+import datatypes.Animal;
+import datatypes.Carnivore;
+import datatypes.Organism;
+import datatypes.Species;
 import itumulator.executable.DisplayInformation;
 import itumulator.world.Location;
 import itumulator.world.World;
@@ -11,7 +17,7 @@ import java.util.List;
  * The Wolf class represents a wolf, extending the Animal class. A wolf can form part of a pack,
  * has an alpha status, and interacts with the world.
  */
-public class Wolf extends Animal {
+public class Wolf extends Carnivore {
 
     private boolean alpha;
     private List<Wolf> pack;
@@ -75,30 +81,15 @@ public class Wolf extends Animal {
         if(alpha) {
             this.wander(world);
             return;
-        }
-
-        // Follow alpha
-        if(!alpha) {
+        } else {
             this.pursue(world, world.getLocation(wolfPack.getAlpha()));
             return;
         }
 
         // DOESN'T WORK
         // Fight other wolf packs
-        for (Location loc : neighbours) {
-            if(world.getTile(loc) instanceof Wolf w && w.getPack() != this.wolfPack) {
-                System.out.println("Fighting");
-                if(new Random().nextDouble() < 0.5) {
-                    w.onConsume(world);
-                    return;
-                }
-                else {
-                    this.onConsume(world);
-                    return;
-                }
-            }
-        }
-        
+//
+
     }
 
     /**

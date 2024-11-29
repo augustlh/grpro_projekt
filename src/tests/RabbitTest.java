@@ -1,3 +1,7 @@
+package tests;
+
+import behaviours.Grass;
+import behaviours.Rabbit;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

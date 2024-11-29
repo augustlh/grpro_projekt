@@ -1,3 +1,9 @@
+package behaviours;
+
+import datatypes.Animal;
+import datatypes.Carnivore;
+import datatypes.Organism;
+import datatypes.Species;
 import itumulator.executable.DisplayInformation;
 import itumulator.world.Location;
 import itumulator.world.World;
@@ -6,10 +12,10 @@ import java.awt.Color;
 import java.util.*;
 
 
-public class Bear extends Animal {
+public class Bear extends Carnivore {
 
     private HashSet<Location> territory;
-    private int territoryRange;
+    private final int territoryRange;
 
     public Bear(World world, Location location) {
         super(Species.Bear, new Random().nextDouble(), new Random().nextDouble(1, 2), 1);

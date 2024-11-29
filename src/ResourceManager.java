@@ -1,11 +1,12 @@
+import behaviours.*;
+import help.Utils;
 import itumulator.executable.Program;
 import itumulator.world.Location;
 import itumulator.world.World;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -55,7 +56,14 @@ public class ResourceManager {
 
             String entity = contents[0];
             int quantity = handleQuantity(contents[1]);
-            spawnEntities(entity, quantity);
+
+            if(contents.length > 2) {
+                String location = contents[2];
+                String[] coords = location.replaceAll("[()]", "").split(",");
+                spawnEntities(entity, quantity, new Location(Integer.parseInt(coords[0]), Integer.parseInt(coords[1])));
+            } else {
+                spawnEntities(entity, quantity);
+            }
         }
 
         bufferedReader.close();
@@ -99,6 +107,22 @@ public class ResourceManager {
             createEntity(entity, location);
         }
     }
+
+
+    /**
+     * Spawns the specified quantity of entities within the world on a given location
+     *
+     * @param entity The type of the entity to spawn.
+     * @param quantity The number of entities to spawn.
+     * @param location The location to spawn the entity
+     */
+    private void spawnEntities(String entity, int quantity, Location location) {
+        if (entity.equals("wolf")) return;
+        for (int i = 0; i < quantity; i++) {
+            createEntity(entity, location);
+        }
+    }
+
 
     /**
      * Creates a new entity at the specified location with the given quantity.

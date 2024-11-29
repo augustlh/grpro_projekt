@@ -1,4 +1,6 @@
+package tests;
 
+import behaviours.Grass;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,7 +30,7 @@ public class GrassTest {
             }
         };
         Grass grass = new Grass(world, new Location(0, 1));
-        grass.spreadProbability=1;
+        grass.setSpreadProbability(1);
         grass.spread(world);
 
         // Ensure grass does not spread when there are no surrounding empty non-blocking tiles
@@ -40,7 +42,7 @@ public class GrassTest {
         Location location = new Location(0, 1);
         Grass grass = new Grass(world, location);
         world.setCurrentLocation(location);
-        grass.spreadProbability=1;
+        grass.setSpreadProbability(1);
         grass.spread(world);
         List<Location> neighbours = new ArrayList<>(world.getSurroundingTiles(world.getLocation(grass)));
         for (Location loc : neighbours) {
