@@ -8,4 +8,5 @@ public abstract class Carnivore extends Animal {
 
     // Hunt and eat other animals method
 
+
 }

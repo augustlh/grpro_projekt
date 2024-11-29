@@ -30,6 +30,7 @@ public class Bush extends Plant {
             }
         }
     }
+
     @Override
     public DisplayInformation getInformation() {
         if(berryCount > 0) {

@@ -20,7 +20,7 @@ public class Bear extends Carnivore {
     public Bear(World world, Location location) {
         super(Species.Bear, new Random().nextDouble(), new Random().nextDouble(1, 2), 1);
         world.setTile(location, this);
-        this.energy = 20;
+        this.energy = 30;
         territoryRange = 2;
     }
 

@@ -35,7 +35,7 @@ public class Wolf extends Carnivore {
     public Wolf(World world, Location location, WolfPack wolfPack) {
         super(Species.Wolf, new Random().nextDouble(), new Random().nextDouble(1, 2), 1);
         world.setTile(location, this);
-        this.energy = 20;
+        this.energy = 25;
         alpha = false;
         pack = null;
         this.wolfPack = wolfPack;
@@ -65,17 +65,24 @@ public class Wolf extends Carnivore {
                     return;
                }
             }
-            /*
-            // What dis do?
-            else if(world.getTile(loc) instanceof Wolf w){
-                if(this.energy>w.energy){
+        }
+        // DOESN'T WORK
+        // Fight other wolf packs
+
+        for (Location loc : neighbours) {
+            if(world.getTile(loc) instanceof Wolf w && w.getPack() != this.wolfPack) {
+                System.out.println("Fighting");
+                if(new Random().nextDouble() < 0.5) {
                     w.onConsume(world);
-                }else{
+                    w.wolfPack.updatePack();
+                    return;
+                }
+                else {
                     this.onConsume(world);
+                    wolfPack.updatePack();
                     return;
                 }
             }
-             */
         }
 
         // Alpha moves
@@ -87,9 +94,6 @@ public class Wolf extends Carnivore {
             return;
         }
 
-        // DOESN'T WORK
-        // Fight other wolf packs
-//
 
     }
 

@@ -22,7 +22,7 @@ jobs:
       - name: Generate Javadocs
         run: |
           javadoc -d ./docs/grpro_projekt_docs -sourcepath ./code/src -subpackages . || true
-ges
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
