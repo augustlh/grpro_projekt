@@ -131,6 +131,7 @@ public class Rabbit extends Herbivore {
         }
 
         setHole(world);
+
         eat(world);
 
         // Seeks nearby food or wander randomly
@@ -142,14 +143,13 @@ public class Rabbit extends Herbivore {
         if (target == null) {
             wander(world);
         } else {
+            System.out.println("Pursuing");
             pursue(world, target);
         }
 
     }
 
-    /**
-     * Sets the rabbit's hole if it does not already have one and if the current
-     * location in the*/
+
     private void setHole(World world) {
         if(this.hole == null && world.getNonBlocking(world.getLocation(this)) instanceof RabbitHole e) {
             this.hole = e;

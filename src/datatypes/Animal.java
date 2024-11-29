@@ -98,20 +98,6 @@ public abstract class Animal extends Organism {
     }
 
     /**
-     * Determines whether the rabbit is standing on an edible organism and consumes it if possible.
-     *
-     * @param world The world in which the rabbit resides and interacts with the environment.
-     */
-    protected void eat(World world) {
-        // If stands on eatable organism, eat it
-        if (world.getNonBlocking(world.getLocation(this)) instanceof Organism o) {
-            if(canEat(o)) {
-                this.consume(o, world);
-            }
-        }
-    }
-
-    /**
      * Causes the animal to pursue a specified location within the given world.
      * The animal will move one tile closer to the target location if the tile is empty.
      *
@@ -119,7 +105,24 @@ public abstract class Animal extends Organism {
      * @param location the target location the animal is trying to move towards
      */
     protected void pursue(World world, Location location) {
-        Location newLocation = Utils.getNextLocationInPath(world.getLocation(this));
+        Location currentLocation = world.getLocation(this);
+
+        int x = currentLocation.getX();
+        int y = currentLocation.getY();
+
+        if(x < location.getX()) {
+            x++;
+        } else if(x > location.getX()) {
+            x--;
+        }
+
+        if(y < location.getY()) {
+            y++;
+        } else if(y > location.getY()){
+            y--;
+        }
+
+        Location newLocation = new Location(x, y);
         if(world.isTileEmpty(newLocation)) {
             world.move(this, newLocation);
         }

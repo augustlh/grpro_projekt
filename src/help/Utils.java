@@ -149,18 +149,20 @@ public class Utils {
      * Gets the next location an object should take, to path towards a target.
      *
      * @param location Startlocation to pathfind from
+     * @param target target location to  pathfind to
      */
-    static public Location getNextLocationInPath(Location location) {
-        int x = location.getX();
-        int y = location.getY();
-
+    static public Location getNextLocationInPath(Location location, Location target) {
+        int x = target.getX();
+        int y = target.getY();
+        System.out.println(x+ " " + location.getX());
         if(x < location.getX()) {
             x++;
         } else if(x > location.getX()) {
             x--;
         }
-
+        System.out.println(y+ " " + location.getY());
         if(y < location.getY()) {
+
             y++;
         } else if(y > location.getY()){
             y--;
