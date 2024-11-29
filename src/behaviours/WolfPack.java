@@ -12,10 +12,9 @@ import java.util.List;
  * creation of the pack, assigns an alpha wolf, and updates the pack when necessary.
  */
 public class WolfPack {
+    private Cave cave;
 
-    private ArrayList<Wolf> wolves;
-    private Location spawnLocation;
-    private int quantity;
+    private final ArrayList<Wolf> wolves;
     private Wolf alpha;
 
     /**
@@ -26,10 +25,9 @@ public class WolfPack {
      * @param quantity the number of wolves to be included in the pack
      */
     public WolfPack(World world, Location location, int quantity) {
-        this.spawnLocation = location;
-        this.quantity = quantity;
         this.wolves = new ArrayList<>();
-        setupPack(world);
+        this.cave = null;
+        setupPack(world, location, quantity);
         setAlpha();
     }
 
@@ -39,14 +37,26 @@ public class WolfPack {
      *
      * @param world the world in which the wolves will be spawned
      */
-    private void setupPack(World world) {
+    private void setupPack(World world, Location location, int quantity) {
         for (int i = 0; i < quantity; i++) {
-            wolves.add(new Wolf(world, Utils.getSurroundingEmptyTiles(spawnLocation, world),this));
+            wolves.add(new Wolf(world, Utils.getSurroundingEmptyTiles(location, world),this));
         }
     }
 
+    public Cave getCave() {
+        return this.cave;
+    }
+
+    public void setCave(Cave cave) {
+        if (this.cave == null) {
+            return;
+        }
+
+        this.cave = cave;
+    }
+
     /**
-     * Retrieves the list of wolves that form the pack.
+     * Retrieves the list of wolves that formS the pack.
      *
      * @return a list of Wolf objects representing the wolves in the pack
      */

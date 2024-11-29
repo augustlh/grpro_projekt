@@ -60,31 +60,20 @@ public class Rabbit extends Herbivore {
      */
     @Override
     public void act(World world) {
+        // Stops act if dead
         age(world);
         if(isDead) {
             return;
         }
 
+        // Execute daytime behavior
         if(world.isDay()) {
             dayTimeBehaviour(world);
         }
 
+        // Execute nighttime behavior
         if(world.isNight()) {
             nightTimeBehaviour(world);
-        }
-    }
-
-    /**
-     * Increases the rabbit's age and decreases its energy by a specific decay factor.
-     * If the rabbit's energy falls to 0 or below, or its age reaches 100, the rabbit dies.
-     *
-     * @param world The world in which the rabbit exists.
-     */
-    private void age(World world) {
-        this.age++;
-        this.energy -= this.energyDecay * 0.2;
-        if(energy <= 0 || age >= 100) {
-            die(world);
         }
     }
 

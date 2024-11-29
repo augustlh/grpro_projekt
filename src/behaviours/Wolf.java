@@ -1,8 +1,6 @@
 package behaviours;
 
-import datatypes.Animal;
 import datatypes.Carnivore;
-import datatypes.Organism;
 import datatypes.Species;
 import itumulator.executable.DisplayInformation;
 import itumulator.world.Location;
@@ -55,39 +53,18 @@ public class Wolf extends Carnivore {
             return;
         }
 
-        // Eats nearby food
-        List<Location> neighbours = new ArrayList<>(world.getSurroundingTiles());
-        for (Location loc:neighbours){
-            if(world.getTile(loc) instanceof Organism o) {
-               if(this.canEat(o)){
-                    this.consume(o,world);
-                    world.move(this,loc);
-                    return;
-               }
-            }
-        }
-        // DOESN'T WORK
-        // Fight other wolf packs
+        //builds a cave, maybe!.
+        buildCave(world, world.getLocation(this));
 
-        for (Location loc : neighbours) {
-            if(world.getTile(loc) instanceof Wolf w && w.getPack() != this.wolfPack) {
-                System.out.println("Fighting");
-                if(new Random().nextDouble() < 0.5) {
-                    w.onConsume(world);
-                    w.wolfPack.updatePack();
-                    return;
-                }
-                else {
-                    this.onConsume(world);
-                    wolfPack.updatePack();
-                    return;
-                }
-            }
-        }
+        // Eats adjacent food
+        eat(world);
+
+        // Fight other wolf packs
+        fight(world);
 
         // Alpha moves
         if(alpha) {
-            this.wander(world);
+            this.hunt(world);
             return;
         } else {
             this.pursue(world, world.getLocation(wolfPack.getAlpha()));
@@ -97,6 +74,17 @@ public class Wolf extends Carnivore {
 
     }
 
+    private void buildCave(World world, Location location) {
+        if(this.wolfPack.getCave() == null) {
+            if (world.getNonBlocking(location) == null) {
+                if(new Random().nextDouble() < 0.1) {
+                    this.wolfPack.setCave(new Cave(world, location));
+
+                }
+            }
+        }
+    }
+
     /**
      * Ages the wolf by incrementing its age and decrementing its energy. If the wolf's energy
      * depletes to zero or it reaches a certain age threshold, it will die. If the wolf is
@@ -104,9 +92,10 @@ public class Wolf extends Carnivore {
      *
      * @param world The world in which the wolf resides.
      */
-    private void age(World world){
+    @Override
+    protected void age(World world){
         this.age ++;
-        //this.energy -= energyDecay;
+        this.energy -= energyDecay;
         if (energy <=0 || age >=100){
             if (alpha){
                 wolfPack.updatePack();
@@ -134,6 +123,24 @@ public class Wolf extends Carnivore {
         this.pack=wolves;
     }
 
+    private void fight(World world) {
+        List <Location> neighbours = new ArrayList<>(world.getSurroundingTiles());
+        for (Location loc : neighbours) {
+            if(world.getTile(loc) instanceof Wolf w && w.getPack() != this.wolfPack) {
+                System.out.println("Fighting");
+                if(new Random().nextDouble() < 0.5) {
+                    w.onConsume(world);
+                    w.wolfPack.updatePack();
+                    return;
+                }
+                else {
+                    this.onConsume(world);
+                    wolfPack.updatePack();
+                    return;
+                }
+            }
+        }
+    }
 
     /**
      * Retrieves the wolf pack that this wolf belongs to.

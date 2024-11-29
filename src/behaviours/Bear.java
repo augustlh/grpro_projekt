@@ -1,9 +1,9 @@
 package behaviours;
 
-import datatypes.Animal;
 import datatypes.Carnivore;
 import datatypes.Organism;
 import datatypes.Species;
+import help.Utils;
 import itumulator.executable.DisplayInformation;
 import itumulator.world.Location;
 import itumulator.world.World;
@@ -35,50 +35,43 @@ public class Bear extends Carnivore {
         // Set's the bear's territory
         setTerritory(world);
 
-        // Eat adjacent eatable organisms
-        List<Location> neighbours = new ArrayList<>(world.getSurroundingTiles());
-        for (Location loc : neighbours){
-            Set<Location> territoryNeighbours = getValidEmptyLocationsWithinTerritory(world);
-            if (world.getTile(loc) instanceof Organism o && territoryNeighbours.contains(loc)){
-                if((this.canEat(o))) {
-                    System.out.println("Eating");
-                    this.consume(o,world);
-                    world.move(this,loc);
-                    return;
-                }
-            }
-        }
+        // Eats adjacent food if within territory
+        eat(world);
 
         // Pursue food in territory
-        ArrayList<Location> territoryList = new ArrayList<>(territory);
-        for (Location loc : territoryList){
-            if (world.getTile(loc) instanceof Organism o){
-                if(this.canEat(o)){
-                    System.out.println("Pursuing");
-                    pursue(world, loc);
-                    return;
-                }
-            }
-        }
+        hunt(world);
 
         // Wander randomly within territory
         wander(world);
 
     }
 
-    private void age(World world){
-        this.age ++;
-        this.energy -= energyDecay;
-        if (energy <=0 || age >=100){
-            die();
-            world.delete(this);
-        }
-    }
-
     private void setTerritory(World world){
         if(territory == null) {
             territory = new HashSet<>(world.getSurroundingTiles(territoryRange));
         }
+    }
+
+    @Override
+    protected void eat(World world) {
+        List<Location> neighbours = new ArrayList<>(world.getSurroundingTiles());
+        for (Location loc : neighbours) {
+            Set<Location> territoryNeighbours = getValidEmptyLocationsWithinTerritory(world);
+            if (world.getTile(loc) instanceof Organism o && territoryNeighbours.contains(loc)) {
+                if ((this.canEat(o))) {
+                    System.out.println("Eating");
+                    this.consume(o, world);
+                    world.move(this, loc);
+                    return;
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void hunt(World world) {
+        Location loc = Utils.closestConsumableEntity(world, this, searchRadius);
+        if(loc != null && territory.contains(loc)) pursue(world, loc);
     }
 
     private Set<Location> getValidEmptyLocationsWithinTerritory(World world){

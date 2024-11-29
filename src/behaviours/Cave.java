@@ -2,10 +2,21 @@ package behaviours;
 
 import datatypes.BreedingGround;
 import itumulator.executable.DisplayInformation;
+import itumulator.world.Location;
+import itumulator.world.World;
 
 import java.awt.*;
 
-public class WolfCave extends BreedingGround {
+public class Cave extends BreedingGround {
+    Location entrance;
+
+    public Cave(World world, Location location) {
+        world.setTile(location, this);
+    }
+
+    public Location getEntrance() {
+        return entrance;
+    }
 
     /**
      * Provides display information for the WolfCave.
@@ -14,7 +25,7 @@ public class WolfCave extends BreedingGround {
      */
     @Override
     public DisplayInformation getInformation() {
-        return new DisplayInformation(Color.BLACK, "hole-big");
+        return new DisplayInformation(Color.BLACK, "cave");
     }
 
 }

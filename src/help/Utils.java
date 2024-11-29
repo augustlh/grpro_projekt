@@ -145,4 +145,28 @@ public class Utils {
         return getValidRandomLocation(world);
     }
 
+    /**
+     * Gets the next location an object should take, to path towards a target.
+     *
+     * @param location Startlocation to pathfind from
+     */
+    static public Location getNextLocationInPath(Location location) {
+        int x = location.getX();
+        int y = location.getY();
+
+        if(x < location.getX()) {
+            x++;
+        } else if(x > location.getX()) {
+            x--;
+        }
+
+        if(y < location.getY()) {
+            y++;
+        } else if(y > location.getY()){
+            y--;
+        }
+
+        return new Location(x, y);
+    }
+
 }

@@ -1,5 +1,6 @@
 package datatypes;
 
+import help.Utils;
 import itumulator.world.Location;
 import itumulator.world.World;
 import java.util.Random;
@@ -32,6 +33,7 @@ public abstract class Animal extends Organism {
         this.energyDecay = energyDecay;
         this.searchRadius = searchRadius;
     }
+
 
     /**
      * Calculates the nutritional value of the animal based on its current energy level
@@ -68,6 +70,15 @@ public abstract class Animal extends Organism {
         world.delete(this);
     }
 
+    protected void age(World world) {
+        this.age ++;
+        this.energy -= energyDecay;
+        if (energy <=0 || age >=100){
+            die();
+            world.delete(this);
+        }
+    }
+
     /**
      * Causes the animal to wander to a random empty neighboring tile in the given world.
      * The method selects an empty neighboring tile at random and moves the animal to
@@ -75,7 +86,6 @@ public abstract class Animal extends Organism {
      *
      * @param world the world in which the animal is wandering
      */
-
     protected void wander(World world) {
         Set<Location> emptyNeighbours = world.getEmptySurroundingTiles();
         Location newLocation = null;
@@ -101,7 +111,6 @@ public abstract class Animal extends Organism {
         }
     }
 
-
     /**
      * Causes the animal to pursue a specified location within the given world.
      * The animal will move one tile closer to the target location if the tile is empty.
@@ -110,24 +119,7 @@ public abstract class Animal extends Organism {
      * @param location the target location the animal is trying to move towards
      */
     protected void pursue(World world, Location location) {
-        Location currentLocation = world.getLocation(this);
-
-        int x = currentLocation.getX();
-        int y = currentLocation.getY();
-
-        if(x < location.getX()) {
-            x++;
-        } else if(x > location.getX()) {
-            x--;
-        }
-
-        if(y < location.getY()) {
-            y++;
-        } else if(y > location.getY()){
-            y--;
-        }
-
-        Location newLocation = new Location(x, y);
+        Location newLocation = Utils.getNextLocationInPath(world.getLocation(this));
         if(world.isTileEmpty(newLocation)) {
             world.move(this, newLocation);
         }

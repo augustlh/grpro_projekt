@@ -42,4 +42,8 @@ public class Bush extends Plant {
     public void onConsume(World world) {
         berryCount--;
     }
+
+    public int getBerryCount() {
+        return berryCount;
+    }
 }
