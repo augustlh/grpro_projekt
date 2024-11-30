@@ -115,16 +115,23 @@ public class Utils {
             throw new IllegalArgumentException("World cannot be null");
         }
 
+        int ATTEMPTS = 0;
+        int MAX_ATTEMPTS = 800;
+
         int size = world.getSize();
         Random rand = new Random();
         Location location = new Location(rand.nextInt(size), rand.nextInt(size));
 
         while (world.getTile(location) != null) {
+            if(ATTEMPTS >= MAX_ATTEMPTS) {
+                return null;
+            }
+
+            ATTEMPTS++;
             location = new Location(rand.nextInt(size), rand.nextInt(size));
         }
 
         return location;
-
     }
 
     /**

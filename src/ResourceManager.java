@@ -98,12 +98,22 @@ public class ResourceManager {
     private void spawnEntities(String entity, int quantity) {
         if (entity.equals("wolf")){
             Location location = Utils.getValidRandomLocation(world);
+
+            if(location == null) {
+                throw new RuntimeException("Failed to spawn entity. Could not find valid spawn location in allowed amount of tries.");
+            }
+
             createEntity(entity, location, quantity);
             return;
         }
 
         for (int i = 0; i < quantity; i++) {
             Location location = Utils.getValidRandomLocation(world);
+
+            if(location == null) {
+                throw new RuntimeException("Failed to spawn entity. Could not find valid spawn location in allowed amount of tries.");
+            }
+
             createEntity(entity, location);
         }
     }

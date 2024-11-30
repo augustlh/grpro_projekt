@@ -5,6 +5,7 @@ import datatypes.Herbivore;
 import datatypes.Species;
 import itumulator.executable.DisplayInformation;
 import itumulator.world.Location;
+import itumulator.world.NonBlocking;
 import itumulator.world.World;
 
 import java.awt.Color;
@@ -222,9 +223,10 @@ public class Rabbit extends Herbivore {
      * If the location contains a non-blocking entity or is null, the method will return without making any changes.
      *
      * @param world The world in which the exit is to be dug.
-     * @param*/
+     * @param location The location in which to dig the hole.
+     */
     private void digExit(World world, Location location) {
-        if(world.containsNonBlocking(location) || location == null) {
+        if(location == null || world.getTile(location) != null) {
             return;
         }
 
@@ -261,19 +263,19 @@ public class Rabbit extends Herbivore {
      */
     private void exitHole(World world){
         Location holeLocation = this.hole.getRandomExit(world);
-        if(world.getTile(holeLocation) != null /*|| new Random().nextDouble() < 0.2*/) {
+        if(!(world.getTile(holeLocation) instanceof NonBlocking)) {
             Location newLocation = Utils.getValidRandomLocation(world);
-            digExit(world, newLocation);
+
+            if(newLocation != null) {
+                digExit(world, newLocation);
+            }
             holeLocation = newLocation;
         }
 
-        if(holeLocation == null) {
-            System.out.println("Forced to stay in hole: " + this);
-            return;
+        if(holeLocation != null) {
+            world.setTile(holeLocation, this);
+            insideHole = false;
         }
-
-        world.setTile(holeLocation, this);
-        insideHole = false;
     }
 
     /**

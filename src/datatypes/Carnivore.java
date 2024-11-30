@@ -6,7 +6,6 @@ import itumulator.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public abstract class Carnivore extends Animal {
 
@@ -32,7 +31,7 @@ public abstract class Carnivore extends Animal {
 
     protected void hunt(World world) {
         // Pursue nearest eatable organism
-        Location loc = Utils.closestConsumableEntity(world, this, searchRadius);
+        Location loc = Utils.closestConsumableEntity(world, this, searchRadius*2);
         if(loc != null) pursue(world, loc);
     }
 

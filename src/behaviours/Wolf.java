@@ -31,7 +31,7 @@ public class Wolf extends Carnivore {
      * @param wolfPack The wolf pack to which this wolf belongs.
      */
     public Wolf(World world, Location location, WolfPack wolfPack) {
-        super(Species.Wolf, new Random().nextDouble(), new Random().nextDouble(1, 2), 1);
+        super(Species.Wolf, new Random().nextDouble(), new Random().nextDouble(1, 2), 2);
         world.setTile(location, this);
         this.energy = 25;
         alpha = false;
