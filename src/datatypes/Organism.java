@@ -43,7 +43,7 @@ public abstract class Organism implements Consumable, Actor, DynamicDisplayInfor
      * @return true if this organism can consume the other organism, false otherwise
      */
     public boolean canEat(Organism other) {
-        return (this.species.getDietMask() & other.getSpecies().getValue()) != 0;
+        return (this.species.getDietMask() & other.getSpecies().getValue()) != 0 && other.canBeEaten();
     }
 
     /**
@@ -55,6 +55,8 @@ public abstract class Organism implements Consumable, Actor, DynamicDisplayInfor
         return !this.isDead;
     }
 
-    public boolean canBeEaten() {return true;}
+    public boolean canBeEaten() {
+        return true;
+    }
 
 }
