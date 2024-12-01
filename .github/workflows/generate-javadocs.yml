@@ -22,6 +22,10 @@ jobs:
           java-version: '17'  # Replace with your Java version (e.g., 11, 17)
           distribution: 'temurin'
 
+      - name: autism
+        run: |
+          mkdir docs
+
       # Step 4: Generate Javadocs
       - name: Generate Javadocs
         run: |
