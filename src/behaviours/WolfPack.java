@@ -60,7 +60,7 @@ public class WolfPack {
      *
      * @return a list of Wolf objects representing the wolves in the pack
      */
-    public List getPack() {
+    public List<Wolf> getPack() {
         return wolves;
     }
 
@@ -70,6 +70,9 @@ public class WolfPack {
      * the pack updated.
      */
     public void setAlpha() {
+        if (wolves.isEmpty()) {
+            return;
+        }
         this.alpha = wolves.getFirst();
         wolves.getFirst().setThisAlpha(true);
         for (Wolf wolf : wolves) {
