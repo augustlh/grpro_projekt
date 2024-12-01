@@ -34,7 +34,7 @@ jobs:
 
       - name: L
         run: |
-          cat children.txt
+          cat ./docs/index.html
               
       # Step 5: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
