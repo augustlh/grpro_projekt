@@ -10,16 +10,26 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # if you have a protection rule on your repository, you'll need to give write permission to the workflow.
+      contents: write  # If you have a protection rule on your repository, you'll need to give write permission to the workflow.
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
         
-      - name: Deploy JavaDoc 🚀
-        uses: MathieuSoysal/Javadoc-publisher.yml@v2.5.0
+      - name: Set up Java 17
+        uses: actions/setup-java@v3
         with:
+          java-version: '17'
+          
+      - name: Generate Javadoc
+        run: |
+          mkdir -p javadoc
+          javadoc -d javadoc -sourcepath src/ -subpackages .
+          
+      - name: Deploy Javadoc to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4.2.0
+        with:
+          branch: javadoc  # The branch where the Javadoc will be deployed
+          folder: javadoc  # The folder containing generated Javadoc files
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          javadoc-branch: javadoc
-          java-version: 17
-          target-folder: javadoc
-          custom-command: javadoc -d javadoc -sourcepath src/ -subpackages .
