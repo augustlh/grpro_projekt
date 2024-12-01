@@ -30,7 +30,7 @@ jobs:
       # Step 4: Generate Javadocs
       - name: Generate Javadocs
         run: |
-          javadoc -d ./docs -sourcepath ./src $(find ./src -name "*.java" -not -path "./src/itumulator/*")
+          javadoc -d ./docs -sourcepath ./src $(find ./src -name "*.java" -not -path "./src/itumulator/*") || true
 
       # Step 5: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
