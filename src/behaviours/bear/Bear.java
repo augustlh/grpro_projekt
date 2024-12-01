@@ -109,11 +109,19 @@ public class Bear extends Carnivore {
 
     @Override
     protected void nightTimeBehaviour(World world) {
-        dayTimeBehaviour(world);
+        // Sleepy time :)
     }
 
+    /**
+     * Retrieves display information for the bear, including its color and image key.
+     *
+     * @return a DisplayInformation object representing the rabbit with specific color and image key.
+     */
     @Override
     public DisplayInformation getInformation() {
-        return new DisplayInformation(Color.YELLOW, "mc-bear-large");
+        if(age > 6) {
+            return new DisplayInformation(Color.WHITE, "mc-bear-large");
+        }
+        return new DisplayInformation(Color.WHITE, "mc-bear-small");
     }
 }

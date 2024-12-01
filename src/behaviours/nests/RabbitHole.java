@@ -90,6 +90,6 @@ public class RabbitHole extends Nest<Rabbit> {
      */
     @Override
     public DisplayInformation getInformation() {
-        return new DisplayInformation(Color.BLACK, "hole");
+        return new DisplayInformation(Color.BLACK, "pkmndp-hole");
     }
 }

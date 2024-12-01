@@ -232,13 +232,17 @@ public class Wolf extends Carnivore {
     }
 
     /**
-     * Provides display information for the wolf object, including its color and the image key.
+     * Retrieves display information for the wolf, including its color and image key.
      *
-     * @return a DisplayInformation object containing color as Color.GRAY and image key as "mc_wolf"
+     * @return a DisplayInformation object representing the rabbit with specific color and image key.
      */
     @Override
     public DisplayInformation getInformation() {
-        return new DisplayInformation(Color.GRAY, "mc-wolf-large");
+        if(age > 6) {
+            return new DisplayInformation(Color.WHITE, "mc-wolf-large");
+        }
+        return new DisplayInformation(Color.WHITE, "mc-wolf-small");
     }
+
 }
 

@@ -34,14 +34,6 @@ public class Bush extends Plant {
     }
 
     @Override
-    public DisplayInformation getInformation() {
-        if(berryCount > 0) {
-            return new DisplayInformation(Color.green, "bush-berries");
-        }
-        return new DisplayInformation(Color.magenta, "bush");
-    }
-
-    @Override
     public void onConsume(World world) {
         berryCount = 0;
     }
@@ -55,4 +47,16 @@ public class Bush extends Plant {
     public int getBerryCount() {
         return berryCount;
     }
+
+    @Override
+    public DisplayInformation getInformation() {
+        if(berryCount > 3) {
+            return new DisplayInformation(Color.green, "mc-bush-many");
+        }
+        if(berryCount > 0) {
+            return new DisplayInformation(Color.green, "mc-bush-few");
+        }
+        return new DisplayInformation(Color.magenta, "mc-bush");
+    }
+
 }

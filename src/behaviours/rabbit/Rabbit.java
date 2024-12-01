@@ -266,6 +266,6 @@ public class Rabbit extends Herbivore {
         if(age > 6) {
             return new DisplayInformation(Color.WHITE, "mc-rabbit-large");
         }
-        return new DisplayInformation(Color.WHITE, "mc-rabbit-large");
+        return new DisplayInformation(Color.WHITE, "mc-rabbit-small");
     }
 }

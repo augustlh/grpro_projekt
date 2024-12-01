@@ -27,7 +27,7 @@ public class WolfCave extends Nest<Wolf> {
      */
     @Override
     public DisplayInformation getInformation() {
-        return new DisplayInformation(Color.BLACK, "cave");
+        return new DisplayInformation(Color.BLACK, "pkmndp-cave");
     }
 
 }
