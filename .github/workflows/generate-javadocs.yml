@@ -20,13 +20,18 @@ jobs:
         with:
           java-version: '23'  # Replace with your Java version (e.g., 11, 17)
           distribution: 'temurin'
-          
-      # Step 3: Generate Javadocs (allow failure)
+
+      # Step 3: Create docs directory
+      - name: Create docs directory
+        run: |
+          mkdir -p ./docs
+
+      # Step 4: Generate Javadocs
       - name: Generate Javadocs
         run: |
-          javadoc -d ./docs -sourcepath ./src $(find ./code/src -name "*.java" -not -path "./src/itumulator/*") || true
+          javadoc -d ./docs -sourcepath ./src $(find ./src -name "*.java" -not -path "./src/itumulator/*")
 
-      # Step 4: Publish Javadocs to GitHub Pages
+      # Step 5: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
