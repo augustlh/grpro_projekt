@@ -19,13 +19,8 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v3
         with:
-          java-version: '23'  # Replace with your Java version (e.g., 11, 17)
+          java-version: '17'  # Replace with your Java version (e.g., 11, 17)
           distribution: 'temurin'
-
-      # Step 3: Create docs directory
-      - name: Create docs directory
-        run: |
-          mkdir -p ./docs
 
       # Step 4: Generate Javadocs
       - name: Generate Javadocs
