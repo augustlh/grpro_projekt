@@ -31,9 +31,9 @@ jobs:
       - name: Generate Javadocs
         run: |
           javadoc -verbose -d ./docs -sourcepath ./src $(find ./src -name "*.java" -not -path "./src/itumulator/*") || true
-      - name: L
-        run: |
-          cat ./docs/index.html
+      # Step 5: Verify Javadoc generation
+      - name: Verify Javadoc files
+        run: ls -l ./docs | grep '\.html$' || { echo "No HTML files found in docs directory"; exit 1;
               
       # Step 5: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
