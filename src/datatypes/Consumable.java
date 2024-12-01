@@ -22,4 +22,7 @@ public interface Consumable {
      * @return the nutritional value of the consumable object
      */
     double getNutritionalValue();
+
+    boolean canBeEaten();
+
 }

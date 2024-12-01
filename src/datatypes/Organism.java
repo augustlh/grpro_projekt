@@ -55,4 +55,6 @@ public abstract class Organism implements Consumable, Actor, DynamicDisplayInfor
         return !this.isDead;
     }
 
+    public boolean canBeEaten() {return true;}
+
 }

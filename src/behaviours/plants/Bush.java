@@ -40,9 +40,16 @@ public class Bush extends Plant {
         }
         return new DisplayInformation(Color.magenta, "bush");
     }
+
     @Override
     public void onConsume(World world) {
-        berryCount--;
+        berryCount = 0;
+    }
+
+    @Override
+    public boolean canBeEaten() {
+        if (berryCount > 0) {return true;}
+        else {return false;}
     }
 
     public int getBerryCount() {
