@@ -3,7 +3,8 @@ name: Generate Javadocs
 on:
   push:
     branches:
-      - main  # Adjust to your primary branch (e.g., main, master)
+      - master
+      - main # Adjust to your primary branch (e.g., main, master)
 
 jobs:
   generate-javadoc:
