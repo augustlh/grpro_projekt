@@ -27,7 +27,7 @@ jobs:
           javadoc -d javadoc -sourcepath src/ -subpackages .
           
       - name: Deploy Javadoc to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4.2.0
+        uses: JamesIves/github-pages-deploy-action@v4.7.1
         with:
           branch: javadoc  # The branch where the Javadoc will be deployed
           folder: javadoc  # The folder containing generated Javadoc files
