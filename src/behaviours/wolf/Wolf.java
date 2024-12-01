@@ -1,4 +1,4 @@
-package behaviours;
+package behaviours.wolf;
 
 import datatypes.Carnivore;
 import datatypes.Species;

@@ -1,6 +1,5 @@
-package behaviours;
+package behaviours.rabbit;
 
-import datatypes.Animal;
 import datatypes.Herbivore;
 import datatypes.Species;
 import itumulator.executable.DisplayInformation;

@@ -1,4 +1,4 @@
-package behaviours;
+package behaviours.wolf;
 
 import datatypes.BreedingGround;
 import itumulator.executable.DisplayInformation;

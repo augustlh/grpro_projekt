@@ -1,6 +1,6 @@
 package tests;
 
-import behaviours.Grass;
+import behaviours.plants.Grass;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

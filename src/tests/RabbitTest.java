@@ -1,7 +1,7 @@
 package tests;
 
-import behaviours.Grass;
-import behaviours.Rabbit;
+import behaviours.plants.Grass;
+import behaviours.rabbit.Rabbit;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -9,9 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import itumulator.world.World;
 import itumulator.world.Location;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class RabbitTest {

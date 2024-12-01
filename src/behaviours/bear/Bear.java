@@ -1,4 +1,4 @@
-//package behaviours;
+//package behaviours.bear;
 //
 //import datatypes.Carnivore;
 //import datatypes.Organism;

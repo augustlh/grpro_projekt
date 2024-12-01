@@ -1,10 +1,8 @@
-package behaviours;
+package behaviours.rabbit;
 
 import datatypes.BreedingGround;
 import itumulator.executable.DisplayInformation;
-import itumulator.executable.DynamicDisplayInformationProvider;
 import itumulator.world.Location;
-import itumulator.world.NonBlocking;
 import itumulator.world.World;
 
 import java.awt.Color;

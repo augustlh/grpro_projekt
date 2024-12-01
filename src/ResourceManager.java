@@ -1,4 +1,8 @@
-import behaviours.*;
+import behaviours.plants.Bush;
+import behaviours.plants.Grass;
+import behaviours.rabbit.Rabbit;
+import behaviours.rabbit.RabbitHole;
+import behaviours.wolf.WolfPack;
 import help.Utils;
 import itumulator.executable.Program;
 import itumulator.world.Location;
@@ -6,7 +10,6 @@ import itumulator.world.World;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.Arrays;
 import java.util.Random;
 
 /**

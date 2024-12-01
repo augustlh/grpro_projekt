@@ -1,4 +1,4 @@
-package behaviours;
+package behaviours.plants;
 
 import datatypes.Plant;
 import datatypes.Species;
