@@ -30,8 +30,7 @@ jobs:
       # Step 4: Generate Javadocs
       - name: Generate Javadocs
         run: |
-          javadoc -d ./docs -sourcepath ./src $(find ./src -name "*.java" -not -path "./src/itumulator/*") || true
-
+          javadoc -verbose -d ./docs -sourcepath ./src $(find ./src -name "*.java" -not -path "./src/itumulator/*")
       - name: L
         run: |
           cat ./docs/index.html
