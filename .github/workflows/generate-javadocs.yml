@@ -12,6 +12,9 @@ jobs:
     permissions:
       contents: write  # if you have a protection rule on your repository, you'll need to give write permission to the workflow.
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
       - name: Deploy JavaDoc 🚀
         uses: MathieuSoysal/Javadoc-publisher.yml@v2.5.0
         with:
