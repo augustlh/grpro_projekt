@@ -26,8 +26,11 @@ jobs:
           mkdir -p javadoc
           javadoc -d javadoc -sourcepath src/ -subpackages .
           
+      - name: Create .nojekyll to Disable Jekyll
+        run: echo "" > javadoc/.nojekyll  # Create the .nojekyll file in the Javadoc folder
+        
       - name: Deploy Javadoc to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4.7.1
+        uses: JamesIves/github-pages-deploy-action@v4  # Use the latest stable version
         with:
           branch: javadoc  # The branch where the Javadoc will be deployed
           folder: javadoc  # The folder containing generated Javadoc files
