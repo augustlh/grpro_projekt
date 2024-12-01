@@ -108,7 +108,7 @@ public class Rabbit extends Herbivore {
         setHole(world);
         eat(world);
 
-        if(this.energy/2 > this.maxEnergy / 4) {
+        if(this.energy/2 > this.maxEnergy / 4 && this.age > 4) {
             this.canBreed = true;
         }
 
