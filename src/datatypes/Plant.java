@@ -51,4 +51,10 @@ public abstract class Plant extends Organism implements NonBlocking {
     public double getNutritionalValue() {
         return this.nutritionalValue;
     }
+
+
+    //only for test
+    public void setSpreadProbability(double spreadProbability) {
+        this.spreadProbability = spreadProbability;
+    }
 }

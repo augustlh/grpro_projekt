@@ -103,14 +103,14 @@ public class WolfPack {
 //        this.cave = cave;
 //    }
 //
-//    /**
-//     * Retrieves the list of wolves that formS the pack.
-//     *
-//     * @return a list of Wolf objects representing the wolves in the pack
-//     */
-//    public List getPack() {
-//        return wolves;
-//    }
+   /**
+    * Retrieves the list of wolves that formS the pack.
+   *
+    * @return a list of Wolf objects representing the wolves in the pack
+    */
+   public List<Wolf> getPack() {
+       return wolves;
+   }
 //
 //    /**
 //     * Sets the alpha wolf within the wolf pack. The first wolf in the list of wolves is assigned as the alpha.
