@@ -21,6 +21,10 @@ jobs:
           java-version: '23'  # Replace with your Java version (e.g., 11, 17)
           distribution: 'temurin'
 
+      - name: Create docs directory
+        run: |
+          mkdir -p ./docs
+
       # Step 3: Generate Javadocs (allow failure)
       - name: Generate Javadocs
         run: |
