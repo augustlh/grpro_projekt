@@ -1,3 +1,4 @@
+import behaviours.bear.Bear;
 import behaviours.plants.Bush;
 import behaviours.plants.Grass;
 import behaviours.rabbit.Rabbit;
@@ -174,7 +175,7 @@ public class ResourceManager {
             case "grass" -> new Grass(world, location);
             case "rabbit" -> new Rabbit(world, location);
             case "burrow" -> new RabbitHole(world, location);
-            //case "bear" -> new Bear(world, location);
+            case "bear" -> new Bear(world, location);
             case "berry" -> new Bush(world, location);
             default -> throw new IllegalArgumentException("Unknown entity: " + entity);
         }
