@@ -59,7 +59,7 @@ public class Bear extends Carnivore {
         List<Location> neighbours = new ArrayList<>(world.getSurroundingTiles());
         for (Location loc : neighbours) {
             if (world.getTile(loc) instanceof Organism o && territory.contains(loc)) {
-                if ((this.canEat(o)) && o.canBeEaten()) {
+                if ((this.canEat(o))) {
                     //System.out.println("Eating");
                     this.consume(o, world);
                     world.move(this, loc);
