@@ -13,6 +13,7 @@ public class WolfCave extends Nest<Wolf> {
 
     public WolfCave(World world, Location location) {
         super(world, location);
+        this.entrance = location;
     }
 
     public Location getEntrance() {

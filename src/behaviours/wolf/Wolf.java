@@ -1,5 +1,7 @@
 package behaviours.wolf;
 
+import behaviours.nests.WolfCave;
+import behaviours.rabbit.Rabbit;
 import datatypes.Carnivore;
 import datatypes.Species;
 import help.Utils;
@@ -11,6 +13,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * The Wolf class represents a wolf, extending the Animal class. A wolf can form part of a pack,
@@ -20,6 +23,8 @@ public class Wolf extends Carnivore {
     protected WolfType type;
     protected WolfPack pack;
     protected double strength;
+    protected boolean insideCave;
+    protected boolean canBreed;
 
 
     /**
@@ -40,11 +45,37 @@ public class Wolf extends Carnivore {
         world.setTile(location, this);
     }
 
+    public Wolf(World world, WolfPack pack) {
+        super(Species.Wolf, Utils.random.nextDouble(), new Random().nextDouble(), 2, 75.0);
+        this.type = WolfType.Normal;
+        this.pack = pack;
+        this.strength = Utils.random.nextDouble();
+        this.pack.addWolf(this);
+        this.insideCave = true;
+        world.add(this);
+        System.out.println("Wolf breeding occured!");
+    }
+
     @Override
     protected void dayTimeBehaviour(World world) {
+        if(this.insideCave) {
+            exitCave(world);
+            return;
+        }
+
         this.pack.updatePack();
 
+        if(this.pack.getCave() == null) {
+            if(Utils.random.nextDouble() < 0.2) {
+                buildCave(world, world.getLocation(this));
+            }
+        }
+
         eat(world);
+
+        if(this.energy/2 > this.maxEnergy / 88 && this.age > 4) {
+            this.canBreed = true;
+        }
 
         if(this.type == WolfType.Alpha) {
             hunt(world);
@@ -72,23 +103,84 @@ public class Wolf extends Carnivore {
 
     @Override
     protected void nightTimeBehaviour(World world) {
-        this.pack.updatePack();
+        if(this.insideCave) {
+            reproduce(world);
+            return;
+        }
+
+        if(this.pack.getCave() == null) {
+            if(Utils.random.nextDouble() < 0.4) {
+                buildCave(world, world.getLocation(this));
+                return;
+            }
+        }
 
         if(this.pack.getCave() != null) {
-            //this.pursue(this);
+            if(world.getSurroundingTiles(world.getLocation(this)).contains(this.pack.getCave().getEntrance())) {
+                enterCave(world, world.getLocation(this));
+            } else {
+                this.pursue(world, this.pack.getCave().getEntrance());
+            }
         }
     }
 
-    //    private void buildCave(World world, Location location) {
-//        if(this.wolfPack.getCave() == null) {
-//            if (world.getNonBlocking(location) == null) {
-//                if(new Random().nextDouble() < 0.1) {
-//                    this.wolfPack.setCave(new Cave(world, location));
-//
-//                }
-//            }
-//        }
-//    }
+    private void reproduce(World world) {
+        if(this.pack.getCave() == null || !this.canBreed || !this.insideCave || new Random().nextDouble() < 0.4) {
+            return;
+        }
+
+        List<Wolf> possiblePartners = this.pack.getCave().getAnimals();
+        possiblePartners.remove(this);
+
+        if(possiblePartners.isEmpty()) {
+            return;
+        }
+
+        for(Wolf wolf: possiblePartners) {
+            if (wolf.canBreed && wolf.insideCave) {
+                new Wolf(world, this.pack);
+
+                this.energy -= energy / 4;
+                this.canBreed = false;
+
+                wolf.energy -= wolf.energy / 4;
+                wolf.canBreed = false;
+                break;
+            }
+        }
+    }
+
+
+    private void enterCave(World world, Location currentLocation) {
+        if(this.pack.getCave() == null) {
+            return;
+        }
+
+        Location caveEntrance = this.pack.getCave().getEntrance();
+        if (!world.getSurroundingTiles(currentLocation).contains(caveEntrance)) {
+            return;
+        }
+
+        world.remove(this);
+        this.insideCave = true;
+    }
+
+    private void exitCave(World world) {
+        Location caveEntrance = this.pack.getCave().getEntrance();
+        Set<Location> validTiles = world.getEmptySurroundingTiles(caveEntrance);
+
+        if(!validTiles.isEmpty()) {
+            world.setTile(validTiles.iterator().next(), this);
+            this.insideCave = false;
+        }
+
+    }
+
+    private void buildCave(World world, Location location) {
+        if(this.pack.getCave() == null && !world.containsNonBlocking(location)) {
+            this.pack.setCave(new WolfCave(world, location));
+        }
+    }
 
     public double getStrength() {
         return this.strength * (this.energy/this.maxEnergy);
@@ -121,6 +213,11 @@ public class Wolf extends Carnivore {
     @Override
     public void onConsume(World world) {
         this.die();
+
+        if(this.pack.getCave() != null) {
+            this.pack.getCave().removeAnimal(this);
+        }
+
         super.onConsume(world);
     }
 

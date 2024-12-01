@@ -8,7 +8,7 @@ import itumulator.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract public class Nest<T> implements NonBlocking, DynamicDisplayInformationProvider {
+abstract public class Nest<T extends Animal> implements NonBlocking, DynamicDisplayInformationProvider {
     protected List<T> animals;
 
     public Nest(World world, Location location) {
