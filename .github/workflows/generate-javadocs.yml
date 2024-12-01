@@ -25,6 +25,7 @@ jobs:
       - name: autism
         run: |
           mkdir docs
+          touch children.txt
 
       # Step 4: Generate Javadocs
       - name: Generate Javadocs
