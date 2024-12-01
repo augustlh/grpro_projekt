@@ -34,6 +34,19 @@ public class Grass extends Plant {
     }
 
     /**
+     * This constructor should only be used for testing purposes!
+     *
+     * @param world the world where the Grass instance will be placed
+     * @param location the specific location within the world where the Grass instance will be set
+     * @param spreadProb the proboabilty of the grass spreading.
+     */
+    public Grass(World world, Location location, double spreadProb) {
+        super(Species.Grass,spreadProb, 2);
+        world.setTile(location, this);
+        neighbours = null;
+    }
+
+    /**
      * Act method is called to perform the Grass-specific action in the given world.
      * In this method, the Grass attempts to spread to a new location.
      *
@@ -42,11 +55,11 @@ public class Grass extends Plant {
      */
     @Override
     public void act(World world) {
-        spread(world);
+        grow(world);
     }
 
     /**
-     * Attempts to spread this Grass instance to a new location within the given world.
+     * Attempts to grow this Grass instance by spreading to a new location within the given world.
      * If the neighbours list is uninitialized, it retrieves the surrounding tiles.
      * If a random chance meets the predefined spread probability, it selects a random
      * empty non-blocking tile from the surrounding tiles and creates a new Grass instance there.
@@ -54,13 +67,13 @@ public class Grass extends Plant {
      * @param world the world in which the Grass instance exists and where it will attempt to spread
      */
     @Override
-    public void spread(World world) {
+    protected void grow(World world) {
         if(this.neighbours == null) {
             this.neighbours = new ArrayList<>(world.getSurroundingTiles());
         }
 
         Random rand = new Random();
-        if (rand.nextDouble() <= getSpreadProbability()){
+        if (rand.nextDouble() <= this.spreadProbability){
             List<Location> surroundingEmptyNonBlockingTiles = Utils.getSurroundingEmptyNonBlockingTiles(world, neighbours);
 
             if(surroundingEmptyNonBlockingTiles.isEmpty()) return;

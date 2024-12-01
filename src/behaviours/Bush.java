@@ -20,12 +20,14 @@ public class Bush extends Plant {
     }
 
     @Override
-    public void act(World world) {spread(world);}
+    public void act(World world) {
+        grow(world);
+    }
 
     @Override
-    public void spread(World world) {
+    public void grow(World world) {
         if(berryCount<4){
-            if(rand.nextDouble() <= getSpreadProbability()){
+            if(rand.nextDouble() <= this.spreadProbability){
                 berryCount++;
             }
         }

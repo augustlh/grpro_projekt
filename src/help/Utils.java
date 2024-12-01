@@ -10,6 +10,7 @@ import java.util.*;
  * Utility class providing various methods useful for working with simulation entities and locations.
  */
 public class Utils {
+    public static Random random = new Random();
     public static int manhattanDistance(Location a, Location b) {
         int dx = Math.abs(a.getX() - b.getX());
         int dy = Math.abs(a.getY() - b.getY());

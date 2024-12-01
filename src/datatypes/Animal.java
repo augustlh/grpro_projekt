@@ -1,6 +1,5 @@
 package datatypes;
 
-import help.Utils;
 import itumulator.world.Location;
 import itumulator.world.World;
 import java.util.Random;
@@ -14,6 +13,7 @@ import java.util.Set;
 public abstract class Animal extends Organism {
     protected int age;
     protected double energy;
+    protected double maxEnergy;
     protected double metabolism;
     protected double energyDecay;
     protected int searchRadius;
@@ -26,12 +26,44 @@ public abstract class Animal extends Organism {
      * @param energyDecay  the rate at which the animal's energy decreases over time
      * @param searchRadius the radius in which the animal searches for food or other entities
      */
-    public Animal(Species species, double metabolism, double energyDecay, int searchRadius) {
+    public Animal(Species species, double metabolism, double energyDecay, int searchRadius, double maxEnergy) {
         super(species);
         this.age = 0;
         this.metabolism = metabolism;
         this.energyDecay = energyDecay;
         this.searchRadius = searchRadius;
+        this.maxEnergy = maxEnergy;
+        this.energy = this.maxEnergy;
+    }
+
+    abstract protected void dayTimeBehaviour(World world);
+    abstract protected void nightTimeBehaviour(World world);
+
+    /**
+     * Executes the actions of an animal within the given world, including aging,
+     * and performing appropriate behavior based on the time of day.
+     *
+     * @param world The world in which the rabbit behaves.
+     */
+    @Override
+    public void act(World world) {
+        if(this.isDead) {
+            return;
+        }
+
+        if(world.isDay()) {
+            dayTimeBehaviour(world);
+        } else if(world.isNight()) {
+            nightTimeBehaviour(world);
+        }
+
+        this.age = this.age + 1;
+        this.energy = this.energy - this.energyDecay;
+
+        if (this.energy <= 0 || this.age >= 100){
+            die();
+            world.delete(this);
+        }
     }
 
 
@@ -55,7 +87,7 @@ public abstract class Animal extends Organism {
      * @param world the world in which the consumption takes place, used to handle effects of the consumption
      */
     public void consume(Organism other, World world) {
-        this.energy += other.getNutritionalValue();
+        this.energy += other.getNutritionalValue() * this.metabolism;
         other.onConsume(world);
     }
 
@@ -68,15 +100,6 @@ public abstract class Animal extends Organism {
     @Override
     public void onConsume(World world) {
         world.delete(this);
-    }
-
-    protected void age(World world) {
-        this.age ++;
-        this.energy -= energyDecay;
-        if (energy <=0 || age >=100){
-            die();
-            world.delete(this);
-        }
     }
 
     /**

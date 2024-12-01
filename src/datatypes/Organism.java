@@ -46,4 +46,13 @@ public abstract class Organism implements Consumable, Actor, DynamicDisplayInfor
         return (this.species.getDietMask() & other.getSpecies().getValue()) != 0;
     }
 
+    /**
+     * Determines if the organism is alive or dead.
+     *
+     * @return A boolean indicating whether the organism is alive.
+     */
+    public boolean isAlive() {
+        return !this.isDead;
+    }
+
 }

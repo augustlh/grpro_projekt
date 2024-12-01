@@ -29,9 +29,8 @@ public class GrassTest {
                 return true;
             }
         };
-        Grass grass = new Grass(world, new Location(0, 1));
-        grass.setSpreadProbability(1);
-        grass.spread(world);
+        Grass grass = new Grass(world, new Location(0, 1), 1);
+        grass.act(world);
 
         // Ensure grass does not spread when there are no surrounding empty non-blocking tiles
         assertEquals(1, world.getEntities().size());
@@ -40,10 +39,10 @@ public class GrassTest {
     public void testSpread_ToNeighboringTiles() {
         World world = new World(5);
         Location location = new Location(0, 1);
-        Grass grass = new Grass(world, location);
+        Grass grass = new Grass(world,location, 1);
+
         world.setCurrentLocation(location);
-        grass.setSpreadProbability(1);
-        grass.spread(world);
+        grass.act(world);
         List<Location> neighbours = new ArrayList<>(world.getSurroundingTiles(world.getLocation(grass)));
         for (Location loc : neighbours) {
             if (world.getNonBlocking(loc) instanceof Grass && world.getEntities().containsValue(loc)) {

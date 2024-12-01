@@ -10,7 +10,7 @@ import itumulator.world.World;
  * being consumed, and providing nutritional value.
  */
 public abstract class Plant extends Organism implements NonBlocking {
-    private double spreadProbability;
+    protected double spreadProbability;
     protected double nutritionalValue;
 
     /**
@@ -26,11 +26,11 @@ public abstract class Plant extends Organism implements NonBlocking {
     }
 
     /**
-     * Defines the behavior of a plant spreading within the simulation world.
+     * Defines the behavior of a plant growing within the simulation world.
      *
-     * @param world the simulation world where the plant is attempting to spread
+     * @param world the simulation world where the plant is attempting to grow
      */
-    protected abstract void spread(World world);
+    protected abstract void grow(World world);
 
     /**
      * Defines the behavior of the plant when it is consumed within the simulation world.
@@ -51,8 +51,4 @@ public abstract class Plant extends Organism implements NonBlocking {
     public double getNutritionalValue() {
         return this.nutritionalValue;
     }
-
-    public double getSpreadProbability(){return this.spreadProbability;}
-
-    public void setSpreadProbability(double probability){this.spreadProbability=probability;}
 }

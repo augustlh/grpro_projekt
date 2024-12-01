@@ -29,9 +29,8 @@ public class Rabbit extends Herbivore {
      * @param location The location within the world where the rabbit will be placed.
      */
     public Rabbit(World world, Location location) {
-        super(Species.Rabbit, new Random().nextDouble(), new Random().nextDouble(0, 0.8), 1);
+        super(Species.Rabbit, new Random().nextDouble(), new Random().nextDouble(0, 0.8), 1, 50.0);
         world.setTile(location, this);
-        this.energy = 20;
         this.canBreed = true;
         this.insideHole = false;
         this.hole = null;
@@ -44,38 +43,13 @@ public class Rabbit extends Herbivore {
      * @param hole The RabbitHole instance where the rabbit will reside.
      */
     public Rabbit(World world, RabbitHole hole) {
-        super(Species.Rabbit, new Random().nextDouble(), new Random().nextDouble(0, 0.8), 1);
+        super(Species.Rabbit, new Random().nextDouble(), new Random().nextDouble(0, 0.8), 1, 50.0);
         this.insideHole = true;
         this.hole = hole;
         this.canBreed = false;
         this.hole.addRabbit(this);
         world.add(this);
-        System.out.println("sex happened");
-    }
-
-    /**
-     * Executes the actions of the rabbit within the given world, including aging,
-     * and performing appropriate behavior based on the time of day.
-     *
-     * @param world The world in which the rabbit behaves.
-     */
-    @Override
-    public void act(World world) {
-        // Stops act if dead
-        age(world);
-        if(isDead) {
-            return;
-        }
-
-        // Execute daytime behavior
-        if(world.isDay()) {
-            dayTimeBehaviour(world);
-        }
-
-        // Execute nighttime behavior
-        if(world.isNight()) {
-            nightTimeBehaviour(world);
-        }
+        System.out.println("Breeding happened! :)");
     }
 
     /**
@@ -85,7 +59,7 @@ public class Rabbit extends Herbivore {
      *
      * @param world The world in which the rabbit exists and performs its night time behavior.
      */
-    private void nightTimeBehaviour(World world) {
+    protected void nightTimeBehaviour(World world) {
         // If in hole, reproduce
         if(insideHole) {
             reproduce(world);
@@ -125,15 +99,18 @@ public class Rabbit extends Herbivore {
      *
      * @param world The world in which the rabbit exists and performs its daytime behavior.
      */
-    private void dayTimeBehaviour(World world) {
+    protected void dayTimeBehaviour(World world) {
         if(this.insideHole) {
             exitHole(world);
             return;
         }
 
         setHole(world);
-
         eat(world);
+
+        if(this.energy/2 > this.maxEnergy / 4) {
+            this.canBreed = true;
+        }
 
         // Seeks nearby food or wander randomly
         Location target = Utils.closestConsumableEntity(world,this, this.searchRadius);
@@ -144,7 +121,6 @@ public class Rabbit extends Herbivore {
         if (target == null) {
             wander(world);
         } else {
-            System.out.println("Pursuing");
             pursue(world, target);
         }
 
@@ -166,13 +142,12 @@ public class Rabbit extends Herbivore {
      * @param world The world in which the rabbit resides and attempts to reproduce.
      */
     private void reproduce(World world) {
-        if(!this.canBreed || !this.insideHole || new Random().nextDouble() > 1) {
+        if(!this.canBreed || !this.insideHole || new Random().nextDouble() < 0.4) {
             return;
         }
 
         List<Rabbit> possiblePartners = this.hole.getRabbits();
         possiblePartners.remove(this);
-        System.out.println(possiblePartners);
 
         if(possiblePartners.isEmpty()) {
             return;
@@ -180,13 +155,12 @@ public class Rabbit extends Herbivore {
 
         for(Rabbit rabbit: possiblePartners) {
             if (rabbit.canBreed && rabbit.insideHole) {
-                System.out.println("Sex should happen");
                 new Rabbit(world, this.hole);
 
-                this.energy /= 2;
+                this.energy -= energy / 4;
                 this.canBreed = false;
 
-                rabbit.energy /= 2;
+                rabbit.energy -= rabbit.energy / 4;
                 rabbit.canBreed = false;
 
                 break;
@@ -195,14 +169,18 @@ public class Rabbit extends Herbivore {
     }
 
     /**
-     * Handles the death of a rabbit by removing it from its hole and the world.
+     * Handles the event when the rabbit is consumed by another organism.
+     * This method will delete the current instance of the animal from the world.
      *
-     * @param world The world from which the rabbit is to be removed.
+     * @param world the world in which the animal exists
      */
-    private void die(World world) {
-        super.die();
-        this.hole.removeRabbit(this);
-        world.remove(this);
+    @Override
+    public void onConsume(World world) {
+        this.die();
+        if(this.hole != null) {
+            this.hole.removeRabbit(this);
+        }
+        super.onConsume(world);
     }
 
     /**

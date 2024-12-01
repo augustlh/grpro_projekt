@@ -2,24 +2,25 @@ package behaviours;
 
 import datatypes.Carnivore;
 import datatypes.Species;
+import help.Utils;
 import itumulator.executable.DisplayInformation;
 import itumulator.world.Location;
 import itumulator.world.World;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.List;
+import java.util.Random;
 
 /**
  * The Wolf class represents a wolf, extending the Animal class. A wolf can form part of a pack,
  * has an alpha status, and interacts with the world.
  */
 public class Wolf extends Carnivore {
+    protected WolfType type;
+    protected WolfPack pack;
+    protected double strength;
 
-    private boolean alpha;
-    private List<Wolf> pack;
-    private WolfPack wolfPack;
 
     /**
      * Constructs a new Wolf object within the given world at the specified location and
@@ -28,126 +29,106 @@ public class Wolf extends Carnivore {
      *
      * @param world The world in which the wolf resides.
      * @param location The initial location of the wolf within the world.
-     * @param wolfPack The wolf pack to which this wolf belongs.
+     * @param pack The wolf pack to which this wolf belongs.
      */
-    public Wolf(World world, Location location, WolfPack wolfPack) {
-        super(Species.Wolf, new Random().nextDouble(), new Random().nextDouble(1, 2), 2);
+    public Wolf(World world, Location location, WolfPack pack) {
+        super(Species.Wolf, Utils.random.nextDouble(), new Random().nextDouble(), 2, 75.0);
+        this.type = WolfType.Normal;
+        this.pack = pack;
+        this.strength = Utils.random.nextDouble();
+
         world.setTile(location, this);
-        this.energy = 25;
-        alpha = false;
-        pack = null;
-        this.wolfPack = wolfPack;
     }
 
-    /**
-     * Performs the actions of the wolf in the given world. The wolf ages, eats, and moves according
-     * to its role within the pack (alpha or non-alpha).
-     *
-     * @param world The world in which the wolf performs its actions.
-     */
     @Override
-    public void act(World world) {
-        // Stops act if dead
-        age(world);
-        if(isDead){
-            return;
-        }
+    protected void dayTimeBehaviour(World world) {
+        this.pack.updatePack();
 
-        //builds a cave, maybe!.
-        buildCave(world, world.getLocation(this));
-
-        // Eats adjacent food
         eat(world);
 
-        // Fight other wolf packs
+        if(this.type == WolfType.Alpha) {
+            hunt(world);
+        } else if(this.type == WolfType.Normal) {
+            Wolf alpha = this.pack.getAlphaWolf();
+
+            if(alpha != null && Utils.random.nextDouble() > 0.75) {
+                this.pursue(world, world.getLocation(this.pack.getAlphaWolf()));
+            } else {
+                wander(world);
+            }
+        }
+
         fight(world);
 
-        // Alpha moves
-        if(alpha) {
-            this.hunt(world);
-            return;
+    }
+
+    public void toggleAlpha() {
+        if(this.type == WolfType.Alpha) {
+            this.type = WolfType.Normal;
         } else {
-            this.pursue(world, world.getLocation(wolfPack.getAlpha()));
-            return;
-        }
-
-
-    }
-
-    private void buildCave(World world, Location location) {
-        if(this.wolfPack.getCave() == null) {
-            if (world.getNonBlocking(location) == null) {
-                if(new Random().nextDouble() < 0.1) {
-                    this.wolfPack.setCave(new Cave(world, location));
-
-                }
-            }
+            this.type = WolfType.Alpha;
         }
     }
 
-    /**
-     * Ages the wolf by incrementing its age and decrementing its energy. If the wolf's energy
-     * depletes to zero or it reaches a certain age threshold, it will die. If the wolf is
-     * the alpha, it updates the pack's status before dying.
-     *
-     * @param world The world in which the wolf resides.
-     */
     @Override
-    protected void age(World world){
-        this.age ++;
-        this.energy -= energyDecay;
-        if (energy <=0 || age >=100){
-            if (alpha){
-                wolfPack.updatePack();
-            }
-            die();
-            world.delete(this);
-        }
+    protected void nightTimeBehaviour(World world) {
+        this.pack.updatePack();
     }
 
-    /**
-     * Sets the alpha status of the wolf.
-     *
-     * @param b A boolean value indicating whether the wolf is the alpha (true) or not (false).
-     */
-    public void setThisAlpha(boolean b) {
-        this.alpha = b;
+    //    private void buildCave(World world, Location location) {
+//        if(this.wolfPack.getCave() == null) {
+//            if (world.getNonBlocking(location) == null) {
+//                if(new Random().nextDouble() < 0.1) {
+//                    this.wolfPack.setCave(new Cave(world, location));
+//
+//                }
+//            }
+//        }
+//    }
+
+    public double getStrength() {
+        return this.strength * (this.energy/this.maxEnergy);
     }
 
-    /**
-     * Sets the pack of wolves to which this wolf belongs.
-     *
-     * @param wolves The list of wolves representing the pack.
-     */
-    public void setPack(List<Wolf> wolves) {
-        this.pack=wolves;
+    public void kill(World world, Wolf other) {
+       this.consume(other, world);
     }
 
     private void fight(World world) {
-        List <Location> neighbours = new ArrayList<>(world.getSurroundingTiles());
-        for (Location loc : neighbours) {
-            if(world.getTile(loc) instanceof Wolf w && w.getPack() != this.wolfPack) {
-                System.out.println("Fighting");
-                if(new Random().nextDouble() < 0.5) {
-                    w.onConsume(world);
-                    w.wolfPack.updatePack();
-                    return;
-                }
-                else {
-                    this.onConsume(world);
-                    wolfPack.updatePack();
-                    return;
+        List <Location> neighbours = new ArrayList<>(world.getSurroundingTiles(this.searchRadius));
+        for(Location location : neighbours) {
+            if(world.getTile(location) instanceof Wolf w && w.pack != this.pack) {
+                System.out.println("Fight");
+                if(this.strength > w.getStrength()) {
+                    this.kill(world, w);
+                } else {
+                    w.kill(world, this);
                 }
             }
         }
     }
 
     /**
-     * Retrieves the wolf pack that this wolf belongs to.
+     * Handles the event when the wolf is consumed by another organism.
+     * This method will delete the current instance of the animal from the world.
      *
-     * @return the WolfPack object representing the wolf's pack
+     * @param world the world in which the animal exists
      */
-    public WolfPack getPack() {return this.wolfPack;}
+    @Override
+    public void onConsume(World world) {
+        this.die();
+        super.onConsume(world);
+    }
+
+    /**
+     * Handles logic for when the wolf dies. The wolf is responsible for telling its pack its dead.
+     */
+    @Override
+    public void die() {
+        super.die();
+        this.pack.updatePack();
+
+    }
 
     /**
      * Provides display information for the wolf object, including its color and the image key.
@@ -158,7 +139,5 @@ public class Wolf extends Carnivore {
     public DisplayInformation getInformation() {
         return new DisplayInformation(Color.GRAY, "mc-wolf-large");
     }
-
-
-
 }
+

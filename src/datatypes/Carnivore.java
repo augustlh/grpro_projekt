@@ -9,8 +9,8 @@ import java.util.List;
 
 public abstract class Carnivore extends Animal {
 
-    public Carnivore (Species species, double metabolism, double energyDecay, int searchRadius) {
-        super(species, metabolism, energyDecay, searchRadius);
+    public Carnivore (Species species, double metabolism, double energyDecay, int searchRadius, double maxEnergy) {
+        super(species, metabolism, energyDecay, searchRadius, maxEnergy);
     }
 
     // Hunt and eat other animals method
@@ -20,7 +20,6 @@ public abstract class Carnivore extends Animal {
         for (Location loc : neighbours) {
             if (world.getTile(loc) instanceof Organism o) {
                 if ((this.canEat(o))) {
-                    System.out.println("Eating");
                     this.consume(o, world);
                     world.move(this, loc);
                     return;
@@ -32,7 +31,11 @@ public abstract class Carnivore extends Animal {
     protected void hunt(World world) {
         // Pursue nearest eatable organism
         Location loc = Utils.closestConsumableEntity(world, this, searchRadius*2);
-        if(loc != null) pursue(world, loc);
+        if(loc != null){
+            pursue(world, loc);
+        } else {
+            wander(world);
+        }
     }
 
 }
