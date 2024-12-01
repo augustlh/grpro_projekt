@@ -1,52 +1,36 @@
-name: Deploy Javadoc
+name: Generate Javadocs
 
 on:
   push:
     branches:
-      - master
-      - main
-  pull_request:
-    branches: [ master ]
-  release:
-    types: [created]
-  workflow_dispatch:
+      - main  # Adjust to your primary branch (e.g., main, master)
 
 jobs:
-  publish:
+  generate-javadoc:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+
     steps:
-      - name: Checkout code
+      # Step 1: Check out the code
+      - name: Checkout repository
         uses: actions/checkout@v3
-      
-      - name: Set up Java 17
+
+      # Step 2: Set up Java
+      - name: Set up Java
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
-          distribution: 'adopt'
-          
-      - name: Generate Javadoc
+          java-version: '23'  # Replace with your Java version (e.g., 11, 17)
+          distribution: 'temurin'
+
+      # Step 3: Generate Javadocs (allow failure)
+      - name: Generate Javadocs
         run: |
-          mkdir -p javadoc
-          javadoc -d javadoc -sourcepath src/ -subpackages .
-          
-      - name: Create .nojekyll to Disable Jekyll
-        run: echo "" > javadoc/.nojekyll
-        
-      - name: Deploy Javadoc to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
+          javadoc -d ./docs -sourcepath ./src $(find ./code/src -name "*.java" -not -path "./src/itumulator/*") || true
+
+      # Step 4: Publish Javadocs to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          branch: javadoc
-          folder: javadoc
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Verify working directory
-        run: ls -la
-
-      - name: Debug
-        run: |
-          echo "Current directory: $(pwd)"
-          echo "Contents of javadoc directory:"
-          ls -la javadoc
