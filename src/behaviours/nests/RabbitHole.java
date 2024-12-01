@@ -1,6 +1,7 @@
-package behaviours.rabbit;
+package behaviours.nests;
 
-import datatypes.BreedingGround;
+import behaviours.rabbit.Rabbit;
+import datatypes.Nest;
 import itumulator.executable.DisplayInformation;
 import itumulator.world.Location;
 import itumulator.world.World;
@@ -17,9 +18,8 @@ import java.util.Random;
  * This class implements NonBlocking, allowing other actors/objects to exist on top of it,
  * and DynamicDisplayInformationProvider to dynamically control its display information.
  */
-public class RabbitHole extends BreedingGround {
+public class RabbitHole extends Nest<Rabbit> {
     private final List<RabbitHole> holes;
-    private final List<Rabbit> rabbits;
     private final Location location;
 
     /**
@@ -31,11 +31,10 @@ public class RabbitHole extends BreedingGround {
      * @param location The specific location in the world where the RabbitHole is placed.
      */
     public RabbitHole(World world, Location location) {
-        world.setTile(location, this);
+        super(world, location);
         this.holes = new ArrayList<>();
         this.holes.add(this);
         this.location = location;
-        rabbits = new ArrayList<>();
     }
 
     /**
@@ -48,11 +47,11 @@ public class RabbitHole extends BreedingGround {
      * @param holes A list of already connected RabbitHoles to which this RabbitHole will be linked.
      */
     public RabbitHole(World world, Location location, List<RabbitHole> holes) {
-        world.setTile(location, this);
+        super(world, location);
         this.holes = holes;
         this.location = location;
         this.holes.add(this);
-        this.rabbits = this.holes.getFirst().getRabbits();
+        this.animals = this.holes.getFirst().getAnimals();
     }
 
     /**
@@ -65,14 +64,6 @@ public class RabbitHole extends BreedingGround {
         return this.holes.get(new Random().nextInt(this.holes.size())).getLocation();
     }
 
-    /**
-     * Retrieves the list of rabbits currently in the rabbit hole.
-     *
-     * @return A list of Rabbit objects present in the rabbit hole.
-     */
-    public List<Rabbit> getRabbits() {
-        return this.rabbits;
-    }
 
     /**
      * Retrieves the location of the rabbit hole.
@@ -90,24 +81,6 @@ public class RabbitHole extends BreedingGround {
      */
     public List<RabbitHole> getHoles() {
         return holes;
-    }
-
-    /**
-     * Adds a Rabbit to the current list of rabbits in the RabbitHole.
-     *
-     * @param rabbit The Rabbit to be added to the RabbitHole.
-     */
-    public void addRabbit(Rabbit rabbit) {
-        this.rabbits.add(rabbit);
-    }
-
-    /**
-     * Removes the specified Rabbit from the list of rabbits in the RabbitHole.
-     *
-     * @param rabbit The Rabbit to be removed from the RabbitHole.
-     */
-    public void removeRabbit(Rabbit rabbit) {
-        this.rabbits.remove(rabbit);
     }
 
     /**

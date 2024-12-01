@@ -1,5 +1,6 @@
 package behaviours.wolf;
 
+import behaviours.nests.WolfCave;
 import datatypes.Organism;
 import help.Utils;
 import itumulator.world.Location;
@@ -14,7 +15,7 @@ import java.util.List;
  * creation of the pack, assigns an alpha wolf, and updates the pack when necessary.
  */
 public class WolfPack {
-    private Cave cave;
+    private WolfCave cave;
     private List<Wolf> wolves;
     private Wolf alphaWolf;
 
@@ -51,8 +52,15 @@ public class WolfPack {
         return this.alphaWolf;
     }
 
+    public void setCave(WolfCave cave) {
+        this.cave = cave;
+    }
 
-//    private Cave cave;
+    public WolfCave getCave() {
+        return this.cave;
+    }
+
+    //    private Cave cave;
 //
 //    private final ArrayList<Wolf> wolves;
 //    private Wolf alpha;

@@ -2,7 +2,7 @@ import behaviours.bear.Bear;
 import behaviours.plants.Bush;
 import behaviours.plants.Grass;
 import behaviours.rabbit.Rabbit;
-import behaviours.rabbit.RabbitHole;
+import behaviours.nests.RabbitHole;
 import behaviours.wolf.WolfPack;
 import help.Utils;
 import itumulator.executable.Program;

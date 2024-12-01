@@ -1,5 +1,5 @@
 package help;
-import behaviours.rabbit.RabbitHole;
+import behaviours.nests.RabbitHole;
 import datatypes.Organism;
 import itumulator.world.Location;
 import itumulator.world.World;

@@ -1,5 +1,6 @@
 package behaviours.rabbit;
 
+import behaviours.nests.RabbitHole;
 import datatypes.Herbivore;
 import datatypes.Species;
 import itumulator.executable.DisplayInformation;
@@ -46,7 +47,7 @@ public class Rabbit extends Herbivore {
         this.insideHole = true;
         this.hole = hole;
         this.canBreed = false;
-        this.hole.addRabbit(this);
+        this.hole.addAnimal(this);
         world.add(this);
         System.out.println("Breeding happened! :)");
     }
@@ -129,7 +130,7 @@ public class Rabbit extends Herbivore {
     private void setHole(World world) {
         if(this.hole == null && world.getNonBlocking(world.getLocation(this)) instanceof RabbitHole e) {
             this.hole = e;
-            this.hole.addRabbit(this);
+            this.hole.addAnimal(this);
         }
     }
 
@@ -145,7 +146,7 @@ public class Rabbit extends Herbivore {
             return;
         }
 
-        List<Rabbit> possiblePartners = this.hole.getRabbits();
+        List<Rabbit> possiblePartners = this.hole.getAnimals();
         possiblePartners.remove(this);
 
         if(possiblePartners.isEmpty()) {
@@ -177,7 +178,7 @@ public class Rabbit extends Herbivore {
     public void onConsume(World world) {
         this.die();
         if(this.hole != null) {
-            this.hole.removeRabbit(this);
+            this.hole.removeAnimal(this);
         }
         super.onConsume(world);
     }
@@ -192,7 +193,7 @@ public class Rabbit extends Herbivore {
         }
 
         this.hole = new RabbitHole(world, location);
-        this.hole.addRabbit(this);
+        this.hole.addAnimal(this);
     }
 
     /**

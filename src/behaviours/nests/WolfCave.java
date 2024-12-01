@@ -1,17 +1,18 @@
-package behaviours.wolf;
+package behaviours.nests;
 
-import datatypes.BreedingGround;
+import behaviours.wolf.Wolf;
+import datatypes.Nest;
 import itumulator.executable.DisplayInformation;
 import itumulator.world.Location;
 import itumulator.world.World;
 
-import java.awt.*;
+import java.awt.Color;
 
-public class Cave extends BreedingGround {
+public class WolfCave extends Nest<Wolf> {
     Location entrance;
 
-    public Cave(World world, Location location) {
-        world.setTile(location, this);
+    public WolfCave(World world, Location location) {
+        super(world, location);
     }
 
     public Location getEntrance() {

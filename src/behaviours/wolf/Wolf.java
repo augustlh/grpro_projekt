@@ -73,6 +73,10 @@ public class Wolf extends Carnivore {
     @Override
     protected void nightTimeBehaviour(World world) {
         this.pack.updatePack();
+
+        if(this.pack.getCave() != null) {
+            //this.pursue(this);
+        }
     }
 
     //    private void buildCave(World world, Location location) {
