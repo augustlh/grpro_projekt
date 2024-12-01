@@ -32,10 +32,13 @@ class WolfTest {
     @Test
     public void testMoveAfterAlpha(){
         World world = new World(5);
-        Wolf wolf = new WolfPack(world,new Location(1,1),2).getPack().getFirst();
-        world.setCurrentLocation(new Location(1,1));
-        wolf.act(world);
-        for (Location loc: world.getSurroundingTiles(world.getLocation(wolf))){
+        WolfPack wolfPack = new WolfPack(world,new Location(2,0),2);
+        world.setCurrentLocation(new Location(2,2));
+        List<Wolf> wolfs = new ArrayList<>(wolfPack.getPack());
+        for (Wolf wolf : wolfs) {
+           wolf.act(world);
+        }
+        for (Location loc: world.getSurroundingTiles(world.getLocation(wolfs.getFirst()))){
             if (world.getTile(loc) instanceof Wolf){
                 assertTrue(true);
                 return;

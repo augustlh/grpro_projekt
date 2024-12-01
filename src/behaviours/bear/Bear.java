@@ -124,4 +124,9 @@ public class Bear extends Carnivore {
         }
         return new DisplayInformation(Color.WHITE, "mc-bear-small");
     }
+
+    //test
+    public Set<Location> getTerritory() {
+        return territory;
+    }
 }
