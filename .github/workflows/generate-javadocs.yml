@@ -30,7 +30,7 @@ jobs:
       # Step 4: Generate Javadocs
       - name: Generate Javadocs
         run: |
-          javadoc -d ./docs -sourcepath ./src -subpackages . || true
+          javadoc -d ./docs -sourcepath ./src $(find ./src -name "*.java" -not -path "./src/itumulator/*" -not -path "./src/tests") || true
       - name: Verify Javadoc files
         run: |
           ls -l ./docs | grep '.html$' || { echo "No HTML files found in docs directory"; exit 1; }
