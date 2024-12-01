@@ -25,7 +25,7 @@ jobs:
       - name: autism
         run: |
           mkdir docs
-          touch children.txt
+          echo "asdadjhasjd" > children.txt
 
       # Step 4: Generate Javadocs
       - name: Generate Javadocs
@@ -34,7 +34,7 @@ jobs:
 
       - name: L
         run: |
-          ls ./docs
+          cat children.txt
               
       # Step 5: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
