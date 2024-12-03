@@ -68,6 +68,7 @@ public class Grass extends Plant {
      */
     @Override
     protected void grow(World world) {
+        super.grow(world);
         if(this.neighbours == null) {
             this.neighbours = new ArrayList<>(world.getSurroundingTiles());
         }

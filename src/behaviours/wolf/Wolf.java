@@ -1,5 +1,6 @@
 package behaviours.wolf;
 
+import behaviours.Carcass;
 import behaviours.nests.WolfCave;
 import behaviours.rabbit.Rabbit;
 import datatypes.Carnivore;
@@ -82,7 +83,7 @@ public class Wolf extends Carnivore {
         } else if(this.type == WolfType.Normal) {
             Wolf alpha = this.pack.getAlphaWolf();
 
-            if(alpha != null && Utils.random.nextDouble() > 0.75) {
+            if(alpha != null && Utils.random.nextDouble() > 0.75 && !this.pack.getAlphaWolf().insideCave) {
                 this.pursue(world, world.getLocation(this.pack.getAlphaWolf()));
             } else {
                 wander(world);
@@ -111,6 +112,7 @@ public class Wolf extends Carnivore {
         if(this.pack.getCave() == null) {
             if(Utils.random.nextDouble() < 0.4) {
                 buildCave(world, world.getLocation(this));
+                enterCave(world, world.getLocation(this));
                 return;
             }
         }
@@ -186,10 +188,6 @@ public class Wolf extends Carnivore {
         return this.strength * (this.energy/this.maxEnergy);
     }
 
-    public void kill(World world, Wolf other) {
-       this.consume(other, world);
-    }
-
     private void fight(World world) {
         List <Location> neighbours = new ArrayList<>(world.getSurroundingTiles(this.searchRadius));
         for(Location location : neighbours) {
@@ -218,7 +216,15 @@ public class Wolf extends Carnivore {
             this.pack.getCave().removeAnimal(this);
         }
 
-        super.onConsume(world);
+        Location temp = null;
+        if(!this.insideCave) {
+            temp = world.getLocation(this);
+        }
+
+        world.delete(this);
+        if(temp != null) {
+            new Carcass(world, temp, this.energy);
+        }
     }
 
     /**

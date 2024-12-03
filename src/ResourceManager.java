@@ -1,3 +1,4 @@
+import behaviours.Carcass;
 import behaviours.bear.Bear;
 import behaviours.plants.Bush;
 import behaviours.plants.Grass;
@@ -10,7 +11,9 @@ import itumulator.world.Location;
 import itumulator.world.World;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.Random;
 
 /**
@@ -58,20 +61,48 @@ public class ResourceManager {
         while ((currentLine = bufferedReader.readLine()) != null) {
             String[] contents = currentLine.split("\\s+");
 
-            String entity = contents[0];
-            int quantity = handleQuantity(contents[1]);
-
-            if(contents.length > 2) {
-                String location = contents[2];
-                String[] coords = location.replaceAll("[()]", "").split(",");
-                spawnEntities(entity, quantity, new Location(Integer.parseInt(coords[0]), Integer.parseInt(coords[1])));
+            if(contents[0].equals("cordyceps")) {
+                handleCordyceps(contents);
+            } else if(contents[1].equals("fungi")) {
+                handleCarcasser(contents);
             } else {
-                spawnEntities(entity, quantity);
+                String entity = contents[0];
+                int quantity = handleQuantity(contents[1]);
+                Location location = getLocation(contents, 2);
+                spawnEntities(entity, quantity, location);
             }
         }
 
         bufferedReader.close();
         fileReader.close();
+    }
+
+
+    public void handleCordyceps(String[] contents) {
+        String fungi = contents[0];
+        String entity = contents[1];
+        int quantity = handleQuantity(contents[2]);
+        Location location = getLocation(contents, 3);
+
+        //Spawnentities!!!! :))))))))))))))
+    }
+
+    public void handleCarcasser(String[] contents) {
+        String entity = contents[0];
+        String fungi = contents[1];
+        int quantity = handleQuantity(contents[2]);
+
+        Location location = getLocation(contents, 3);
+        //spawn!!!! :))))))))))))))))))))))))).
+    }
+
+    public Location getLocation(String[] contents, int numArgs) {
+        if(contents.length > numArgs) {
+            String location = contents[numArgs];
+            String[] coords = location.replaceAll("[()]", "").split(",");
+            return new Location(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
+        }
+        return null;
     }
 
     /**
@@ -131,6 +162,11 @@ public class ResourceManager {
      * @param location The location to spawn the entity
      */
     private void spawnEntities(String entity, int quantity, Location location) {
+        if(location == null) {
+            spawnEntities(entity, quantity);
+            return;
+        }
+
         if (entity.equals("wolf")) return;
         for (int i = 0; i < quantity; i++) {
             createEntity(entity, location);
@@ -171,12 +207,13 @@ public class ResourceManager {
         if(entity == null) {
             throw new IllegalArgumentException("Entity cannot be null");
         }
-        switch (entity) {
+        switch (entity.toLowerCase()) {
             case "grass" -> new Grass(world, location);
             case "rabbit" -> new Rabbit(world, location);
             case "burrow" -> new RabbitHole(world, location);
             case "bear" -> new Bear(world, location);
             case "berry" -> new Bush(world, location);
+            case "carcass" -> new Carcass(world, location);
             default -> throw new IllegalArgumentException("Unknown entity: " + entity);
         }
     }

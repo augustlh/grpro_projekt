@@ -1,0 +1,7 @@
+12
+grass 10
+rabbit 4-8
+cordyceps rabbit 1
+wolf 3
+cordyceps wolf 2
+bear 1

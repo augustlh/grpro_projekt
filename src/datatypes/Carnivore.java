@@ -13,16 +13,30 @@ public abstract class Carnivore extends Animal {
         super(species, metabolism, energyDecay, searchRadius, maxEnergy);
     }
 
+    protected void kill(World world, Animal other) {
+        System.out.print("Killed your mom, Frederik");
+        other.onConsume(world);
+    }
+
     // Hunt and eat other animals method
     // Eat adjacent eatable organisms
     protected void eat(World world) {
+        System.out.println("eat call");
         List<Location> neighbours = new ArrayList<>(world.getSurroundingTiles());
-        for (Location loc : neighbours) {
-            if (world.getTile(loc) instanceof Organism o) {
-                if ((this.canEat(o))) {
-                    this.consume(o, world);
-                    world.move(this, loc);
-                    return;
+
+        for (Location location : neighbours) {
+            if (world.getTile(location) instanceof Organism organism) {
+                System.out.println("organism moment");
+                if (this.canEat(organism)) {
+                    System.out.println("can eat moment");
+                    if (organism instanceof Animal) {
+                        System.out.println("Should eat animal");
+                        //hasacted bs
+                        this.kill(world, (Animal) organism);
+                        return;
+                    }
+                    this.consume(organism, world);
+                    System.out.println("eat done");
                 }
             }
         }

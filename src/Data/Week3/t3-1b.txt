@@ -1,0 +1,4 @@
+8
+rabbit 1-2
+wolf 2
+bear 1

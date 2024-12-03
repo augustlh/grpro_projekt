@@ -30,7 +30,11 @@ public abstract class Plant extends Organism implements NonBlocking {
      *
      * @param world the simulation world where the plant is attempting to grow
      */
-    protected abstract void grow(World world);
+    protected void grow(World world) {
+        if(world.isNight()) {
+            return;
+        }
+    }
 
     /**
      * Defines the behavior of the plant when it is consumed within the simulation world.

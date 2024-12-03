@@ -1,5 +1,6 @@
 package behaviours.rabbit;
 
+import behaviours.Carcass;
 import behaviours.nests.RabbitHole;
 import datatypes.Herbivore;
 import datatypes.Species;
@@ -180,7 +181,17 @@ public class Rabbit extends Herbivore {
         if(this.hole != null) {
             this.hole.removeAnimal(this);
         }
-        super.onConsume(world);
+
+        Location temp = null;
+        if(!this.insideHole) {
+            temp = world.getLocation(this);
+        }
+
+        world.delete(this);
+
+        if(temp != null) {
+            new Carcass(world, temp, this.energy);
+        }
     }
 
     /**

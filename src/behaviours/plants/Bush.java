@@ -2,16 +2,15 @@ package behaviours.plants;
 
 import datatypes.Plant;
 import datatypes.Species;
+import help.Utils;
 import itumulator.executable.DisplayInformation;
 import itumulator.world.World;
 import itumulator.world.Location;
 
 import java.awt.Color;
-import java.util.Random;
 
 public class Bush extends Plant {
     private int berryCount;
-    Random rand = new Random();
 
     public Bush(World world, Location location) {
         super(Species.BerryBush,.25, 1.5);
@@ -26,8 +25,10 @@ public class Bush extends Plant {
 
     @Override
     public void grow(World world) {
-        if(berryCount<4){
-            if(rand.nextDouble() <= this.spreadProbability){
+        super.grow(world);
+
+        if(berryCount < 4){
+            if(Utils.random.nextDouble() <= this.spreadProbability){
                 berryCount++;
             }
         }
@@ -40,8 +41,12 @@ public class Bush extends Plant {
 
     @Override
     public boolean canBeEaten() {
-        if (berryCount > 0) {return true;}
-        else {return false;}
+        return berryCount > 0;
+    }
+
+    @Override
+    public double getNutritionalValue() {
+        return this.nutritionalValue * berryCount;
     }
 
     public int getBerryCount() {

@@ -1,5 +1,6 @@
 package datatypes;
 
+import behaviours.Carcass;
 import itumulator.world.Location;
 import itumulator.world.World;
 import java.util.Random;
@@ -62,7 +63,7 @@ public abstract class Animal extends Organism {
 
         if (this.energy <= 0 || this.age >= 100){
             die();
-            world.delete(this);
+            onConsume(world);
         }
     }
 
@@ -91,16 +92,21 @@ public abstract class Animal extends Organism {
         other.onConsume(world);
     }
 
-    /**
-     * Handles the event when the animal is consumed by another organism.
-     * This method will delete the current instance of the animal from the world.
-     *
-     * @param world the world in which the animal exists
-     */
-    @Override
-    public void onConsume(World world) {
-        world.delete(this);
-    }
+//    /**
+//     * Handles the event when the animal is consumed by another organism.
+//     * This method will delete the current instance of the animal from the world.
+//     *
+//     * @param world the world in which the animal exists
+//     */
+//    @Override
+//    public void onConsume(World world) {
+//        Location temp = world.getLocation(this);
+//        world.delete(this);
+//
+//        if(temp != null) {
+//            new Carcass(world, temp, this.energy);
+//        }
+//    }
 
     /**
      * Causes the animal to wander to a random empty neighboring tile in the given world.

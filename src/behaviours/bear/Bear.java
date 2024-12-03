@@ -1,9 +1,8 @@
 package behaviours.bear;
 
+import behaviours.Carcass;
 import behaviours.plants.Bush;
-import datatypes.Carnivore;
-import datatypes.Organism;
-import datatypes.Species;
+import datatypes.*;
 import help.Utils;
 import itumulator.executable.DisplayInformation;
 import itumulator.world.Location;
@@ -20,7 +19,7 @@ public class Bear extends Carnivore {
     private boolean hasActed;
 
     public Bear(World world, Location location) {
-        super(Species.Bear, Utils.random.nextDouble(), Utils.random.nextDouble(), Utils.random.nextInt(1, 3), 75);
+        super(Species.Bear, Utils.random.nextDouble(), Utils.random.nextDouble()*2, Utils.random.nextInt(1, 3), 75);
         this.territory = world.getSurroundingTiles(location, Utils.random.nextInt(3, 5));
         world.setTile(location, this);
         this.hasActed = false;
@@ -34,49 +33,47 @@ public class Bear extends Carnivore {
             //Søg mod territorie
         }
          */
-
+        System.out.println("ENERGY: " + this.energy + " P: " + this.energy/this.maxEnergy);
         hasActed = false;
-
-        if (!hasActed) {
-            //System.out.println("Try eat");
+        if(this.energy < this.maxEnergy / 1.3) {
             eat(world);
         }
 
         if (!hasActed) {
-            //System.out.println("Try hunt");
             hunt(world);
         }
 
         if (!hasActed) {
-            //System.out.println("Try wander");
             wander(world);
         };
 
     }
 
-    @Override
-    protected void eat(World world) {
-        List<Location> neighbours = new ArrayList<>(world.getSurroundingTiles());
-        for (Location loc : neighbours) {
-            if (world.getTile(loc) instanceof Organism o && territory.contains(loc)) {
-                if ((this.canEat(o))) {
-                    //System.out.println("Eating");
-                    this.consume(o, world);
-                    world.move(this, loc);
-                    hasActed = true;
-                    return;
-                }
-            }
-        }
-    }
+
+//        for (Location loc : neighbours) {
+//            if (world.getTile(loc) instanceof Organism o && territory.contains(loc)) {
+//                if ((this.canEat(o))) {
+//                    //System.out.println("Eating");
+//                    this.consume(o, world);
+//                    world.move(this, loc);
+//                    hasActed = true;
+//                    return;
+//                }
+//            }
+//        }
 
     @Override
     protected void hunt(World world) {
         Location loc = Utils.closestConsumableEntity(world, this, searchRadius);
         if(loc != null && territory.contains(loc)) {
             if(world.getTile(loc) instanceof Organism o && o.canBeEaten()) {
-                pursue(world, loc);
-                hasActed = true;
+                if(!(o instanceof Animal)) {
+                    pursue(world, loc);
+                    hasActed = true;
+                } else if (this.energy < this.maxEnergy / 1.3) {
+                    pursue(world, loc);
+                    hasActed = true;
+                }
             }
         }
     }
@@ -128,5 +125,13 @@ public class Bear extends Carnivore {
     //test
     public Set<Location> getTerritory() {
         return territory;
+    }
+
+    @Override
+    public void onConsume(World world) {
+        Location temp = world.getLocation(this);
+        world.delete(this);
+        new Carcass(world, temp, this.energy);
+
     }
 }

@@ -9,9 +9,10 @@ public enum Species {
     None(1, 1),
     Grass(1 << 1, 1),
     BerryBush(1 << 2, 1),
-    Rabbit(1 << 3, 1 << 1),
-    Wolf(1 << 4, 1 << 3),
-    Bear(1 << 5, 1 << 4 | 1 << 3 | 1 << 2);
+    Carcass(1 << 3, 1),
+    Rabbit(1 << 4, 1 << 1),
+    Wolf(1 << 5, 1 << 4 | 1 << 3),
+    Bear(1 << 6, 1 << 4 | 1 << 5 | 1 << 3);
 
     private final int value;
     private final int dietMask;

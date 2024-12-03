@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - master
-      - main # Adjust to your primary branch (e.g., main, master)
-
 jobs:
   generate-javadoc:
     runs-on: ubuntu-latest
