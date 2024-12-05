@@ -1,4 +1,5 @@
 import behaviours.Carcass;
+import behaviours.Fungus;
 import behaviours.bear.Bear;
 import behaviours.plants.Bush;
 import behaviours.plants.Grass;
@@ -92,8 +93,14 @@ public class ResourceManager {
         String fungi = contents[1];
         int quantity = handleQuantity(contents[2]);
 
-        Location location = getLocation(contents, 3);
-        //spawn!!!! :))))))))))))))))))))))))).
+
+        for (int i = 0; i < quantity; i++) {
+            Location location = Utils.getValidRandomLocation(world);
+            Carcass carcass = new Carcass(world, location);
+            Fungus fungus = new Fungus(world,carcass,Utils.random.nextDouble()*2);
+            carcass.setFungus(fungus);
+        }
+
     }
 
     public Location getLocation(String[] contents, int numArgs) {

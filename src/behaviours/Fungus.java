@@ -2,6 +2,7 @@ package behaviours;
 
 import datatypes.Organism;
 import datatypes.Species;
+import help.Utils;
 import itumulator.executable.DisplayInformation;
 import itumulator.simulator.Actor;
 import itumulator.world.Location;
@@ -20,7 +21,7 @@ public class Fungus extends Organism implements NonBlocking {
 
     private Carcass carcass;
 
-    public Fungus(Carcass carcass, double energyDecay) {
+    public Fungus(World world,Carcass carcass, double energyDecay) {
         super(Species.Carcass);
         this.energyDecay = energyDecay;
         this.carcass = carcass;
@@ -28,11 +29,11 @@ public class Fungus extends Organism implements NonBlocking {
         this.energy = 30;
         this.spreadCounter = 0;
         this.spreadRadius = 1;
+        world.setTile(world.getLocation(carcass),this);
     }
 
     @Override
     public void act(World world) {
-
         // Stop act if dead
         if(this.isDead){
             return;
@@ -42,17 +43,14 @@ public class Fungus extends Organism implements NonBlocking {
         if(this.carcass != null) {
             energy = energy + carcass.getNutritionalValue();
             carcass.onConsume(world);
+            return;
         }
 
         // Spread to other Carcasses
         spreadCounter++;
         if (spreadCounter >= 10) {
             // Infect other carcasses within certain radius
-            if(world.getLocation(this) == null && carcass != null) {
-                infestOther(world);
-            } else if (world.getLocation(this) != null && carcass == null) {
-                infestOther(world);
-            }
+            infestOther(world);
             spreadCounter = 0;
             spreadRadius++;
         }
@@ -69,11 +67,14 @@ public class Fungus extends Organism implements NonBlocking {
     }
 
     public void infestOther(World world) {
-        ArrayList<Location> infestLocations = new ArrayList<>(world.getSurroundingTiles(world.getLocation(carcass), spreadRadius));
+        ArrayList<Location> infestLocations = new ArrayList<>(world.getSurroundingTiles(world.getLocation(this), spreadRadius));
         // Call infest method
         for (Location location : infestLocations) {
             if(world.getTile(location) instanceof Carcass c) {
-                c.infest();
+                if(!c.isInfested()){
+                    c.infest();
+                    c.setFungus(new Fungus(world,c, Utils.random.nextDouble()*2));
+                }
             }
         }
     }
@@ -91,7 +92,9 @@ public class Fungus extends Organism implements NonBlocking {
         return new DisplayInformation(Color.RED, "mc-mushroom-brown");
     }
 
-    
+    public void setCarcass(Carcass carcass) {
+        this.carcass = carcass;
+    }
 
 
 }

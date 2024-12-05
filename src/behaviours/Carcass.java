@@ -12,6 +12,7 @@ import java.awt.Color;
 public class Carcass extends Organism {
     private double energy;
     private int remainingUses;
+    private Fungus fungus;
 
 
     public Carcass(World world, Location location, double energy) {
@@ -36,12 +37,16 @@ public class Carcass extends Organism {
 
     @Override
     public void onConsume(World world) {
-        remainingUses--;
         this.energy = this.energy / remainingUses;
+        remainingUses--;
 
         if(remainingUses == 0) {
-            Location temp = world.getLocation(this);
-            world.remove(this);
+            if(isInfested()){
+                fungus.setCarcass(null);
+                world.delete(this);
+                return;
+            }
+            world.delete(this);
         }
     }
 
@@ -53,18 +58,30 @@ public class Carcass extends Organism {
 
     @Override
     public DisplayInformation getInformation() {
+        if(isInfested()){
+            return new DisplayInformation(Color.GRAY);
+        }
         return new DisplayInformation(Color.CYAN, "carcass");
     }
 
 
+
+
     @Override
     public void act(World world) {
+        System.out.println(isInfested());
+        if(this.isDead){
+            return;
+        }
         this.energy--;
         if(this.energy <= 0) {
+            super.die();
             onConsume(world);
         }
     }
 
-
+    public void setFungus(Fungus fungus){
+        this.fungus=fungus;
+    }
 
 }
