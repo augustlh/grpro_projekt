@@ -2,7 +2,7 @@ import itumulator.executable.Program;
 
 public class Main {
     public static void main(String[] args) {
-        ResourceManager resourceManager = new ResourceManager("src/Data/Week2/t2-1c.txt", 1000, 200);
+        ResourceManager resourceManager = new ResourceManager("src/Data/Week3/t3-2ab.txt", 1000, 300);
         Program program = resourceManager.getProgram();
         program.show();
     }

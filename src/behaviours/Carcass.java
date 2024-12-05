@@ -64,4 +64,7 @@ public class Carcass extends Organism {
             onConsume(world);
         }
     }
+
+
+
 }

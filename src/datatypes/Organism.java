@@ -10,6 +10,8 @@ import itumulator.simulator.Actor;
 public abstract class Organism implements Consumable, Actor, DynamicDisplayInformationProvider {
     protected final Species species;
     protected boolean isDead;
+    protected int age;
+    private boolean isInfested = false;
 
     /**
      * Constructs a new Organism with the specified species.
@@ -58,5 +60,11 @@ public abstract class Organism implements Consumable, Actor, DynamicDisplayInfor
     public boolean canBeEaten() {
         return true;
     }
+
+    public void infest() {
+        isInfested = true;
+    }
+
+    public boolean isInfested() {return isInfested;}
 
 }

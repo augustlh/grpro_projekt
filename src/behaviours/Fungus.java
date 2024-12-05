@@ -4,28 +4,82 @@ import datatypes.Organism;
 import datatypes.Species;
 import itumulator.executable.DisplayInformation;
 import itumulator.simulator.Actor;
+import itumulator.world.Location;
 import itumulator.world.NonBlocking;
 import itumulator.world.World;
+
+import java.awt.*;
+import java.util.ArrayList;
 
 public class Fungus extends Organism implements NonBlocking {
 
     private double energy;
-    private double energydecay;
+    private double energyDecay;
+    private int spreadCounter;
+    private int spreadRadius;
 
-    public Fungus() {
+    private Carcass carcass;
+
+    public Fungus(Carcass carcass, double energyDecay) {
         super(Species.Carcass);
-
+        this.energyDecay = energyDecay;
+        this.carcass = carcass;
+        this.carcass.infest();
+        this.energy = 30;
+        this.spreadCounter = 0;
+        this.spreadRadius = 1;
     }
 
     @Override
     public void act(World world) {
 
+        // Stop act if dead
+        if(this.isDead){
+            return;
+        }
+
+        // Gain energy if in carcass
+        if(this.carcass != null) {
+            energy = energy + carcass.getNutritionalValue();
+            carcass.onConsume(world);
+        }
+
+        // Spread to other Carcasses
+        spreadCounter++;
+        if (spreadCounter >= 10) {
+            // Infect other carcasses within certain radius
+            if(world.getLocation(this) == null && carcass != null) {
+                infestOther(world);
+            } else if (world.getLocation(this) != null && carcass == null) {
+                infestOther(world);
+            }
+            spreadCounter = 0;
+            spreadRadius++;
+        }
+
+        // Subtract energy
+        energy = energy - energyDecay;
+
+        // Dies if out of energy
+        if(energy <= 0) {
+            die();
+            world.delete(this);
+        }
+
+    }
+
+    public void infestOther(World world) {
+        ArrayList<Location> infestLocations = new ArrayList<>(world.getSurroundingTiles(world.getLocation(carcass), spreadRadius));
+        // Call infest method
+        for (Location location : infestLocations) {
+            if(world.getTile(location) instanceof Carcass c) {
+                c.infest();
+            }
+        }
     }
 
     @Override
-    public void onConsume(World world) {
-
-    }
+    public void onConsume(World world) {}
 
     @Override
     public double getNutritionalValue() {
@@ -34,7 +88,7 @@ public class Fungus extends Organism implements NonBlocking {
 
     @Override
     public DisplayInformation getInformation() {
-        return null;
+        return new DisplayInformation(Color.RED, "mc-mushroom-brown");
     }
 
     

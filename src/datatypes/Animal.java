@@ -12,7 +12,6 @@ import java.util.Set;
  * and pursuing targets in a given world.
  */
 public abstract class Animal extends Organism {
-    protected int age;
     protected double energy;
     protected double maxEnergy;
     protected double metabolism;
