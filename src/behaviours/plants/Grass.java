@@ -1,5 +1,6 @@
 package behaviours.plants;
 
+import behaviours.Carcass;
 import datatypes.Plant;
 import datatypes.Species;
 import itumulator.executable.DisplayInformation;
@@ -79,6 +80,7 @@ public class Grass extends Plant {
 
             if(surroundingEmptyNonBlockingTiles.isEmpty()) return;
             Location newLocation = surroundingEmptyNonBlockingTiles.get(rand.nextInt(surroundingEmptyNonBlockingTiles.size()));
+            if(world.getTile(newLocation) instanceof Carcass)return;
             new Grass(world, newLocation);
         }
     }

@@ -74,6 +74,7 @@ public class Fungus extends Organism implements NonBlocking {
                 if(!c.isInfested()){
                     c.infest();
                     c.setFungus(new Fungus(world,c, Utils.random.nextDouble()*2));
+                    return;
                 }
             }
         }

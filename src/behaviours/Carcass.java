@@ -1,5 +1,6 @@
 package behaviours;
 
+import behaviours.plants.Grass;
 import datatypes.Organism;
 import datatypes.Species;
 import help.Utils;
@@ -20,7 +21,7 @@ public class Carcass extends Organism {
         this.energy = energy;
         remainingUses = 3;
 
-        if(!world.isTileEmpty((location))) {
+        if(!world.isTileEmpty((location)) || world.containsNonBlocking(location)) {
             world.delete(world.getTile(location));
         }
 
@@ -69,10 +70,14 @@ public class Carcass extends Organism {
 
     @Override
     public void act(World world) {
-        System.out.println(isInfested());
         if(this.isDead){
             return;
         }
+
+        if(world.getNonBlocking(world.getLocation(this)) instanceof Grass g){
+            world.delete(g);
+        }
+
         this.energy--;
         if(this.energy <= 0) {
             super.die();
@@ -82,6 +87,10 @@ public class Carcass extends Organism {
 
     public void setFungus(Fungus fungus){
         this.fungus=fungus;
+    }
+
+    public int getRemainingUses(){
+        return remainingUses;
     }
 
 }
