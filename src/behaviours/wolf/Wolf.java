@@ -211,20 +211,11 @@ public class Wolf extends Carnivore {
     @Override
     public void onConsume(World world) {
         this.die();
-
         if(this.pack.getCave() != null) {
             this.pack.getCave().removeAnimal(this);
         }
 
-        Location temp = null;
-        if(!this.insideCave) {
-            temp = world.getLocation(this);
-        }
-
-        world.delete(this);
-        if(temp != null) {
-            new Carcass(world, temp, this.energy);
-        }
+        super.onConsume(world);
     }
 
     /**
@@ -244,6 +235,10 @@ public class Wolf extends Carnivore {
      */
     @Override
     public DisplayInformation getInformation() {
+        if(this.isInfected()) {
+            return new DisplayInformation(Color.WHITE, "mc-wolf-large-infested");
+        }
+
         if(age > 6) {
             return new DisplayInformation(Color.WHITE, "mc-wolf-large");
         }

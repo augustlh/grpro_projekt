@@ -116,6 +116,10 @@ public class Bear extends Carnivore {
      */
     @Override
     public DisplayInformation getInformation() {
+        if(this.isInfected()) {
+            return new DisplayInformation(Color.WHITE, "mc-bear-large-infested");
+        }
+
         if(age > 6) {
             return new DisplayInformation(Color.WHITE, "mc-bear-large");
         }
@@ -129,9 +133,6 @@ public class Bear extends Carnivore {
 
     @Override
     public void onConsume(World world) {
-        Location temp = world.getLocation(this);
-        world.delete(this);
-        new Carcass(world, temp, this.energy);
-
+        super.onConsume(world);
     }
 }

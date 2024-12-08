@@ -1,6 +1,8 @@
 package datatypes;
 
 import behaviours.Carcass;
+import behaviours.Cordyceps;
+import help.Utils;
 import itumulator.world.Location;
 import itumulator.world.World;
 import java.util.Random;
@@ -17,6 +19,7 @@ public abstract class Animal extends Organism {
     protected double metabolism;
     protected double energyDecay;
     protected int searchRadius;
+    protected Cordyceps cordyceps;
 
     /**
      * Constructs a new Animal with the specified species, metabolism, energy decay, and search radius.
@@ -34,7 +37,38 @@ public abstract class Animal extends Organism {
         this.searchRadius = searchRadius;
         this.maxEnergy = maxEnergy;
         this.energy = this.maxEnergy;
+        this.cordyceps = null;
+
+
+        if(Utils.random.nextDouble() < 0.3) {
+            this.cordyceps = new Cordyceps();
+            this.cordyceps.onInfect(this);
+
+        }
     }
+
+    /**
+     * Constructs a new Animal with the specified species, metabolism, energy decay, search radius that is infected by cordyceps.
+     *
+     * @param species      the species of the animal
+     * @param metabolism   the rate at which the animal metabolizes energy
+     * @param energyDecay  the rate at which the animal's energy decreases over time
+     * @param searchRadius the radius in which the animal searches for food or other entities
+     * @param cordyceps    the cordyceps it is infected by.
+     */
+    public Animal(Species species, double metabolism, double energyDecay, int searchRadius, double maxEnergy, Cordyceps cordyceps) {
+        super(species);
+        this.age = 0;
+        this.metabolism = metabolism;
+        this.energyDecay = energyDecay;
+        this.searchRadius = searchRadius;
+        this.maxEnergy = maxEnergy;
+        this.energy = this.maxEnergy;
+        this.cordyceps = cordyceps;
+        this.cordyceps.onInfect(this);
+    }
+
+
 
     abstract protected void dayTimeBehaviour(World world);
     abstract protected void nightTimeBehaviour(World world);
@@ -51,12 +85,22 @@ public abstract class Animal extends Organism {
             return;
         }
 
+        if(this.isInfected()) {
+            age(world);
+            this.cordyceps.act(world);
+            return;
+        }
+
         if(world.isDay()) {
             dayTimeBehaviour(world);
         } else if(world.isNight()) {
             nightTimeBehaviour(world);
         }
 
+        age(world);
+    }
+
+    private void age(World world) {
         this.age = this.age + 1;
         this.energy = this.energy - this.energyDecay;
 
@@ -91,21 +135,29 @@ public abstract class Animal extends Organism {
         other.onConsume(world);
     }
 
-//    /**
-//     * Handles the event when the animal is consumed by another organism.
-//     * This method will delete the current instance of the animal from the world.
-//     *
-//     * @param world the world in which the animal exists
-//     */
-//    @Override
-//    public void onConsume(World world) {
-//        Location temp = world.getLocation(this);
-//        world.delete(this);
-//
-//        if(temp != null) {
-//            new Carcass(world, temp, this.energy);
-//        }
-//    }
+    /**
+     * Handles the event when the animal is consumed by another organism.
+     * This method will delete the current instance of the animal from the world.
+     *
+     * @param world the world in which the animal exists
+     */
+    @Override
+    public void onConsume(World world) {
+        if(!world.isOnTile(this)) {
+            world.delete(this);
+        } else {
+            Location temp = world.getLocation(this);
+            world.delete(this);
+
+            if(!this.isInfected()) {
+                if(temp != null) {
+                    new Carcass(world, temp, this.energy);
+                }
+            } else {
+                this.cordyceps.onHostDeath(world, temp);
+            }
+        }
+    }
 
     /**
      * Causes the animal to wander to a random empty neighboring tile in the given world.
@@ -154,5 +206,24 @@ public abstract class Animal extends Organism {
         if(world.isTileEmpty(newLocation)) {
             world.move(this, newLocation);
         }
+    }
+
+    public boolean isInfected() {
+        return this.cordyceps != null;
+    }
+
+    public void infect(Cordyceps cordyceps) {
+        if(this.cordyceps == null) {
+            this.cordyceps = cordyceps;
+            cordyceps.onInfect(this);
+        }
+    }
+
+    public void devour() {
+        this.energy -= this.energyDecay * 1.5;
+    }
+
+    public void moveTowards(World world, Location target) {
+        pursue(world, target);
     }
 }

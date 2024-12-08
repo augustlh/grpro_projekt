@@ -1,6 +1,8 @@
 package help;
 import behaviours.nests.RabbitHole;
+import datatypes.Animal;
 import datatypes.Organism;
+import datatypes.Species;
 import itumulator.world.Location;
 import itumulator.world.World;
 
@@ -16,6 +18,28 @@ public class Utils {
         int dy = Math.abs(a.getY() - b.getY());
 
         return dx + dy;
+    }
+
+    public static Location closestEqualAnimal(Animal c, World world, Species species, Location currentLocation) {
+        Set<Location> tiles = world.getSurroundingTiles(world.getSize());
+
+        int closestDistance = Integer.MAX_VALUE;
+        Location closestLocation = null;
+
+        for(Location location : tiles) {
+            Object entity = world.getTile(location);
+
+            if(entity instanceof Animal a && a.getSpecies() == species && a != c && !a.isInfected()) {
+                int distance = manhattanDistance(currentLocation, location);
+
+                if(distance < closestDistance) {
+                    closestLocation = location;
+                    closestDistance = distance;
+                }
+            }
+        }
+
+        return closestLocation;
     }
 
     /**

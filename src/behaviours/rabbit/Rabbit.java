@@ -30,7 +30,7 @@ public class Rabbit extends Herbivore {
      * @param location The location within the world where the rabbit will be placed.
      */
     public Rabbit(World world, Location location) {
-        super(Species.Rabbit, new Random().nextDouble(), new Random().nextDouble(0, 0.8), 1, 50.0);
+        super(Species.Rabbit, new Random().nextDouble(), new Random().nextDouble(1, 2), 1, 50.0);
         world.setTile(location, this);
         this.canBreed = true;
         this.insideHole = false;
@@ -109,7 +109,7 @@ public class Rabbit extends Herbivore {
         setHole(world);
         eat(world);
 
-        if(this.energy/2 > this.maxEnergy / 4 && this.age > 4) {
+        if(this.energy/2 > this.maxEnergy / 4 && this.age > 4 && !this.isInfected()) {
             this.canBreed = true;
         }
 
@@ -182,16 +182,7 @@ public class Rabbit extends Herbivore {
             this.hole.removeAnimal(this);
         }
 
-        Location temp = null;
-        if(!this.insideHole) {
-            temp = world.getLocation(this);
-        }
-
-        world.delete(this);
-
-        if(temp != null) {
-            new Carcass(world, temp, this.energy);
-        }
+        super.onConsume(world);
     }
 
     /**
@@ -274,6 +265,10 @@ public class Rabbit extends Herbivore {
      */
     @Override
     public DisplayInformation getInformation() {
+        if(this.isInfected()) {
+            return new DisplayInformation(Color.RED, "mc-rabbit-large-infested");
+        }
+
         if(age > 6) {
             return new DisplayInformation(Color.WHITE, "mc-rabbit-large");
         }
