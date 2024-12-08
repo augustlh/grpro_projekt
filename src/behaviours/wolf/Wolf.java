@@ -1,8 +1,6 @@
 package behaviours.wolf;
 
-import behaviours.Carcass;
 import behaviours.nests.WolfCave;
-import behaviours.rabbit.Rabbit;
 import datatypes.Carnivore;
 import datatypes.Species;
 import help.Utils;

@@ -168,12 +168,11 @@ public abstract class Animal extends Organism {
      */
     protected void wander(World world) {
         Set<Location> emptyNeighbours = world.getEmptySurroundingTiles();
-        Location newLocation = null;
         if(emptyNeighbours.isEmpty()) {
             return;
         }
 
-        newLocation = (Location) emptyNeighbours.toArray()[new Random().nextInt(emptyNeighbours.size())];
+        Location newLocation = (Location) emptyNeighbours.toArray()[new Random().nextInt(emptyNeighbours.size())];
         world.move(this, newLocation);
     }
 

@@ -1,5 +1,4 @@
 import itumulator.executable.Program;
-import itumulator.world.World;
 
 public class Main {
     public static void main(String[] args) {

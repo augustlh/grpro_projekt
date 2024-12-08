@@ -1,7 +1,5 @@
 package behaviours.bear;
 
-import behaviours.Carcass;
-import behaviours.plants.Bush;
 import datatypes.*;
 import help.Utils;
 import itumulator.executable.DisplayInformation;
@@ -15,7 +13,7 @@ import java.util.Set;
 
 
 public class Bear extends Carnivore {
-    private Set<Location> territory;
+    private final Set<Location> territory;
     private boolean hasActed;
 
     public Bear(World world, Location location) {
@@ -45,7 +43,7 @@ public class Bear extends Carnivore {
 
         if (!hasActed) {
             wander(world);
-        };
+        }
 
     }
 
@@ -92,9 +90,8 @@ public class Bear extends Carnivore {
         Set<Location> territoryNeighbours = getValidEmptyLocationsWithinTerritory(world);
 
         //  Move the bear
-        Location newLocation = null;
         if(!territoryNeighbours.isEmpty()) {
-            newLocation = (Location) territoryNeighbours.toArray()[new Random().nextInt(territoryNeighbours.size())];
+            Location newLocation = (Location) territoryNeighbours.toArray()[new Random().nextInt(territoryNeighbours.size())];
             world.move(this, newLocation);
         }
         else {
@@ -124,11 +121,6 @@ public class Bear extends Carnivore {
             return new DisplayInformation(Color.WHITE, "mc-bear-large");
         }
         return new DisplayInformation(Color.WHITE, "mc-bear-small");
-    }
-
-    //test
-    public Set<Location> getTerritory() {
-        return territory;
     }
 
     @Override

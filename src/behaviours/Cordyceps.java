@@ -25,12 +25,11 @@ public class Cordyceps {
         if(target == null) {
             System.out.println("No target");
             Set<Location> emptyNeighbours = world.getEmptySurroundingTiles(world.getLocation(this.host));
-            Location newLocation = null;
             if(emptyNeighbours.isEmpty()) {
                 return;
             }
 
-            newLocation = (Location) emptyNeighbours.toArray()[new Random().nextInt(emptyNeighbours.size())];
+            Location newLocation = (Location) emptyNeighbours.toArray()[new Random().nextInt(emptyNeighbours.size())];
             world.move(host, newLocation);
         } else {
             this.host.moveTowards(world, target);

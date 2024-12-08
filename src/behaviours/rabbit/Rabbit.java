@@ -1,6 +1,5 @@
 package behaviours.rabbit;
 
-import behaviours.Carcass;
 import behaviours.nests.RabbitHole;
 import datatypes.Herbivore;
 import datatypes.Species;

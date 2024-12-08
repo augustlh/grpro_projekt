@@ -4,7 +4,6 @@ import datatypes.Organism;
 import datatypes.Species;
 import help.Utils;
 import itumulator.executable.DisplayInformation;
-import itumulator.simulator.Actor;
 import itumulator.world.Location;
 import itumulator.world.NonBlocking;
 import itumulator.world.World;
