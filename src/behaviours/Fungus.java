@@ -1,5 +1,6 @@
 package behaviours;
 
+import behaviours.plants.Grass;
 import datatypes.Organism;
 import datatypes.Species;
 import help.Utils;
@@ -60,7 +61,9 @@ public class Fungus extends Organism implements NonBlocking {
         // Dies if out of energy
         if(energy <= 0) {
             die();
+            Location temp = world.getLocation(this);
             world.delete(this);
+            new Grass(world,temp);
         }
 
     }
