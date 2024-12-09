@@ -15,7 +15,7 @@ import java.util.Random;
 
 /**
  * The Grass class represents a type of Plant that can spread over time to new locations
- * within a World. Grass instances have a specific spread probability and nutritional value.
+ * within the world. Grass instances have a specific spread probability and nutritional value.
  */
 public class Grass extends Plant {
     List<Location> neighbours;
@@ -25,8 +25,8 @@ public class Grass extends Plant {
      * Initializes the spread probability and nutritional value.
      * Sets the tile at the given location to this Grass instance.
      *
-     * @param world the world where the Grass instance will be placed
-     * @param location the specific location within the world where the Grass instance will be set
+     * @param world The world in which the Grass exists.
+     * @param location The specific location within the world where the Grass instance will be set
      */
     public Grass(World world, Location location) {
         super(Species.Grass,.125, 1.2);
@@ -51,8 +51,7 @@ public class Grass extends Plant {
      * Act method is called to perform the Grass-specific action in the given world.
      * In this method, the Grass attempts to spread to a new location.
      *
-     * @param world the world in which the Grass instance exists and where
-     *              it will attempt to spread
+     * @param world The world in which the Grass exists.
      */
     @Override
     public void act(World world) {
@@ -65,7 +64,7 @@ public class Grass extends Plant {
      * If a random chance meets the predefined spread probability, it selects a random
      * empty non-blocking tile from the surrounding tiles and creates a new Grass instance there.
      *
-     * @param world the world in which the Grass instance exists and where it will attempt to spread
+     * @param world The world in which the Grass exists.
      */
     @Override
     protected void grow(World world) {

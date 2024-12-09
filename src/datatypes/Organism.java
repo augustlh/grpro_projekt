@@ -4,8 +4,13 @@ import itumulator.executable.DynamicDisplayInformationProvider;
 import itumulator.simulator.Actor;
 
 /**
- * Represents a generic organism within a simulation, characterized by its species and its ability to be consumed, act, and provide dynamic display information.
- * This class provides basic functionalities for all organisms, such as determining species, mortality, and dietary rules.
+ * The Organism class represents a living entity and acts as the super class for all living entities.
+ * The class contains information about the organism's species, age and whether it's dead or infested.
+ * It provides the functionality for species to recognize which other organisms they can consume.
+ * It implements the Consumable and Actor interfaces as the behavior defined in those classes
+ * are required to accurately represent organisms.
+ * it also implements the DynamicDisplayInformationProvider interface, in order for each sub-organism
+ * to be able to change appearance based on certain conditions.
  */
 public abstract class Organism implements Consumable, Actor, DynamicDisplayInformationProvider {
     protected final Species species;
@@ -41,7 +46,7 @@ public abstract class Organism implements Consumable, Actor, DynamicDisplayInfor
     /**
      * Determines whether this organism can consume another specified organism.
      *
-     * @param other the organism to check if it can be consumed
+     * @param other The other organism we wish to see if it can consumed by this organism.
      * @return true if this organism can consume the other organism, false otherwise
      */
     public boolean canEat(Organism other) {
@@ -57,14 +62,29 @@ public abstract class Organism implements Consumable, Actor, DynamicDisplayInfor
         return !this.isDead;
     }
 
+    /**
+     * Determines if this organism can be eaten by another organism.
+     * Acts as a helping method for certain subclasses.
+     *
+     * @return true if the organism can be eaten, false otherwise.
+     */
     public boolean canBeEaten() {
         return true;
     }
 
+    /**
+     * Marks this organism as infested by setting its 'isInfested' flag to true.
+     * This can trigger certain alternate behaviors in the organism.
+     */
     public void infest() {
         isInfested = true;
     }
 
+    /**
+     * Checks if the organism is currently infested.
+     *
+     * @return true if the organism is infested, false otherwise.
+     */
     public boolean isInfested() {return isInfested;}
 
 }

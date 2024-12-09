@@ -9,7 +9,7 @@ import itumulator.world.World;
 import java.util.*;
 
 /**
- * Utility class providing various methods useful for working with simulation entities and locations.
+ * A utility class providing various methods useful for working with simulation entities and locations.
  */
 public class Utils {
     public static Random random = new Random();
@@ -20,6 +20,17 @@ public class Utils {
         return dx + dy;
     }
 
+    /**
+     * Finds the closest non-infected animal of a specified species around the given current location
+     * but excludes the given animal from consideration.
+     *
+     * @param c the animal that is searching for the closest equal animal; this animal is excluded from the search.
+     * @param world the world in which the animals reside.
+     * @param species the species of animals to search for.
+     * @param currentLocation the current location from which to start the search.
+     * @return the location of the closest non-infected animal of the same species,
+     *         or null if no such animal is found.
+     */
     public static Location closestEqualAnimal(Animal c, World world, Species species, Location currentLocation) {
         Set<Location> tiles = world.getSurroundingTiles(world.getSize());
 
@@ -38,17 +49,16 @@ public class Utils {
                 }
             }
         }
-
         return closestLocation;
     }
 
     /**
      * Finds the closest consumable entity (Organism) within a given search radius from a specified organism.
      *
-     * @param world the world containing the organism and other entities
-     * @param organism the organism searching for a consumable entity
-     * @param searchRadius the radius within which to search for consumable entities
-     * @return the location of the closest consumable organism if found, otherwise null
+     * @param world the world in which the entities reside.
+     * @param organism the organism searching for a consumable entity.
+     * @param searchRadius the radius within which to search for consumable entities.
+     * @return the location of the closest consumable organism if found, otherwise null.
      */
     public static Location closestConsumableEntity(World world, Organism organism, int searchRadius) {
         Set<Location> neighbours = world.getSurroundingTiles(searchRadius);
@@ -114,9 +124,9 @@ public class Utils {
     /**
      * Retrieves a list of tiles from the provided list that are empty and non-blocking within the given world.
      *
-     * @param world the world containing the tiles
-     * @param tiles the list of locations to be checked
-     * @return a list of locations that are empty and non-blocking
+     * @param world the world containing the tiles.
+     * @param tiles the list of locations to be checked.
+     * @return a list of locations that are empty and non-blocking.
      */
     public static List<Location> getSurroundingEmptyNonBlockingTiles(World world, List<Location> tiles) {
         List<Location> freeTiles = new ArrayList<>();

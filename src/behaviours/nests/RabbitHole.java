@@ -12,23 +12,21 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * The RabbitHole class represents a rabbit hole in a world tile that can contain rabbits.
+ * The RabbitHole class represents a rabbit hole in the world and extends the {@link Nest Nest class}.
+ * Used by rabbits to sleep and reproduce during nighttime.
  * Rabbit holes are connected, and a rabbit can travel between connected holes.
- *
- * This class implements NonBlocking, allowing other actors/objects to exist on top of it,
- * and DynamicDisplayInformationProvider to dynamically control its display information.
  */
 public class RabbitHole extends Nest<Rabbit> {
     private final List<RabbitHole> holes;
     private final Location location;
 
     /**
-     * Creates a new RabbitHole at the specified location in the given world.
-     * The RabbitHole is added to the world's tile at the specified location
-     * and initializes its own list of connected holes and rabbits.
+     * Creates a new RabbitHole at the specified location in the world.
+     * The RabbitHole is added to the world at the specified location
+     * and a list containing holes (including itself) is stored in the rabbit hole itself.
      *
-     * @param world The world where the RabbitHole is created.
-     * @param location The specific location in the world where the RabbitHole is placed.
+     * @param world The world in which the RabbitHole exists.
+     * @param location The location in the world where the RabbitHole is placed.
      */
     public RabbitHole(World world, Location location) {
         super(world, location);
@@ -39,11 +37,11 @@ public class RabbitHole extends Nest<Rabbit> {
 
     /**
      * Creates a new RabbitHole at the specified location in the given world and links it with
-     * a list of connected RabbitHoles. The RabbitHole is added to the world's tile at the
-     * specified location and initializes its rabbits and connection to other RabbitHoles.
+     * a list of connected RabbitHoles. The RabbitHole is added to the world at the
+     * specified location and adds itself to the list of holes.
      *
-     * @param world The world where the RabbitHole is created.
-     * @param location The specific location in the world where the RabbitHole is placed.
+     * @param world The world in which the RabbitHole exists.
+     * @param location The location in the world where the RabbitHole is located.
      * @param holes A list of already connected RabbitHoles to which this RabbitHole will be linked.
      */
     public RabbitHole(World world, Location location, List<RabbitHole> holes) {
@@ -86,7 +84,7 @@ public class RabbitHole extends Nest<Rabbit> {
     /**
      * Provides display information for the RabbitHole.
      *
-     * @return DisplayInformation that includes the color (black) and the image key ("hole") for the RabbitHole.
+     * @return The display information of the RabbitHole.
      */
     @Override
     public DisplayInformation getInformation() {
