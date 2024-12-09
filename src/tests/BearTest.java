@@ -1,5 +1,6 @@
 package tests;
 
+import behaviours.Carcass;
 import behaviours.bear.Bear;
 import behaviours.plants.Bush;
 import behaviours.rabbit.Rabbit;
@@ -14,6 +15,10 @@ import itumulator.world.Location;
 
 import java.util.*;
 
+    /*
+    * Needs to rewrite hunt of differnt food and carcass
+    * */
+
 public class BearTest {
 
     @Test
@@ -24,20 +29,27 @@ public class BearTest {
         Bush bush = new Bush(world,new Location(0,1));
         bush.setSpreadProbability(1);
         bush.act(world);
-        bear.act(world);
+        for (int i = 0; i<20;i++){
+            world.setDay();
+            bear.act(world);
+            System.out.println(world.getEntities());
+        }
 
         assertEquals(0,bush.getBerryCount());
 
     }
     @Test
-    public void testBearEatRabbit() {
+    public void testBearKillRabbit() {
         World world = new World(5);
         Bear bear = new Bear(world,new Location(0,0));
         world.setCurrentLocation(new Location(0,0));
         Rabbit rabbit = new Rabbit(world,new Location(0,1));
-        bear.act(world);
+        while (world.contains(rabbit)) {
+            world.setDay();
+            bear.act(world);
+        }
 
-        assertEquals(1,world.getEntities().size());
+        assertFalse(world.contains(rabbit));
 
     }
     @Test
@@ -46,9 +58,12 @@ public class BearTest {
         Bear bear = new Bear(world,new Location(0,0));
         world.setCurrentLocation(new Location(0,0));
         Wolf wolf = new Wolf(world,new Location(0,1),new WolfPack(world,new Location(0,1),0));
-        bear.act(world);
+        while (world.contains(wolf)) {
+            world.setDay();
+            bear.act(world);
+        }
 
-        assertEquals(1,world.getEntities().size());
+        assertFalse(world.contains(wolf));
 
 
     }
@@ -86,6 +101,19 @@ public class BearTest {
         bear.act(world);
 
         assertEquals(1,bush.getBerryCount());
+    }
+
+    @Test
+    public void testBearEatCarcass(){
+        World world = new World(5);
+        Bear bear = new Bear(world,new Location(0,0));
+        world.setCurrentLocation(new Location(0,0));
+        Carcass carcass = new Carcass(world,new Location(0,1));
+        while (world.contains(carcass)) {
+            world.setDay();
+            bear.act(world);
+        }
+        assertEquals(1,world.getEntities().size());
     }
 
 }

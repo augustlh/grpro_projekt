@@ -8,7 +8,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import itumulator.world.World;
 import itumulator.world.Location;
 
-import java.util.*;
+
+// quick check with group/tema 2
+
 public class BushTest {
 
     @Test

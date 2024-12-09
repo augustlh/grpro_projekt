@@ -1,5 +1,6 @@
 package tests;
 
+import behaviours.Carcass;
 import behaviours.rabbit.Rabbit;
 import behaviours.wolf.Wolf;
 import behaviours.wolf.WolfPack;
@@ -12,10 +13,16 @@ import itumulator.world.Location;
 
 import java.util.*;
 
+    /*
+    * Fix eating
+    * make Reproduce and pathfinding test for hole/hunting
+    *
+    * */
+
 class WolfTest {
 
     @Test
-    public void testEatRabbit(){
+    public void testKillRabbit(){
         World world = new World(5);
         Location location = new Location(0, 0);
         Rabbit rabbit = new Rabbit(world, location);
@@ -25,7 +32,7 @@ class WolfTest {
         world.setCurrentLocation(new Location(0,1));
         wolf.act(world);
 
-        assertEquals(1,world.getEntities().size());
+        assertFalse(world.contains(rabbit));
     }
 
     //wolves don't move right so test is 50/50
@@ -67,6 +74,19 @@ class WolfTest {
         }
         fail();
 
+    }
+
+    @Test
+    public void testEatCarcass(){
+        World world = new World(5);
+        Carcass carcass = new Carcass(world,new Location(0,0));
+
+        Location location = new Location(0, 1);
+        Wolf wolf = new WolfPack(world,new Location(0,1),1).getPack().getFirst();
+        world.setCurrentLocation(location);
+        wolf.act(world);
+
+        assertEquals(2,carcass.getRemainingUses());
     }
 
 

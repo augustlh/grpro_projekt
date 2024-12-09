@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
+    // Quick check with group/tema 3
 public class FungusTest {
 
     @Test
@@ -33,9 +35,11 @@ public class FungusTest {
         Fungus fungus = new Fungus(world,carcass, Utils.random.nextDouble()*2);
         carcass.setFungus(fungus);
 
+
         while (carcass.getRemainingUses() > 0){
             fungus.act(world);
         }
+
         assertEquals(1,world.getEntities().size());
     }
 

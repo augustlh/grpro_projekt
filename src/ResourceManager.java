@@ -1,10 +1,12 @@
 import behaviours.Carcass;
+import behaviours.Cordyceps;
 import behaviours.Fungus;
 import behaviours.bear.Bear;
 import behaviours.plants.Bush;
 import behaviours.plants.Grass;
 import behaviours.rabbit.Rabbit;
 import behaviours.nests.RabbitHole;
+import behaviours.wolf.Wolf;
 import behaviours.wolf.WolfPack;
 import help.Utils;
 import itumulator.executable.Program;
@@ -12,9 +14,8 @@ import itumulator.world.Location;
 import itumulator.world.World;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -83,9 +84,26 @@ public class ResourceManager {
         String fungi = contents[0];
         String entity = contents[1];
         int quantity = handleQuantity(contents[2]);
-        Location location = getLocation(contents, 3);
 
-        //Spawnentities!!!! :))))))))))))))
+
+        if (entity.equals("wolf")) {
+            Location location = Utils.getValidRandomLocation(world);
+            WolfPack wolfPack = new WolfPack(world,location,quantity);
+            for (Wolf wolf : wolfPack.getPack()) {
+                Cordyceps cordyceps = new Cordyceps();
+                wolf.infect(cordyceps);
+            }
+        } else if (entity.equals("rabbit")) {
+            for (int i =0; i<quantity; i++) {
+                Location location = Utils.getValidRandomLocation(world);
+                Cordyceps cordyceps = new Cordyceps();
+                Rabbit rabbit = new Rabbit(world,location);
+                rabbit.infect(cordyceps);
+            }
+
+        }
+
+
     }
 
     public void handleCarcasser(String[] contents) {

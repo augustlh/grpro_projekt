@@ -21,7 +21,7 @@ public class Utils {
     }
 
     public static Location closestEqualAnimal(Animal c, World world, Species species, Location currentLocation) {
-        Set<Location> tiles = world.getSurroundingTiles(world.getSize());
+        Set<Location> tiles = world.getSurroundingTiles(currentLocation,world.getSize());
 
         int closestDistance = Integer.MAX_VALUE;
         Location closestLocation = null;

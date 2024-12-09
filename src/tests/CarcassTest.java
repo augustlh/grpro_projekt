@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
+    //Quick check with group/tema 3
 public class CarcassTest {
         World world;
         Carcass carcass;

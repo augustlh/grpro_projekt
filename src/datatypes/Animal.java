@@ -40,11 +40,11 @@ public abstract class Animal extends Organism {
         this.cordyceps = null;
 
 
-        if(Utils.random.nextDouble() < 0.3) {
-            this.cordyceps = new Cordyceps();
-            this.cordyceps.onInfect(this);
-
-        }
+//        if(Utils.random.nextDouble() < 0.3) {
+//            this.cordyceps = new Cordyceps();
+//            this.cordyceps.onInfect(this);
+//
+//        }
     }
 
     /**

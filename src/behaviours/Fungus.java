@@ -29,7 +29,7 @@ public class Fungus extends Organism implements NonBlocking {
         this.energy = 30;
         this.spreadCounter = 0;
         this.spreadRadius = 1;
-        //world.setTile(world.getLocation(carcass),this);
+        world.setTile(world.getLocation(carcass),this);
     }
 
     @Override
