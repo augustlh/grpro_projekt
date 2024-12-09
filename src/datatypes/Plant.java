@@ -4,7 +4,7 @@ import itumulator.world.NonBlocking;
 import itumulator.world.World;
 
 /**
- * Represents an abstract plant organism in a simulation world.
+ * Represents an abstract plant organism.
  * Plants have a probability of spreading to new locations and a defined nutritional value.
  * This class provides basic functionalities for plant-specific behaviors such as spreading,
  * being consumed, and providing nutritional value.
@@ -57,7 +57,13 @@ public abstract class Plant extends Organism implements NonBlocking {
     }
 
 
-    //only for test
+    /**
+     * Sets the probability for the plant to spread to a new location.
+     * This method is primarily intended for testing purposes to modify
+     * the spread probability of a plant instance.
+     *
+     * @param spreadProbability the new spread probability value to set
+     */
     public void setSpreadProbability(double spreadProbability) {
         this.spreadProbability = spreadProbability;
     }

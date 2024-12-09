@@ -79,7 +79,17 @@ public class ResourceManager {
         fileReader.close();
     }
 
-
+    /**
+     * Handles the processing of "cordyceps" entities by extracting relevant data from the contents array.
+     * The method interprets the fungi type, the associated entity, the quantity of entities, and their location.
+     * Subsequently, it triggers the spawning of these entities in the program's world.
+     *
+     * @param contents an array of strings where:
+     *                 contents[0] is expected to be the fungi type,
+     *                 contents[1] is the entity type to be spawned,
+     *                 contents[2] is the quantity or range of quantities for the entities,
+     *                 and, optionally, contents[3] represents the location in the form of coordinates.
+     */
     public void handleCordyceps(String[] contents) {
         String fungi = contents[0];
         String entity = contents[1];
@@ -106,6 +116,16 @@ public class ResourceManager {
 
     }
 
+    /**
+     * Handles the spawning of carcasses and associated fungi in specified quantities.
+     * For each quantity, a carcass is created at a random valid location in the world,
+     * and a fungus is associated with each carcass.
+     *
+     * @param contents an array of strings where:
+     *        contents[0] is expected to be the entity type,
+     *        contents[1] is the fungi type,
+     *        contents[2] is the quantity or range of quantities for the carcasses.
+     */
     public void handleCarcasser(String[] contents) {
         String entity = contents[0];
         String fungi = contents[1];
@@ -121,6 +141,16 @@ public class ResourceManager {
 
     }
 
+    /**
+     * Extracts a location from the given array of strings based on the specified position.
+     * If the array contains more elements than the specified position, it parses the element
+     * at the given position as coordinates and returns a Location object.
+     *
+     * @param contents an array of strings where some elements might contain coordinates in the form "(x,y)"
+     * @param numArgs the index in the array where the coordinates might be located
+     * @return a Location object parsed from the coordinates at the specified index if present,
+     *         otherwise null if the index is out of bounds or the format is invalid
+     */
     public Location getLocation(String[] contents, int numArgs) {
         if(contents.length > numArgs) {
             String location = contents[numArgs];
@@ -178,7 +208,6 @@ public class ResourceManager {
         }
     }
 
-
     /**
      * Spawns the specified quantity of entities within the world on a given location
      *
@@ -197,7 +226,6 @@ public class ResourceManager {
             createEntity(entity, location);
         }
     }
-
 
     /**
      * Creates a new entity at the specified location with the given quantity.

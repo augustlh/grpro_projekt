@@ -12,6 +12,11 @@ import itumulator.world.World;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * Represents a Fungus, a non-blocking organism that can infest carcasses,
+ * consume energy from them, and spread to adjacent carcasses within a certain radius.
+ * The fungus consumes energy and spreads until energy is depleted or no carcasses remain to infest.
+ */
 public class Fungus extends Organism implements NonBlocking {
 
     private double energy;
@@ -21,7 +26,15 @@ public class Fungus extends Organism implements NonBlocking {
 
     private Carcass carcass;
 
-    public Fungus(World world,Carcass carcass, double energyDecay) {
+    /**
+     * Constructs a new Fungus instance that can infest a carcass,
+     * consume energy from it, and potentially spread to nearby carcasses.
+     *
+     * @param world the world in which the fungus resides.
+     * @param carcass the carcass that this fungus will initially infest and consume energy from.
+     * @param energyDecay the rate at which the fungus's energy depletes over time.
+     */
+    public Fungus(World world, Carcass carcass, double energyDecay) {
         super(Species.Carcass);
         this.energyDecay = energyDecay;
         this.carcass = carcass;
