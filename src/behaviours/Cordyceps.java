@@ -22,7 +22,6 @@ public class Cordyceps {
 
         Location target = Utils.closestEqualAnimal(this.host, world, this.host.getSpecies(), world.getLocation(this.host));
         if(target == null) {
-            //System.out.println("No target");
             Set<Location> emptyNeighbours = world.getEmptySurroundingTiles(world.getLocation(this.host));
             if(emptyNeighbours.isEmpty()) {
                 return;
@@ -44,8 +43,6 @@ public class Cordyceps {
                 return;
             }
         }
-
-        //System.out.println("Cordyceps died, sad moment!");
     }
 
     public void onInfect(Animal animal) {
