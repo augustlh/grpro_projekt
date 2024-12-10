@@ -48,14 +48,6 @@ public class Bear extends Carnivore {
      */
     @Override
     protected void dayTimeBehaviour(World world) {
-        // Failsafe for if bear somehow gets out of its territory
-        /*
-        if(!this.territory.contains(world.getLocation(this)) && this.energy > this.maxEnergy / 2) {
-            // Pursue territory
-        }
-         */
-
-        System.out.println("ENERGY: " + this.energy + " P: " + this.energy/this.maxEnergy);
         hasActed = false;
         if(this.energy < this.maxEnergy / 1.3) {
             eat(world);

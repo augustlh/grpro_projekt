@@ -1,6 +1,7 @@
 package tests;
 
 import behaviours.Carcass;
+import behaviours.nests.WolfCave;
 import behaviours.rabbit.Rabbit;
 import behaviours.wolf.Wolf;
 import behaviours.wolf.WolfPack;
@@ -89,5 +90,25 @@ class WolfTest {
         assertEquals(2,carcass.getRemainingUses());
     }
 
+    @Test
+    public void testWolfReproduce(){
+        World world = new World(5);
+        Location location = new Location(0, 0);
+        WolfPack wolfPack = new WolfPack(world,location,2);
+        WolfCave cave = new WolfCave(world,location);
+        wolfPack.setCave(cave);
+        world.setCurrentLocation(location);
+        world.setNight();
+
+        while (world.getEntities().size()<4){
+            world.setNight();
+            for(Wolf wolf:wolfPack.getPack()){
+                wolf.act(world);
+            }
+            System.out.println(world.getEntities());
+        }
+        System.out.println(world.getEntities());
+
+    }
 
 }

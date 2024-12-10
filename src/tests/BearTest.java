@@ -29,10 +29,9 @@ public class BearTest {
         Bush bush = new Bush(world,new Location(0,1));
         bush.setSpreadProbability(1);
         bush.act(world);
-        for (int i = 0; i<20;i++){
+        for (int i = 0; i<50;i++){
             world.setDay();
             bear.act(world);
-            System.out.println(world.getEntities());
         }
 
         assertEquals(0,bush.getBerryCount());

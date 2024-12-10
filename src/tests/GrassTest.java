@@ -1,6 +1,7 @@
 package tests;
 
 import behaviours.plants.Grass;
+import behaviours.rabbit.Rabbit;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,7 +19,7 @@ import java.util.Set;
 public class GrassTest {
 
     @Test
-    public void testSpread_noSurroundingEmptyNonBlockingTiles() {
+    public void testSpreadNoSurroundingEmptyNonBlockingTiles() {
         World world = new World(5) {
             @Override
             //does so there are no tiles grass can spread to
@@ -51,5 +52,16 @@ public class GrassTest {
                     assertTrue(true);
             }
         }
+    }
+
+    @Test
+    public void testBlockingOnNonBlockingTiles() {
+        World world = new World(5);
+        Location location = new Location(0, 1);
+        Grass grass = new Grass(world,location, 1);
+        world.setCurrentLocation(location);
+        Rabbit rabbit = new Rabbit(world,location);
+
+        assertEquals(world.getLocation(grass), world.getLocation(rabbit));
     }
 }

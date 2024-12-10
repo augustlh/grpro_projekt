@@ -12,7 +12,7 @@ public enum Species {
     Carcass(1 << 3, 1),
     Rabbit(1 << 4, 1 << 1),
     Wolf(1 << 5, 1 << 4 | 1 << 3),
-    Bear(1 << 6, 1 << 4 | 1 << 5 | 1 << 3);
+    Bear(1 << 6, 1 << 4 | 1 << 5 | 1 << 3 | 1 << 2);
 
     private final int value;
     private final int dietMask;

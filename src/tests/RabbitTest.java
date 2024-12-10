@@ -1,5 +1,6 @@
 package tests;
 
+import behaviours.nests.RabbitHole;
 import behaviours.plants.Grass;
 import behaviours.rabbit.Rabbit;
 import org.junit.jupiter.api.Test;
@@ -46,6 +47,25 @@ public class RabbitTest {
         world.setCurrentLocation(loc2);
         rabbit.act(world);
         assertEquals(world.getLocation(rabbit), world.getLocation(grass));
+
+    }
+
+    @Test
+    public void testRabbitReproduce(){
+        World world = new World(5);
+        Rabbit rabbit = new Rabbit(world, new Location(0, 0));
+        Rabbit rabbit2 = new Rabbit(world, new Location(0, 1));
+        RabbitHole hole = new RabbitHole(world, new Location(0, 2));
+        world.setCurrentLocation(new Location(0, 0));
+        world.setNight();
+        rabbit.act(world);
+        rabbit2.act(world);
+        System.out.println(world.getEntities());
+        while (world.getEntities().size() <5) {
+            rabbit.act(world);
+            rabbit2.act(world);
+        }
+        assertEquals(5, world.getEntities().size());
 
     }
 

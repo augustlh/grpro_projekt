@@ -40,11 +40,6 @@ public abstract class Animal extends Organism {
         this.energy = this.maxEnergy;
         this.cordyceps = null;
 
-        // Chance of infecting animal with a cordyceps
-//        if(Utils.random.nextDouble() < 0.3) {
-//            this.cordyceps = new Cordyceps();
-//            this.cordyceps.onInfect(this);
-//        }
     }
 
     /**
@@ -123,6 +118,10 @@ public abstract class Animal extends Organism {
      */
     private void age(World world) {
         this.age = this.age + 1;
+        if (age%5==0){
+            this.maxEnergy--;
+            if(maxEnergy<energy)energy = this.maxEnergy;
+        }
         this.energy = this.energy - this.energyDecay;
 
         if (this.energy <= 0 || this.age >= 100){
@@ -207,7 +206,7 @@ public abstract class Animal extends Organism {
      * @param world the world in which the animal resides
      * @param location the target location the animal is trying to move towards
      */
-    protected void pursue(World world, Location location) {
+    public void pursue(World world, Location location) {
         Location currentLocation = world.getLocation(this);
 
         int x = currentLocation.getX();
