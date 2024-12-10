@@ -110,7 +110,7 @@ class WolfTest {
     }
 
     @Test
-    public void testWolfReproduce2(){
+    public void testWolfFight(){
         World world = new World(2);
         world.setDay();
         Location location = new Location(0, 0);
