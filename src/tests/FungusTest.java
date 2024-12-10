@@ -3,6 +3,7 @@ package tests;
 
 import behaviours.Carcass;
 import behaviours.Fungus;
+import behaviours.plants.Grass;
 import behaviours.wolf.Wolf;
 import behaviours.wolf.WolfPack;
 import help.Utils;
@@ -56,6 +57,19 @@ public class FungusTest {
             fungus.act(world);
         }
         assertTrue(carcass2.isInfested());
+    }
+
+    @Test
+    public void testFungusSpawnsGrass(){
+        World world = new World(5);
+        Carcass carcass = new Carcass(world, new Location(0, 0));
+        Fungus fungus = new Fungus(world,carcass, Utils.random.nextDouble()*10);
+        carcass.setFungus(fungus);
+
+        for (int i=0;i<50;i++){
+            fungus.act(world);
+        }
+        assertInstanceOf(Grass.class, world.getTile(new Location(0, 0)));
     }
 
 }

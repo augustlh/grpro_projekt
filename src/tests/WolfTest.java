@@ -96,19 +96,30 @@ class WolfTest {
         Location location = new Location(0, 0);
         WolfPack wolfPack = new WolfPack(world,location,2);
         WolfCave cave = new WolfCave(world,location);
+        Wolf wolf1 = wolfPack.getPack().getFirst();
+        Wolf wolf2 = wolfPack.getPack().getLast();
         wolfPack.setCave(cave);
         world.setCurrentLocation(location);
-        world.setNight();
-
         while (world.getEntities().size()<4){
             world.setNight();
-            for(Wolf wolf:wolfPack.getPack()){
-                wolf.act(world);
-            }
-            System.out.println(world.getEntities());
+            wolf1.act(world);
+            wolf2.act(world);
         }
-        System.out.println(world.getEntities());
+        assertEquals(4, world.getEntities().size());
 
+    }
+
+    @Test
+    public void testWolfReproduce2(){
+        World world = new World(2);
+        world.setDay();
+        Location location = new Location(0, 0);
+        Wolf wolf = new WolfPack(world,location,1).getPack().getFirst();
+        world.setCurrentLocation(location);
+        Wolf wolf2 = new WolfPack(world,new Location(0,0),1).getPack().getLast();
+
+        wolf.act(world);
+        assertTrue(!world.contains(wolf)||!world.contains(wolf2));
     }
 
 }

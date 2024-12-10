@@ -25,7 +25,6 @@ public class Wolf extends Carnivore {
     protected WolfPack pack;
     protected double strength;
     protected boolean insideCave;
-    protected boolean canBreed;
 
     /**
      * Handles wolves constructed by order of the input files.
@@ -94,10 +93,6 @@ public class Wolf extends Carnivore {
         }
 
         eat(world);
-
-        if(this.energy/2 > this.maxEnergy / 88 && this.age > 4) {
-            this.canBreed = true;
-        }
 
         if(this.type == WolfType.Alpha) {
             hunt(world);
@@ -169,7 +164,7 @@ public class Wolf extends Carnivore {
      * @param world the world in which the wolf resides.
      */
     private void reproduce(World world) {
-        if(this.pack.getCave() == null || !this.canBreed || !this.insideCave || new Random().nextDouble() < 0.4) {
+        if(this.pack.getCave() == null || !this.canBreed() || !this.insideCave) {
             return;
         }
 
@@ -181,14 +176,12 @@ public class Wolf extends Carnivore {
         }
 
         for(Wolf wolf: possiblePartners) {
-            if (wolf.canBreed && wolf.insideCave) {
+            if (wolf.canBreed() && wolf.insideCave) {
                 new Wolf(world, this.pack);
 
-                this.energy -= energy / 4;
-                this.canBreed = false;
+                this.energy/=2;
 
-                wolf.energy -= wolf.energy / 4;
-                wolf.canBreed = false;
+                wolf.energy/=2;
                 break;
             }
         }
@@ -331,6 +324,11 @@ public class Wolf extends Carnivore {
         else {
             return new DisplayInformation(Color.WHITE, "mc-wolf-large");
         }
+    }
+
+    public boolean canBreed() {
+        return (this.energy/2 > this.maxEnergy / 88 && this.age > 4);
+
     }
 
 }
