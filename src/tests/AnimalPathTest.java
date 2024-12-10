@@ -1,6 +1,11 @@
 package tests;
 
+import behaviours.nests.RabbitHole;
+import behaviours.nests.WolfCave;
 import behaviours.rabbit.Rabbit;
+import behaviours.wolf.WolfPack;
+import behaviours.wolf.Wolf;
+import help.Utils;
 import itumulator.world.Location;
 import itumulator.world.World;
 import org.junit.jupiter.api.BeforeEach;
@@ -59,10 +64,49 @@ public class AnimalPathTest {
 
     @Test
     public void testRabbitPathingToNestDuringNight() {
-        //for rabbit and wolf
         Rabbit rabbit = new Rabbit(world, new Location(0,0));
-        //world.setTile(new Location(0,0);
-        world.setNight();
-        int previousDistance;
+        RabbitHole rabbitHole = new RabbitHole(world, new Location(0,0));
+        world.setCurrentLocation(world.getLocation(rabbit));
+        rabbit.act(world);
+        world.move(rabbit, new Location(4,4));
+        int previousDistance = Integer.MAX_VALUE;
+
+        while(world.isOnTile(rabbit)) {
+            if(NUM_STEPS > MAX_STEPS) {
+                break;
+            }
+            world.setNight();
+            int curr_dist = Utils.manhattanDistance(world.getLocation(rabbit), world.getLocation(rabbitHole));
+            assertTrue(curr_dist < previousDistance);
+            rabbit.act(world);
+            NUM_STEPS++;
+        }
+
+        assertFalse(world.isOnTile(rabbit));
+    }
+
+    @Test
+    public void testWolfPathingToNestDuringNight() {
+        WolfPack wolfPack = new WolfPack(world, new Location(0,0), 1);
+        wolfPack.setCave(new WolfCave(world, new Location(0,0)));
+
+        Wolf wolf = wolfPack.getAlphaWolf();
+        world.setCurrentLocation(world.getLocation(wolf));
+        wolf.act(world);
+        world.move(wolf, new Location(4,4));
+        int previousDistance = Integer.MAX_VALUE;
+
+        while(world.isOnTile(wolf)) {
+            if(NUM_STEPS > MAX_STEPS) {
+                break;
+            }
+            world.setNight();
+            int curr_dist = Utils.manhattanDistance(world.getLocation(wolf), world.getLocation(wolfPack.getCave()));
+            assertTrue(curr_dist < previousDistance);
+            wolf.act(world);
+            NUM_STEPS++;
+        }
+
+        assertFalse(world.isOnTile(wolf));
     }
 }
