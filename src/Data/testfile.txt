@@ -1,0 +1,10 @@
+12
+bear 1 (8,4)
+grass 10
+rabbit 4-8
+cordyceps rabbit 1
+wolf 3
+cordyceps wolf 2
+burrow 1
+carcass fungi 5-10
+carcass 1
