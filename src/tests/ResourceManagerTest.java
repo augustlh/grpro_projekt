@@ -106,8 +106,7 @@ public class ResourceManagerTest {
 
         for (Object entity : entities.keySet()) {
             if (type.isInstance(entity)) {
-                T castedEntity = type.cast(entity);
-                if (condition.test(castedEntity)) {
+                if (condition.test(type.cast(entity))) {
                     count++;
                 }
             }
