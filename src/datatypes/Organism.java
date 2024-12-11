@@ -16,7 +16,6 @@ public abstract class Organism implements Consumable, Actor, DynamicDisplayInfor
     protected final Species species;
     protected boolean isDead;
     protected int age;
-    private boolean isInfested = false;
 
     /**
      * Constructs a new Organism with the specified species.
@@ -71,20 +70,4 @@ public abstract class Organism implements Consumable, Actor, DynamicDisplayInfor
     public boolean canBeEaten() {
         return true;
     }
-
-    /**
-     * Marks this organism as infested by setting its 'isInfested' flag to true.
-     * This can trigger certain alternate behaviors in the organism.
-     */
-    public void infest() {
-        isInfested = true;
-    }
-
-    /**
-     * Checks if the organism is currently infested.
-     *
-     * @return true if the organism is infested, false otherwise.
-     */
-    public boolean isInfested() {return isInfested;}
-
 }

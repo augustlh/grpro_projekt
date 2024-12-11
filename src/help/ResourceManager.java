@@ -2,7 +2,6 @@ package help;
 
 import behaviours.Carcass;
 import behaviours.Cordyceps;
-import behaviours.Fungus;
 import behaviours.bear.Bear;
 import behaviours.plants.Bush;
 import behaviours.plants.Grass;
@@ -133,9 +132,7 @@ public class ResourceManager {
 
         for (int i = 0; i < quantity; i++) {
             Location location = Utils.getValidRandomLocation(world);
-            Carcass carcass = new Carcass(world, location);
-            Fungus fungus = new Fungus(world,carcass,Utils.random.nextDouble()*2);
-            carcass.setFungus(fungus);
+            new Carcass(world, location, true);
         }
 
     }
@@ -265,7 +262,7 @@ public class ResourceManager {
             case "burrow" -> new RabbitHole(world, location);
             case "bear" -> new Bear(world, location);
             case "berry" -> new Bush(world, location);
-            case "carcass" -> new Carcass(world, location);
+            case "carcass" -> new Carcass(world, location, false);
             default -> throw new IllegalArgumentException("Unknown entity: " + entity);
         }
     }

@@ -2,7 +2,6 @@ package datatypes;
 
 import behaviours.Carcass;
 import behaviours.Cordyceps;
-import help.Utils;
 import itumulator.world.Location;
 import itumulator.world.World;
 import java.util.Random;
@@ -42,27 +41,6 @@ public abstract class Animal extends Organism {
 
     }
 
-    /**
-     * Handles constructing animals specified to be infested with a cordyceps.
-     * Constructs a new Animal with the specified species, metabolism, energy decay, search radius, maximum energy and cordyceps.
-     *
-     * @param species      the species of the animal
-     * @param metabolism   the rate at which the animal metabolizes energy
-     * @param energyDecay  the rate at which the animal's energy decreases over time
-     * @param searchRadius the radius in which the animal searches for food or other entities
-     * @param cordyceps    the cordyceps it is infested by
-     */
-    public Animal(Species species, double metabolism, double energyDecay, int searchRadius, double maxEnergy, Cordyceps cordyceps) {
-        super(species);
-        this.age = 0;
-        this.metabolism = metabolism;
-        this.energyDecay = energyDecay;
-        this.searchRadius = searchRadius;
-        this.maxEnergy = maxEnergy;
-        this.energy = this.maxEnergy;
-        this.cordyceps = cordyceps;
-        this.cordyceps.onInfect(this);
-    }
 
     /**
      * Defines the behavior an animal exhibits during daytime within the given world.

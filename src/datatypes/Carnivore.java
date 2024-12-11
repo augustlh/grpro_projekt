@@ -53,7 +53,6 @@ public abstract class Carnivore extends Animal {
             if (world.getTile(location) instanceof Organism organism) {
                 if (this.canEat(organism)) {
                     if (organism instanceof Animal) {
-                        //hasActed stuff
                         this.kill(world, (Animal) organism);
                         return;
                     }

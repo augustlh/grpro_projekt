@@ -100,7 +100,7 @@ public class BearTest {
         World world = new World(5);
         Bear bear = new Bear(world,new Location(0,0));
         world.setCurrentLocation(new Location(0,0));
-        Carcass carcass = new Carcass(world,new Location(0,1));
+        Carcass carcass = new Carcass(world,new Location(0,1), false);
         while (world.contains(carcass)) {
             world.setDay();
             bear.act(world);

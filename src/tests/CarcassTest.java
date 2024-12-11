@@ -20,7 +20,7 @@ public class CarcassTest {
         world = new World(5);
         wolf = new WolfPack(world,new Location(0,0),1).getPack().getFirst();
         world.setCurrentLocation(new Location(0,0));
-        carcass = new Carcass(world,new Location(1,1));
+        carcass = new Carcass(world,new Location(1,1), false);
     }
 
     //can be eaten

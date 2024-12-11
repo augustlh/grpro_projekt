@@ -172,10 +172,10 @@ public class Bear extends Carnivore {
         if(this.isInfected() && age <= 6) {
             return new DisplayInformation(Color.WHITE, "mc-bear-small-infested");
         }
-        if(!this.isInfested() && age > 6) {
+        if(!this.isInfected() && age > 6) {
             return new DisplayInformation(Color.WHITE, "mc-bear-large");
         }
-        if(!this.isInfested() && age <= 6) {
+        if(!this.isInfected() && age <= 6) {
             return new DisplayInformation(Color.WHITE, "mc-bear-small");
         }
         else {

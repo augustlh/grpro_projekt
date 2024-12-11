@@ -3,10 +3,8 @@ package behaviours;
 import behaviours.plants.Grass;
 import datatypes.Organism;
 import datatypes.Species;
-import help.Utils;
 import itumulator.executable.DisplayInformation;
 import itumulator.world.Location;
-import itumulator.world.NonBlocking;
 import itumulator.world.World;
 
 import java.awt.*;
@@ -17,7 +15,7 @@ import java.util.ArrayList;
  * consume energy from them, and spread to adjacent carcasses within a certain radius.
  * The fungus consumes energy and spreads until energy is depleted or no carcasses remain to infest.
  */
-public class Fungus extends Organism implements NonBlocking {
+public class Fungus extends Organism {
 
     private double energy;
     private double energyDecay;
@@ -29,22 +27,24 @@ public class Fungus extends Organism implements NonBlocking {
     /**
      * Constructs a new Fungus instance that can infest a carcass,
      * consume energy from it, and potentially spread to nearby carcasses.
-     *
-     * @param world the world in which the fungus resides.
+     *.
      * @param carcass the carcass that this fungus will initially infest and consume energy from.
      * @param energyDecay the rate at which the fungus's energy depletes over time.
      */
-    public Fungus(World world, Carcass carcass, double energyDecay) {
-        super(Species.Carcass);
+    public Fungus(Carcass carcass, double energyDecay) {
+        super(Species.Fungus);
         this.energyDecay = energyDecay;
         this.carcass = carcass;
-        this.carcass.infest();
         this.energy = 30;
         this.spreadCounter = 0;
         this.spreadRadius = 1;
-        world.setTile(world.getLocation(carcass),this);
     }
 
+    /**
+     * The act method of the fungus. Consumes a carcass if it is infecting a carcass, else it decays nad tries to spread. If it dies, it spawns grass.
+     *
+     * @param world providing details of the position on which the actor is currently located and much more.
+     */
     @Override
     public void act(World world) {
         // Stop act if dead
@@ -59,14 +59,8 @@ public class Fungus extends Organism implements NonBlocking {
             return;
         }
 
-        // Spread to other Carcasses
-        spreadCounter++;
-        if (spreadCounter >= 10) {
-            // Infect other carcasses within certain radius
-            infestOther(world);
-            spreadCounter = 0;
-            spreadRadius++;
-        }
+        infestOther(world);
+
 
         // Subtract energy
         energy = energy - energyDecay;
@@ -74,9 +68,7 @@ public class Fungus extends Organism implements NonBlocking {
         // Dies if out of energy
         if(energy <= 0) {
             die();
-            Location temp = world.getLocation(this);
-            world.delete(this);
-            new Grass(world,temp);
+            onConsume(world);
         }
 
     }
@@ -88,29 +80,81 @@ public class Fungus extends Organism implements NonBlocking {
             if(world.getTile(location) instanceof Carcass c) {
                 if(!c.isInfested()){
                     c.infest();
-                    c.setFungus(new Fungus(world,c, Utils.random.nextDouble()*2));
                     return;
                 }
             }
         }
+
+        spreadCounter++;
+        if (spreadCounter % 5 == 0) {
+            spreadRadius++;
+        }
     }
 
+    /**
+     * Implement logic for when the fungys is consumed / dies in the simulation.
+     *
+     * @param world providing details of the position on which the actor is currently located and much more.
+     */
     @Override
-    public void onConsume(World world) {}
+    public void onConsume(World world) {
+        Location temp = world.getLocation(this);
+        world.delete(this);
 
+        if(!world.containsNonBlocking(temp)) {
+            new Grass(world,temp);
+        }
+    }
+
+    /**
+     * Retrieves the nutritional value of this object.
+     *
+     * @return the nutritional value, which is 0 for this implementation.
+     */
     @Override
     public double getNutritionalValue() {
         return 0;
     }
 
+    /**
+     * Provides the display information for this object.
+     *
+     * @return a {@link DisplayInformation} object containing color and icon details,
+     *         with the color set to red and the icon identifier "mc-mushroom-brown".
+     */
     @Override
     public DisplayInformation getInformation() {
         return new DisplayInformation(Color.RED, "mc-mushroom-brown");
     }
 
+
+    /**
+     * Sets the carcass associated with this object.
+     *
+     * @param carcass the {@link Carcass} object to associate with this object.
+     */
     public void setCarcass(Carcass carcass) {
         this.carcass = carcass;
     }
 
+    /**
+     * Spawns fungus on carcass position when carcass is consumed
+     * @param world the world in which the fungus resides
+     * @param location the initial location of the fungus within the world.
+     */
+    public void spawn(World world, Location location) {
+        this.carcass = null;
+        world.setTile(location, this);
+    }
 
+
+    /**
+     * Determines if this organism can be eaten by another organism.
+     * Acts as a helping method for certain subclasses.
+     * @return true if the organism can be eaten, false otherwise.
+     */
+    @Override
+    public boolean canBeEaten() {
+        return false;
+    }
 }

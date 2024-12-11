@@ -1,6 +1,5 @@
 package behaviours;
 
-import behaviours.plants.Grass;
 import datatypes.Organism;
 import datatypes.Species;
 import help.Utils;
@@ -54,10 +53,17 @@ public class Carcass extends Organism {
      * @param world the world in which the carcass resides
      * @param location the location of the carcass in the world
      */
-    public Carcass(World world, Location location) {
+    public Carcass(World world, Location location, boolean infested) {
         super(Species.Carcass);
         this.energy = Utils.random.nextDouble(50, 75);
         remainingUses = 3;
+
+        if(infested) {
+            this.fungus = new Fungus(this, Utils.random.nextDouble(2,3));
+        } else {
+            this.fungus = null;
+        }
+
         world.setTile(location, this);
     }
 
@@ -74,12 +80,11 @@ public class Carcass extends Organism {
         remainingUses--;
 
         if(remainingUses == 0) {
-            if(isInfested()){
-                fungus.setCarcass(null);
-                world.delete(this);
-                return;
-            }
+            Location location = world.getLocation(this);
             world.delete(this);
+            if(isInfested()){
+                fungus.spawn(world, location);
+            }
         }
     }
 
@@ -106,24 +111,16 @@ public class Carcass extends Organism {
             return;
         }
 
-        if(world.getNonBlocking(world.getLocation(this)) instanceof Grass g){
-            world.delete(g);
-        }
-
-        this.energy--;
         if(this.energy <= 0) {
             super.die();
             onConsume(world);
         }
-    }
 
-    /**
-     * Sets the fungus living in the carcass.
-     *
-     * @param fungus the fungus living in the carcass
-     */
-    public void setFungus(Fungus fungus){
-        this.fungus=fungus;
+        if(this.isInfested()) {
+            this.fungus.act(world);
+        } else {
+            energy--;
+        }
     }
 
     /**
@@ -144,6 +141,31 @@ public class Carcass extends Organism {
     @Override
     public DisplayInformation getInformation() {
         return new DisplayInformation(Color.CYAN, "carcass");
+    }
+
+    /**
+     * Provides a method to check if a carcass is infested
+     *
+     * @return a boolean indicating if infested
+     */
+    public boolean isInfested() {
+        return this.fungus != null;
+    }
+
+    /**
+     * Infests the carcass with a fungus.
+     */
+    public void infest() {
+        this.fungus = new Fungus(this, Utils.random.nextDouble(2,3));
+    }
+
+    /**
+     * Gets the fungus the carcass is infected by!
+     *
+     * @return the fungus that the carcass is infected by
+     */
+    public Fungus getFungus() {
+        return this.fungus;
     }
 
 }

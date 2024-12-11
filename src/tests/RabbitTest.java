@@ -10,10 +10,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import itumulator.world.World;
 import itumulator.world.Location;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-
 
 public class RabbitTest {
 

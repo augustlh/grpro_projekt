@@ -21,10 +21,11 @@ import java.util.Set;
  * with the alpha taking the lead and the other wolves in the pack following.
  */
 public class Wolf extends Carnivore {
-    protected WolfType type;
-    protected WolfPack pack;
-    protected double strength;
-    protected boolean insideCave;
+    private WolfType type;
+    private final WolfPack pack;
+    private final double strength;
+    private boolean insideCave;
+    private double sexChance = 0.2;
 
     /**
      * Handles wolves constructed by order of the input files.
@@ -175,7 +176,7 @@ public class Wolf extends Carnivore {
         }
 
         for(Wolf wolf: possiblePartners) {
-            if (wolf.canBreed() && wolf.insideCave && Utils.random.nextDouble() < 0.2) {
+            if (wolf.canBreed() && wolf.insideCave && Utils.random.nextDouble() < sexChance) {
                 new Wolf(world, this.pack);
 
                 this.energy/=3;
@@ -313,10 +314,10 @@ public class Wolf extends Carnivore {
         if(this.isInfected() && age <= 6) {
             return new DisplayInformation(Color.WHITE, "mc-wolf-small-infested");
         }
-        if(!this.isInfested() && age > 6) {
+        if(!this.isInfected() && age > 6) {
             return new DisplayInformation(Color.WHITE, "mc-wolf-large");
         }
-        if(!this.isInfested() && age <= 6) {
+        if(!this.isInfected() && age <= 6) {
             return new DisplayInformation(Color.WHITE, "mc-wolf-small");
         }
         else {
@@ -325,9 +326,12 @@ public class Wolf extends Carnivore {
     }
 
     public boolean canBreed() {
-        return (this.energy/2 > this.maxEnergy / 88 && this.age > 4);
+        return (this.energy/2 > this.maxEnergy / 8 && this.age > 4);
 
     }
 
+    public void setSexChance(double sexChance) {
+        this.sexChance = sexChance;
+    }
 }
 

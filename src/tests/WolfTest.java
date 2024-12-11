@@ -81,7 +81,7 @@ class WolfTest {
     @Test
     public void testEatCarcass(){
         World world = new World(5);
-        Carcass carcass = new Carcass(world,new Location(0,0));
+        Carcass carcass = new Carcass(world, new Location(0,0), false);
 
         Location location = new Location(0, 1);
         Wolf wolf = new WolfPack(world,new Location(0,1),1).getPack().getFirst();
@@ -106,7 +106,9 @@ class WolfTest {
         wolfPack.setCave(cave);
         world.setCurrentLocation(location);
         //gets them to keep trying to breed until they have made a baby
-        while (world.getEntities().size()<4){
+        wolf1.setSexChance(1);
+        wolf2.setSexChance(1);
+        while (world.getEntities().size()<4 && world.contains(wolf1)){
             world.setNight();
             wolf1.act(world);
             wolf2.act(world);

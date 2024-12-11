@@ -2,7 +2,6 @@ package tests;
 
 import behaviours.Cordyceps;
 import behaviours.rabbit.Rabbit;
-import behaviours.wolf.Wolf;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

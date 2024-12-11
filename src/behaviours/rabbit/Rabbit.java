@@ -273,10 +273,10 @@ public class Rabbit extends Herbivore {
         if(this.isInfected() && age <= 6) {
             return new DisplayInformation(Color.WHITE, "mc-rabbit-small-infested");
         }
-        if(!this.isInfested() && age > 6) {
+        if(!this.isInfected() && age > 6) {
             return new DisplayInformation(Color.WHITE, "mc-rabbit-large");
         }
-        if(!this.isInfested() && age <= 6) {
+        if(!this.isInfected() && age <= 6) {
             return new DisplayInformation(Color.WHITE, "mc-rabbit-small");
         }
         else {
