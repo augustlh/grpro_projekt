@@ -143,9 +143,6 @@ public class Carcass extends Organism {
      */
     @Override
     public DisplayInformation getInformation() {
-        if(isInfested()){
-            return new DisplayInformation(Color.GRAY);
-        }
         return new DisplayInformation(Color.CYAN, "carcass");
     }
 

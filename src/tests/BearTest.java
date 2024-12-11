@@ -72,7 +72,6 @@ public class BearTest {
         world.setCurrentLocation(world.getLocation(bear));
         Rabbit rabbit = new Rabbit(world,new Location(2,2));
         while(world.contains(rabbit) && world.contains(bear)) {
-            System.out.println(world.getEntities());
             world.setDay();
             bear.act(world);
         }

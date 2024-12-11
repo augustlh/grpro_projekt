@@ -19,6 +19,7 @@ import java.util.Set;
 public class Bear extends Carnivore {
     private final Set<Location> territory;
     private boolean hasActed;
+    private boolean isSleeping;
 
     /**
      * Constructs a new Bear in the specified world at the given location.
@@ -31,7 +32,7 @@ public class Bear extends Carnivore {
      * @param location the Location within the world where the bear will be initially situated
      */
     public Bear(World world, Location location) {
-        super(Species.Bear, Utils.random.nextDouble(), Utils.random.nextDouble()*2.5, Utils.random.nextInt(1, 3), 75);
+        super(Species.Bear, Utils.random.nextDouble(), Utils.random.nextDouble()*2.5, Utils.random.nextInt(2, 4), 75);
         this.territory = world.getSurroundingTiles(location, Utils.random.nextInt(3, 5));
         world.setTile(location, this);
         this.hasActed = false;
@@ -48,8 +49,9 @@ public class Bear extends Carnivore {
      */
     @Override
     protected void dayTimeBehaviour(World world) {
+        isSleeping = false;
         hasActed = false;
-        if(this.energy < this.maxEnergy / 1.3) {
+        if(this.energy < this.maxEnergy / 1.1) {
             eat(world);
         }
 
@@ -71,7 +73,7 @@ public class Bear extends Carnivore {
      */
     @Override
     protected void nightTimeBehaviour(World world) {
-        // Sleepy time :)
+        isSleeping = true;
     }
 
     /**
@@ -92,7 +94,7 @@ public class Bear extends Carnivore {
                 if(!(o instanceof Animal)) {
                     pursue(world, loc);
                     hasActed = true;
-                } else if (this.energy < this.maxEnergy / 1.3) {
+                } else if (this.energy < this.maxEnergy / 1.1) {
                     pursue(world, loc);
                     hasActed = true;
                 }
@@ -114,7 +116,6 @@ public class Bear extends Carnivore {
         Set<Location> emptyNeighbours = world.getEmptySurroundingTiles();
         Set<Location> territoryNeighbours = new HashSet<>(territory);
         territoryNeighbours.retainAll(emptyNeighbours);
-        //System.out.println(territoryNeighbours);
         return territoryNeighbours;
     }
 
@@ -162,6 +163,9 @@ public class Bear extends Carnivore {
      */
     @Override
     public DisplayInformation getInformation() {
+        if(isSleeping) {
+            return new DisplayInformation(Color.WHITE, "mc-bear-large-sleeping");
+        }
         if(this.isInfected() && age > 6) {
             return new DisplayInformation(Color.WHITE, "mc-bear-large-infested");
         }

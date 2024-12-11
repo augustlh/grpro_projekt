@@ -36,7 +36,6 @@ public abstract class Carnivore extends Animal {
      * @param other the other animal that is being killed by the carnivore
      */
     protected void kill(World world, Animal other) {
-        //System.out.print("Killed");
         other.onConsume(world);
     }
 
@@ -48,22 +47,17 @@ public abstract class Carnivore extends Animal {
      * @param world the world in which the carnivore resides.
      */
     protected void eat(World world) {
-        //System.out.println("eat call");
         List<Location> neighbours = new ArrayList<>(world.getSurroundingTiles(world.getLocation(this)));
 
         for (Location location : neighbours) {
             if (world.getTile(location) instanceof Organism organism) {
-                //System.out.println("organism moment");
                 if (this.canEat(organism)) {
-                    //System.out.println("can eat moment");
                     if (organism instanceof Animal) {
-                        //System.out.println("Should eat animal");
                         //hasActed stuff
                         this.kill(world, (Animal) organism);
                         return;
                     }
                     this.consume(organism, world);
-                    //System.out.println("eat done");
                 }
             }
         }

@@ -8,3 +8,4 @@ cordyceps wolf 2
 burrow 1
 carcass fungi 5-10
 carcass 1
+berry 3

@@ -1,0 +1,10 @@
+25
+grass 15
+berry 3
+burrow 5
+rabbit 20
+wolf 3
+wolf 3
+carcass fungi 3
+bear 1 (5,3)
+bear 1 (10,12)

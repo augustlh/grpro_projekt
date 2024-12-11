@@ -19,7 +19,7 @@ import java.io.FileReader;
 import java.util.Random;
 
 /**
- * The help.ResourceManager class is responsible for initializing a Program instance
+ * The ResourceManager class is responsible for initializing a Program instance
  * and populating its World with various entities based on the contents of a specified file.
  */
 public class ResourceManager {
@@ -27,7 +27,7 @@ public class ResourceManager {
     private World world;
 
     /**
-     * Constructs a help.ResourceManager instance and initializes the program with the given parameters.
+     * Constructs a ResourceManager instance and initializes the program with the given parameters.
      *
      * @param filepath the path to the file containing the configuration data for the program.
      * @param displaySize the size of the graphical display window.
@@ -88,7 +88,6 @@ public class ResourceManager {
      *                 contents[0] is expected to be the fungi type,
      *                 contents[1] is the entity type to be spawned,
      *                 contents[2] is the quantity or range of quantities for the entities,
-     *                 and, optionally, contents[3] represents the location in the form of coordinates.
      */
     public void handleCordyceps(String[] contents) {
         String fungi = contents[0];

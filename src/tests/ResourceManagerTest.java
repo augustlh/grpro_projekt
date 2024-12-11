@@ -3,6 +3,7 @@ package tests;
 import behaviours.Carcass;
 import behaviours.bear.Bear;
 import behaviours.nests.RabbitHole;
+import behaviours.plants.Bush;
 import behaviours.plants.Grass;
 import behaviours.rabbit.Rabbit;
 import behaviours.wolf.Wolf;
@@ -31,6 +32,8 @@ public class ResourceManagerTest {
         validateSpawns(resourceManager.getProgram().getWorld(), Rabbit.class, 4, 8);
         validateSpawns(resourceManager.getProgram().getWorld(), Wolf.class, 5);
         validateSpawns(resourceManager.getProgram().getWorld(), RabbitHole.class, 1);
+        validateSpawns(resourceManager.getProgram().getWorld(), Bush.class, 3);
+
 
         //Cordyceps
         validateCondition(resourceManager.getProgram().getWorld(), Rabbit.class, Rabbit::isInfected, 1);

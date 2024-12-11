@@ -38,7 +38,7 @@ public class Wolf extends Carnivore {
      * @param pack the wolf pack to which this wolf belongs.
      */
     public Wolf(World world, Location location, WolfPack pack) {
-        super(Species.Wolf, Utils.random.nextDouble(), new Random().nextDouble(), 2, 75.0);
+        super(Species.Wolf, Utils.random.nextDouble(), new Random().nextDouble()*2.5, 2, 75.0);
         this.type = WolfType.Normal;
         this.pack = pack;
         this.strength = Utils.random.nextDouble();
@@ -57,14 +57,13 @@ public class Wolf extends Carnivore {
      * @param pack the wolf pack to which this wolf belongs.
      */
     public Wolf(World world, WolfPack pack) {
-        super(Species.Wolf, Utils.random.nextDouble(), new Random().nextDouble(), 2, 75.0);
+        super(Species.Wolf, Utils.random.nextDouble(), new Random().nextDouble()*2.5, 2, 75.0);
         this.type = WolfType.Normal;
         this.pack = pack;
         this.strength = Utils.random.nextDouble();
         this.pack.addWolf(this);
         this.insideCave = true;
         world.add(this);
-        //System.out.println("Wolf breeding occured!");
     }
 
     /**
@@ -176,12 +175,12 @@ public class Wolf extends Carnivore {
         }
 
         for(Wolf wolf: possiblePartners) {
-            if (wolf.canBreed() && wolf.insideCave) {
+            if (wolf.canBreed() && wolf.insideCave && Utils.random.nextDouble() < 0.2) {
                 new Wolf(world, this.pack);
 
-                this.energy/=2;
+                this.energy/=3;
 
-                wolf.energy/=2;
+                wolf.energy/=3;
                 break;
             }
         }
@@ -263,9 +262,8 @@ public class Wolf extends Carnivore {
     private void fight(World world) {
         List <Location> neighbours = new ArrayList<>(world.getSurroundingTiles(this.searchRadius));
         for(Location location : neighbours) {
-            if(world.getTile(location) instanceof Wolf w && w.pack != this.pack) {
-                System.out.println("Fight");
-                if(this.strength > w.getStrength()) {
+            if(world.getTile(location) instanceof Wolf w && (w.pack != this.pack)) {
+                if(this.strength > w.getStrength() || w.isInfected()) {
                     this.kill(world, w);
                 } else {
                     w.kill(world, this);

@@ -1,0 +1,5 @@
+8
+grass 10
+berry 3
+bear 1
+rabbit 3

@@ -98,7 +98,7 @@ public class Utils {
      * @return the location of the closest RabbitHole if found, otherwise null
      */
     public static Location getClosestRabbitHole(World world, Location currentLocation, int searchRadius) {
-        Set<Location> neighbours = world.getSurroundingTiles(searchRadius*2);
+        Set<Location> neighbours = world.getSurroundingTiles(searchRadius*3);
         int closestDistance = Integer.MAX_VALUE;
         RabbitHole closestHole = null;
 

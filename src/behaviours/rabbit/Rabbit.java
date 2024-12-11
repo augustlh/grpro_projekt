@@ -51,7 +51,6 @@ public class Rabbit extends Herbivore {
         this.hole = hole;
         this.hole.addAnimal(this);
         world.add(this);
-        //System.out.println("Breeding happened! :)");
     }
 
     /**
@@ -100,7 +99,7 @@ public class Rabbit extends Herbivore {
             setHole(world);
 
 
-            if(new Random().nextDouble() < 0.3) {
+            if(new Random().nextDouble() < 0.1) {
                 digHole(world, world.getLocation(this));
             } else {
                 Location nearestHole = Utils.getClosestRabbitHole(world, world.getLocation(this), this.searchRadius);
@@ -143,7 +142,7 @@ public class Rabbit extends Herbivore {
      * @param world The world in which the rabbit resides.
      */
     private void reproduce(World world) {
-        if(!this.canBreed() || !this.insideHole || new Random().nextDouble() < 0.4) {
+        if(!this.canBreed() || !this.insideHole || new Random().nextDouble() < 0.75) {
             return;
         }
 

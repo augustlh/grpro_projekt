@@ -88,7 +88,6 @@ class WolfTest {
         world.setCurrentLocation(location);
         world.setDay();
         while (carcass.getRemainingUses()==3){
-            System.out.println(world.getEntities());
             wolf.act(world);
         }
 
@@ -108,7 +107,6 @@ class WolfTest {
         world.setCurrentLocation(location);
         //gets them to keep trying to breed until they have made a baby
         while (world.getEntities().size()<4){
-            System.out.println(world.getEntities());
             world.setNight();
             wolf1.act(world);
             wolf2.act(world);

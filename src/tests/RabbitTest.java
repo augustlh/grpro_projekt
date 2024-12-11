@@ -76,7 +76,6 @@ public class RabbitTest {
                 return;
             }
         }
-        System.out.println(world.getEntities());
         fail();
 
     }
