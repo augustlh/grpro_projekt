@@ -22,7 +22,6 @@ import help.Utils;
 public class Rabbit extends Herbivore {
     private RabbitHole hole;
     private boolean insideHole;
-    private boolean canBreed;
 
     /**
      * Handles rabbits constructed as specified by the input files
@@ -35,7 +34,6 @@ public class Rabbit extends Herbivore {
     public Rabbit(World world, Location location) {
         super(Species.Rabbit, new Random().nextDouble(), new Random().nextDouble(1, 2), 1, 50.0);
         world.setTile(location, this);
-        this.canBreed = true;
         this.insideHole = false;
         this.hole = null;
     }
@@ -51,7 +49,6 @@ public class Rabbit extends Herbivore {
         super(Species.Rabbit, new Random().nextDouble(), new Random().nextDouble(0, 0.8), 1, 50.0);
         this.insideHole = true;
         this.hole = hole;
-        this.canBreed = false;
         this.hole.addAnimal(this);
         world.add(this);
         //System.out.println("Breeding happened! :)");
@@ -72,9 +69,6 @@ public class Rabbit extends Herbivore {
         setHole(world);
         eat(world);
 
-        if(this.energy/2 > this.maxEnergy / 4 && this.age > 4 && !this.isInfected()) {
-            this.canBreed = true;
-        }
 
         // Seeks nearby food or wander randomly
         Location target = Utils.closestConsumableEntity(world,this, this.searchRadius);
@@ -102,7 +96,6 @@ public class Rabbit extends Herbivore {
             reproduce(world);
             return;
         }
-
         if(this.hole == null) {
             setHole(world);
 
@@ -111,7 +104,6 @@ public class Rabbit extends Herbivore {
                 digHole(world, world.getLocation(this));
             } else {
                 Location nearestHole = Utils.getClosestRabbitHole(world, world.getLocation(this), this.searchRadius);
-
                 if(nearestHole != null) {
                     pursue(world, nearestHole);
                     return;
@@ -126,7 +118,7 @@ public class Rabbit extends Herbivore {
         }
 
         pursue(world, this.hole.getLocation());
-        enterHole(world, world.getCurrentLocation());
+        enterHole(world, world.getLocation(this));
     }
 
     /**
@@ -151,7 +143,7 @@ public class Rabbit extends Herbivore {
      * @param world The world in which the rabbit resides.
      */
     private void reproduce(World world) {
-        if(!this.canBreed || !this.insideHole || new Random().nextDouble() < 0.4) {
+        if(!this.canBreed() || !this.insideHole ) {
             return;
         }
 
@@ -163,14 +155,12 @@ public class Rabbit extends Herbivore {
         }
 
         for(Rabbit rabbit: possiblePartners) {
-            if (rabbit.canBreed && rabbit.insideHole) {
+            if (rabbit.canBreed() && rabbit.insideHole) {
                 new Rabbit(world, this.hole);
 
                 this.energy -= energy / 4;
-                this.canBreed = false;
 
                 rabbit.energy -= rabbit.energy / 4;
-                rabbit.canBreed = false;
 
                 break;
             }
@@ -293,6 +283,10 @@ public class Rabbit extends Herbivore {
         else {
             return new DisplayInformation(Color.WHITE, "mc-rabbit-large");
         }
+    }
+
+    protected boolean canBreed(){
+        return (this.energy/2 > this.maxEnergy / 4 && this.age > 4 && !this.isInfected());
     }
 
 }

@@ -49,7 +49,7 @@ public abstract class Carnivore extends Animal {
      */
     protected void eat(World world) {
         //System.out.println("eat call");
-        List<Location> neighbours = new ArrayList<>(world.getSurroundingTiles());
+        List<Location> neighbours = new ArrayList<>(world.getSurroundingTiles(world.getLocation(this)));
 
         for (Location location : neighbours) {
             if (world.getTile(location) instanceof Organism organism) {

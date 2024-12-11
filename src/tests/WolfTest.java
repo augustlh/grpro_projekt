@@ -14,15 +14,12 @@ import itumulator.world.Location;
 
 import java.util.*;
 
-    /*
-    * Fix eating
-    * make Reproduce and pathfinding test for hole/hunting
-    *
-    * */
+//Test for wolves
 
 class WolfTest {
 
     @Test
+    //See if they kill rabbit when they can
     public void testKillRabbit(){
         World world = new World(5);
         Location location = new Location(0, 0);
@@ -30,22 +27,22 @@ class WolfTest {
         world.setCurrentLocation(location);
 
         Wolf wolf = new WolfPack(world,new Location(0,1),1).getPack().getFirst();
-        world.setCurrentLocation(new Location(0,1));
+        world.setCurrentLocation(world.getLocation(wolf));
         wolf.act(world);
 
         assertFalse(world.contains(rabbit));
     }
 
-    //wolves don't move right so test is 50/50
+    //Checks if they move after they alpha
     @Test
     public void testMoveAfterAlpha(){
         World world = new World(5);
-        WolfPack wolfPack = new WolfPack(world,new Location(2,0),2);
-        world.setCurrentLocation(new Location(2,2));
+        WolfPack wolfPack = new WolfPack(world,new Location(2,2),2);
         List<Wolf> wolfs = new ArrayList<>(wolfPack.getPack());
+        world.setCurrentLocation(world.getLocation(wolfPack.getAlphaWolf()));
         for (Wolf wolf : wolfs) {
            wolf.act(world);
-        }
+        } //checks the surrounding tiles of alpha to see if the wolf still is near by
         for (Location loc: world.getSurroundingTiles(world.getLocation(wolfs.getFirst()))){
             if (world.getTile(loc) instanceof Wolf){
                 assertTrue(true);
@@ -54,19 +51,17 @@ class WolfTest {
         }
         fail();
     }
-    //wolves don't move right so test fail
+    //See if they hunt rabbits
     @Test
     public void testHuntRabbit(){
         World world = new World(5);
         Rabbit rabbit = new Rabbit(world,new Location(0,0));
         world.setCurrentLocation(new Location(0,0));
-
-        Location location = new Location(2, 0);
-        WolfPack wolfPack = new WolfPack(world,location,0);
-        Wolf wolf = new Wolf(world,location,wolfPack);
-        world.setCurrentLocation(location);
+        Location location = new Location(1, 0);
+        Wolf wolf = new WolfPack(world,location,1).getPack().getFirst();
+        world.setCurrentLocation(world.getLocation(wolf));
         wolf.act(world);
-
+        //checks if wolf is close to rabbit
         for (Location loc : world.getSurroundingTiles(world.getLocation(rabbit))){
             if (world.getTile(loc) instanceof Wolf){
                 assertTrue(true);
@@ -77,6 +72,7 @@ class WolfTest {
 
     }
 
+    //Test that they eat Carcass
     @Test
     public void testEatCarcass(){
         World world = new World(5);
@@ -90,6 +86,7 @@ class WolfTest {
         assertEquals(2,carcass.getRemainingUses());
     }
 
+    //Reproduce test for wolf
     @Test
     public void testWolfReproduce(){
         World world = new World(5);
@@ -100,7 +97,9 @@ class WolfTest {
         Wolf wolf2 = wolfPack.getPack().getLast();
         wolfPack.setCave(cave);
         world.setCurrentLocation(location);
+        //gets them to keep trying to breed until they have made a baby
         while (world.getEntities().size()<4){
+            System.out.println(world.getEntities());
             world.setNight();
             wolf1.act(world);
             wolf2.act(world);
@@ -109,6 +108,7 @@ class WolfTest {
 
     }
 
+    //Test if they fight other wolves from other wolf packs
     @Test
     public void testWolfFight(){
         World world = new World(2);

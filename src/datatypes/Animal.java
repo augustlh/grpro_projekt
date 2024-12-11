@@ -120,7 +120,7 @@ public abstract class Animal extends Organism {
         this.age = this.age + 1;
         if (age%5==0){
             this.maxEnergy--;
-            if(maxEnergy<energy)energy = this.maxEnergy;
+            if(this.maxEnergy<this.energy)this.energy = this.maxEnergy;
         }
         this.energy = this.energy - this.energyDecay;
 

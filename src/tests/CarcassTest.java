@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-    //Quick check with group/tema 3
 public class CarcassTest {
         World world;
         Carcass carcass;
@@ -24,20 +23,21 @@ public class CarcassTest {
         carcass = new Carcass(world,new Location(1,1));
     }
 
+    //can be eaten
     @Test
     public void testGetsEatenByCarnivore() {
         wolf.act(world);
 
         assertEquals(2,carcass.getRemainingUses());
     }
-
+    //deleted when done
     @Test
     public void testGetsDeletedWhenNoMoreUses() {
         while (carcass.getRemainingUses() > 0) {
             wolf.act(world);
         }
 
-        assertEquals(1,world.getEntities().size());
+        assertFalse(world.contains(carcass));
     }
 
 

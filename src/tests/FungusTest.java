@@ -15,9 +15,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-    // Quick check with group/tema 3
 public class FungusTest {
 
+    //fungus eats carcass
     @Test
     public void testFungusEatsCarcass() {
         World world = new World(5);
@@ -29,6 +29,7 @@ public class FungusTest {
         assertEquals(2,carcass.getRemainingUses());
     }
 
+    //fungus eats up
     @Test
     public void testFungusEatsAllOfCarcass(){
         World world = new World(5);
@@ -44,6 +45,7 @@ public class FungusTest {
         assertEquals(1,world.getEntities().size());
     }
 
+    //fungus spreads to other carcasses
     @Test
     public void testFungusSpreads(){
         World world = new World(5);
@@ -59,6 +61,8 @@ public class FungusTest {
         assertTrue(carcass2.isInfested());
     }
 
+
+    //Spawns grass when dead
     @Test
     public void testFungusSpawnsGrass(){
         World world = new World(5);

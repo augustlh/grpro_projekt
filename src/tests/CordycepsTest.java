@@ -11,9 +11,9 @@ import itumulator.world.World;
 import itumulator.world.Location;
 
 
-    //Needs spreading, moving and eating of host
 public class CordycepsTest {
 
+    //Takes control of movement
     @Test
     public void testMoveTowardsOtherAnimals() {
         World world = new World(5);
@@ -35,7 +35,7 @@ public class CordycepsTest {
         fail();
 
     }
-
+    //infects other animals
     @Test
     public void testSpreadsToOtherAnimals() {
         World world = new World(5);

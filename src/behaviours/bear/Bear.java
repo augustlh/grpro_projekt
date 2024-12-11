@@ -31,7 +31,7 @@ public class Bear extends Carnivore {
      * @param location the Location within the world where the bear will be initially situated
      */
     public Bear(World world, Location location) {
-        super(Species.Bear, Utils.random.nextDouble(), Utils.random.nextDouble()*2, Utils.random.nextInt(1, 3), 75);
+        super(Species.Bear, Utils.random.nextDouble(), Utils.random.nextDouble()*2.5, Utils.random.nextInt(1, 3), 75);
         this.territory = world.getSurroundingTiles(location, Utils.random.nextInt(3, 5));
         world.setTile(location, this);
         this.hasActed = false;

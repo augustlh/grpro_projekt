@@ -9,10 +9,8 @@ import itumulator.world.World;
 import itumulator.world.Location;
 
 
-// quick check with group/tema 2
-
 public class BushTest {
-
+    //makes berry
     @Test
     public void bushMakesBerries(){
         World world = new World(5);
@@ -24,6 +22,7 @@ public class BushTest {
         assertEquals(1,bush.getBerryCount());
     }
 
+    //only makes enough berrys
     @Test
     public void bushStopsMakingBerries(){
         World world = new World(5);

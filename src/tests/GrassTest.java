@@ -15,9 +15,8 @@ import java.util.List;
 import java.util.Set;
 
 
-    // quick check with group/tema 1
 public class GrassTest {
-
+    //Cant spread test
     @Test
     public void testSpreadNoSurroundingEmptyNonBlockingTiles() {
         World world = new World(5) {
@@ -35,11 +34,11 @@ public class GrassTest {
         Grass grass = new Grass(world, new Location(0, 1), 1);
         grass.act(world);
 
-        // Ensure grass does not spread when there are no surrounding empty non-blocking tiles
         assertEquals(1, world.getEntities().size());
     }
+    //Spreads to other tiles
     @Test
-    public void testSpread_ToNeighboringTiles() {
+    public void testSpreadToNeighboringTiles() {
         World world = new World(5);
         Location location = new Location(0, 1);
         Grass grass = new Grass(world,location, 1);
@@ -54,6 +53,7 @@ public class GrassTest {
         }
     }
 
+    //Blocking on nonBlocking test
     @Test
     public void testBlockingOnNonBlockingTiles() {
         World world = new World(5);
