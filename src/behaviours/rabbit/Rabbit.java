@@ -128,7 +128,7 @@ public class Rabbit extends Herbivore {
      *
      * @param world The world in which the rabbit resides.
      */
-    private void setHole(World world) {
+    public void setHole(World world) {
         if(this.hole == null && world.getNonBlocking(world.getLocation(this)) instanceof RabbitHole e) {
             this.hole = e;
             this.hole.addAnimal(this);
@@ -143,7 +143,7 @@ public class Rabbit extends Herbivore {
      * @param world The world in which the rabbit resides.
      */
     private void reproduce(World world) {
-        if(!this.canBreed() || !this.insideHole ) {
+        if(!this.canBreed() || !this.insideHole || new Random().nextDouble() < 0.4) {
             return;
         }
 

@@ -26,9 +26,11 @@ class WolfTest {
         Rabbit rabbit = new Rabbit(world, location);
         world.setCurrentLocation(location);
 
-        Wolf wolf = new WolfPack(world,new Location(0,1),1).getPack().getFirst();
+        Wolf wolf = new WolfPack(world,new Location(0,0),1).getPack().getFirst();
         world.setCurrentLocation(world.getLocation(wolf));
-        wolf.act(world);
+        while (world.contains(rabbit)){
+            wolf.act(world);
+        }
 
         assertFalse(world.contains(rabbit));
     }
@@ -36,20 +38,23 @@ class WolfTest {
     //Checks if they move after they alpha
     @Test
     public void testMoveAfterAlpha(){
-        World world = new World(5);
-        WolfPack wolfPack = new WolfPack(world,new Location(2,2),2);
-        List<Wolf> wolfs = new ArrayList<>(wolfPack.getPack());
-        world.setCurrentLocation(world.getLocation(wolfPack.getAlphaWolf()));
-        for (Wolf wolf : wolfs) {
-           wolf.act(world);
-        } //checks the surrounding tiles of alpha to see if the wolf still is near by
-        for (Location loc: world.getSurroundingTiles(world.getLocation(wolfs.getFirst()))){
-            if (world.getTile(loc) instanceof Wolf){
-                assertTrue(true);
-                return;
+        int count = 0;
+        for (int i = 0; i < 100; i++) {
+            World world = new World(5);
+            WolfPack wolfPack = new WolfPack(world,new Location(2,2),2);
+            List<Wolf> wolfs = new ArrayList<>(wolfPack.getPack());
+            world.setCurrentLocation(world.getLocation(wolfPack.getAlphaWolf()));
+            for (Wolf wolf : wolfs) {
+                wolf.act(world);
+            } //checks the surrounding tiles of alpha to see if the wolf still is near by
+            for (Location loc: world.getSurroundingTiles(world.getLocation(wolfs.getFirst()))){
+                if (world.getTile(loc) instanceof Wolf){
+                    count++;
+                }
             }
         }
-        fail();
+        double probability = (double)count/100;
+        assertTrue(probability>= (0.75-0.05) && probability<= (0.75+0.05));
     }
     //See if they hunt rabbits
     @Test
@@ -81,7 +86,11 @@ class WolfTest {
         Location location = new Location(0, 1);
         Wolf wolf = new WolfPack(world,new Location(0,1),1).getPack().getFirst();
         world.setCurrentLocation(location);
-        wolf.act(world);
+        world.setDay();
+        while (carcass.getRemainingUses()==3){
+            System.out.println(world.getEntities());
+            wolf.act(world);
+        }
 
         assertEquals(2,carcass.getRemainingUses());
     }

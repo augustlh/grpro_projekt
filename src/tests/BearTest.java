@@ -23,7 +23,7 @@ public class BearTest {
         Bush bush = new Bush(world,new Location(0,1));
         bush.setSpreadProbability(1);
         bush.act(world);
-        for (int i = 0; i<50;i++){
+        while (world.contains(bear) && bush.getBerryCount()>0) {
             world.setDay();
             bear.act(world);
         }

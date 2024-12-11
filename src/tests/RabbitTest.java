@@ -48,16 +48,19 @@ public class RabbitTest {
     }
 
 
-    //Will not always work since there are times when rabbit are in different holes
-    //But when in same hole they breed
+    //Test breeding for rabbit
     @Test
     public void testRabbitReproduce(){
         World world = new World(5);
-        Rabbit rabbit = new Rabbit(world, new Location(0, 0));
-        Rabbit rabbit2 = new Rabbit(world, new Location(0, 1));
+        Rabbit rabbit = new Rabbit(world, new Location(1, 1));
         RabbitHole hole = new RabbitHole(world, new Location(1,1));
-        world.setCurrentLocation(new Location(0, 0));
+        world.setCurrentLocation(new Location(1, 1));
         world.setNight();
+        rabbit.setHole(world);
+        rabbit.act(world);
+        Rabbit rabbit2 = new Rabbit(world, new Location(1, 1));
+        rabbit2.setHole(world);
+        rabbit2.act(world);
         while (world.contains(rabbit)&&world.contains(rabbit2)) {
             int count =0;
             world.setNight();
