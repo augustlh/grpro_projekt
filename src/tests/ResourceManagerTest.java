@@ -90,8 +90,8 @@ public class ResourceManagerTest {
         for(Object entity : entities.keySet()) {
             if(type.isInstance(entity)) {
                 Location actualLocation = entities.get(entity);
-                assertEquals(location.getX(), actualLocation.getX(), "X coordinates should match");
-                assertEquals(location.getY(), actualLocation.getY(), "Y coordinates should match");
+                assertEquals(location.getX(), actualLocation.getX());
+                assertEquals(location.getY(), actualLocation.getY());
                 return;
             }
         }
