@@ -34,18 +34,6 @@ public class Grass extends Plant {
         neighbours = null;
     }
 
-    /**
-     * This constructor should only be used for testing purposes!
-     *
-     * @param world the world where the Grass instance will be placed
-     * @param location the specific location within the world where the Grass instance will be set
-     * @param spreadProb the proboabilty of the grass spreading.
-     */
-    public Grass(World world, Location location, double spreadProb) {
-        super(Species.Grass,spreadProb, 2);
-        world.setTile(location, this);
-        neighbours = null;
-    }
 
     /**
      * Act method is called to perform the Grass-specific action in the given world.
